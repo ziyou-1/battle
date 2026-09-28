@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新增游戏</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    .charViewboxs .item {
+        display: inline-block;
+        width: 36px;
+        height: 25px;
+        line-height: 25px;
+        box-sizing: border-box;
+        text-align: center;
+        border-radius: 2px;
+        border: 1px solid #A3AFB7;
+        color: #A3AFB7;
+        margin: 5px;
+        cursor:pointer;
+    }
+
+        .charViewboxs .item.active {
+            border: 1px solid #FDA601;
+            color: #FDA601;
+        }
+    .layui-inline .layui-form-radio div.sel {
+        color: #FDA601;
+    }
+    .layui-inline .layui-form-radio div.sel2 {
+        color: #ff0000;
+        font-weight:600;
+        font-size:24px;
+    }
+
+</style>
+
+<form class="layui-form layui-form-pane" action="" style="margin-left:10px;margin-right:10px">
+    <div class="layui-field-box" style="margin-left:0px;padding: 0px 0px;margin-top:10px">
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">按字母索引</label>
+            <div class="layui-input-block">
+                <div class="charViewboxs"></div>
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <div class="layui-inline">
+                <label class="layui-form-label">搜索游戏名称</label>
+                <div class="layui-input-inline">
+                    <select lay-search="" lay-filter="seachGame">
+                        <option value="">请选择或搜索</option>
+[% for g in catalog %]<option value="[[ g.name ]]">[[ g.name ]]</option>[% endfor %]
+
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="width: 120px">搜索</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">请选择游戏</label>
+            <div class="layui-input-block">
+[% for g in catalog %]<div class="layui-inline" style="width:200px"><input type="radio" name="games" value="[[ g.name ]]" data-isPw="[[ g.isPw ]]" data-isMoblie="[[ g.isMoblie ]]" title="[[ g.name ]]" data-name="[[ g.name ]]" data-firstKey="[[ g.firstKey ]]" lay-filter="" /></div>[% endfor %]
+
+
+            </div>
+        </div>
+    </div>
+
+    <blockquote class="layui-elem-quote" style="color:#ff6a00">如果列表里没有找到需要添加的游戏，可以联系平台客服或技术添加</blockquote>
+
+    <div style="text-align:center;align-items:center">
+        <button type="button" class="layui-btn layui-btn-normal w-lg" lay-submit="" lay-filter="savebtn">确定添加到本系统</button>
+    </div>
+
+
+</form>
+<script src="/JS2019/Game/addeditgame.js?v=20210918011" type="text/javascript"></script>
+
+
+</body>
+</html>

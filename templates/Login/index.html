@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>[[ company ]] 管理系统 - 登录</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" type="image/svg+xml" href="/brand-mark.svg">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all" />
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <style>
+        :root { --p: #4f46e5; --p2: #7c3aed; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb; }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; color: var(--text); background: #f3f4f6; }
+        .wrap { min-height: 100%; display: flex; }
+        .brand { flex: 1.1; display: flex; flex-direction: column; justify-content: center; padding: 60px 8%; color: #fff; position: relative; overflow: hidden;
+                 background: [[ login_bg ]]; }
+        .brand:before, .brand:after { content: ''; position: absolute; border-radius: 50%; background: rgba(255, 255, 255, .08); }
+        .brand:before { width: 420px; height: 420px; right: -120px; top: -140px; }
+        .brand:after { width: 300px; height: 300px; left: -100px; bottom: -120px; }
+        .brand .logo { display: inline-flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 700; letter-spacing: 1px; position: relative; }
+        .brand .logo img { width: 44px; height: 44px; flex: none; }
+        .brand h1 { font-size: 34px; margin: 40px 0 12px; font-weight: 700; position: relative; }
+        .brand p { font-size: 15px; opacity: .9; margin: 0; position: relative; max-width: 460px; }
+        .brand ul { list-style: none; padding: 0; margin: 36px 0 0; position: relative; }
+        .brand li { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 14px; opacity: .95; }
+        .brand li span { width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, .2); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+        .panel { width: 480px; display: flex; align-items: center; justify-content: center; padding: 40px 32px; background: #fff; }
+        .box { width: 100%; max-width: 360px; }
+        .box h2 { font-size: 24px; margin: 0 0 6px; }
+        .box .sub { color: var(--muted); margin-bottom: 28px; }
+        .field { margin-bottom: 16px; }
+        .field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+        .field .layui-input { height: 44px; border-radius: 8px; border-color: #d1d5db; padding-left: 14px; }
+        .field .layui-input:focus { border-color: var(--p); box-shadow: 0 0 0 3px rgba(79, 70, 229, .12); }
+        .row { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 20px; font-size: 13px; }
+        .row a { color: var(--p); cursor: pointer; }
+        .codebox { display: flex; gap: 8px; }
+        .codebox .layui-input { flex: 1; }
+        .btn-main { width: 100%; height: 46px; border: 0; border-radius: 10px; background: linear-gradient(135deg, var(--p), var(--p2)); color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(79, 70, 229, .3); }
+        .btn-main:hover { filter: brightness(1.05); }
+        .btn-main:disabled { opacity: .6; cursor: not-allowed; }
+        .foot { margin-top: 28px; color: #9ca3af; font-size: 12px; text-align: center; }
+        .layui-form-checkbox[lay-skin=primary] span { color: var(--muted); }
+        .layui-form-checked[lay-skin=primary] i { border-color: var(--p) !important; background: var(--p); color: #fff; }
+        .panel-hide { display: none; }
+        .steps { display: flex; gap: 6px; margin-bottom: 18px; }
+        .steps span { flex: 1; height: 4px; border-radius: 2px; background: var(--line); }
+        .steps span.on { background: var(--p); }
+        .back { color: var(--muted); cursor: pointer; font-size: 13px; display: inline-block; margin-bottom: 12px; }
+        .back:hover { color: var(--p); }
+        @media (max-width: 860px) { .wrap { flex-direction: column; } .brand { padding: 36px 24px; flex: none; } .brand h1 { font-size: 24px; margin-top: 20px; } .brand ul { display: none; } .panel { width: 100%; flex: 1; } }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="brand">
+        <div class="logo"><img src="/brand-mark.svg" alt="">[[ company ]]</div>
+        <h1>工作室管理系统</h1>
+        <p>订单、打手、客户、财务一站式管理；客户端自助下单实时同步到后台。</p>
+        <ul>
+            <li><span>1</span>录单 → 指派/抢单 → 上号 → 验收 → 结算，全程可追溯</li>
+            <li><span>2</span>会员、积分、优惠券、售后，客户端一体化</li>
+            <li><span>3</span>新订单、客户留言实时提醒</li>
+        </ul>
+    </div>
+    <div class="panel">
+        <div class="box">
+            <div id="panel-login">
+                <h2>登录</h2>
+                <div class="sub">请使用系统分配的账号登录</div>
+                <form class="layui-form" action="" onsubmit="return false">
+                    <div class="field"><label>登录账号</label><input type="text" name="uname" id="uname" required lay-verify="required" autocomplete="on" class="layui-input" placeholder="请输入登录账号" maxlength="18"></div>
+                    <div class="field"><label>登录密码</label><input type="password" name="password" required lay-verify="required" autocomplete="on" class="layui-input" placeholder="请输入登录密码" maxlength="32"></div>
+                    <div class="field" id="larry_code" style="display:none"><label>短信验证码</label><div class="codebox"><input type="text" name="code" autocomplete="off" class="layui-input" placeholder="短信验证码" maxlength="6"><button name="getCodeBtn" type="button" class="layui-btn layui-btn-normal getCodeBtn" lay-filter="getCodeBtn" lay-submit>获取验证码</button></div></div>
+                    <div class="row"><input type="checkbox" name="isRemember" title="3 天内免登录" lay-skin="primary"><a id="to-forget">忘记密码？</a></div>
+                    <button class="btn-main" type="button" id="login" lay-filter="login" lay-submit>立即登录</button>
+                </form>
+            </div>
+            <div id="panel-forget" class="panel-hide">
+                <a class="back" id="back-login">‹ 返回登录</a>
+                <h2>找回密码</h2>
+                <div class="sub">通过绑定邮箱找回密码；邮件服务未配置时请联系管理员</div>
+                <div class="steps"><span class="on" id="st1"></span><span id="st2"></span></div>
+                <form class="layui-form" action="" onsubmit="return false" id="forget-step1">
+                    <div class="field"><label>系统账号</label><input type="text" name="forget_account" id="forget_account" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入系统账户"></div>
+                    <div class="field"><label>绑定邮箱</label><input type="text" name="forget_email" id="forget_email" required lay-verify="required|email" autocomplete="off" class="layui-input" placeholder="请输入绑定邮箱"></div>
+                    <div class="field"><label>邮箱验证码</label><div class="codebox"><input type="text" name="email_code" id="email_code" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="验证码" maxlength="6"><button type="button" class="layui-btn layui-btn-normal" id="send-email-code">发送验证码</button></div></div>
+                    <button class="btn-main" type="button" lay-filter="verifyEmail" lay-submit>下一步</button>
+                </form>
+                <form class="layui-form panel-hide" action="" onsubmit="return false" id="forget-step2">
+                    <div class="field"><label>新密码</label><input type="password" name="new_password" id="new_password" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入新密码"></div>
+                    <div class="field"><label>确认新密码</label><input type="password" name="confirm_password" id="confirm_password" required lay-verify="required" autocomplete="off" class="layui-input" placeholder="请再次输入新密码"></div>
+                    <button class="btn-main" type="button" lay-filter="resetPassword" lay-submit>确认重设密码</button>
+                </form>
+            </div>
+            <div class="foot">[[ company ]] · 内部系统，请勿外传账号 · [[ now_cn[:4] ]]</div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layer'], function () {
+        var $ = layui.$, form = layui.form, layer = layui.layer, re = true, indexLoad, uuid = '';
+        var devices = layui.device(), isPc = !(devices.android === true || devices.ios === true);
+        $('#to-forget').on('click', function () { $('#panel-login').hide(); $('#panel-forget').show(); });
+        $('#back-login').on('click', function () { $('#panel-forget').hide(); $('#panel-login').show(); });
+        $(document).keydown(function (e) { if (e.keyCode == 13 && $('#panel-login').is(':visible')) $('#login').trigger('click'); });
+        // 账号失焦：是否需要短信验证码（原站接口）
+        $('#uname').blur(function () {
+            var acc = $('#uname').val(); if (!acc || !re) return false; re = false;
+            $.ajax({ type: 'Post', url: '/Login/LoginSecurityVerification', data: { acc: acc }, dataType: 'json', cache: false, timeout: 5000, error: function () { re = true; },
+                success: function (d) { re = true; if (d.code > 0) $('#larry_code').show(); else $('#larry_code').hide(); } });
+        });
+        form.on('submit(getCodeBtn)', function (data) {
+            var acc = data.field.uname, pwd = data.field.password;
+            if (!acc) { layer.msg('请输入登录账号'); return false; } if (!pwd) { layer.msg('请输入登录密码'); return false; }
+            if (!re) return false; re = false;
+            $.ajax({ type: 'Post', url: '/Login/LoginGetSmsCode', data: { acc: acc, pwd: pwd }, dataType: 'json', cache: false, timeout: 60000, error: function () { layer.msg('请求出错'); re = true; },
+                success: function (d) { re = true; layer.msg(d.msg, { time: 2500 }); } });
+            return false;
+        });
+        form.on('submit(login)', function (data) {
+            var acc = data.field.uname, pwd = data.field.password, code = data.field.code || '', isRemember = data.field.isRemember ? 1 : 0;
+            if (!acc) { layer.msg('请输入登录账号'); return false; } if (!pwd) { layer.msg('请输入登录密码'); return false; }
+            var deviceInfo = '访问设备：' + (isPc ? 'PC' : '非PC') + '，' + JSON.stringify(devices);
+            if (!re) return false; re = false; $('#login').prop('disabled', true);
+            $.ajax({ type: 'Post', url: '/Login/Login', data: { acc: acc, pwd: pwd, code: code, deviceInfo: deviceInfo, isRemember: isRemember }, dataType: 'json', cache: false, timeout: 60000,
+                error: function () { layer.msg('数据请求出现错误！'); re = true; $('#login').prop('disabled', false); },
+                beforeSend: function () { indexLoad = layer.load(1, { shade: false }); },
+                success: function (d) {
+                    re = true;
+                    if (d.code > 0) {
+                        if (d.data == 'Y') { layer.alert('系统检测到您的登录密码过于简单，为避免账号被盗，点击确定后请按提示更改为更复杂的登录密码', { closeBtn: 0 }, function () { window.location.href = '/User/myinfo#userInfo=2'; }); }
+                        else window.location.href = '/';
+                    } else {
+                        if (d.msg.indexOf('请输入短信验证码') > -1) $('#larry_code').show();
+                        layer.msg(d.msg, { time: 3000 }); $('#login').prop('disabled', false);
+                    }
+                },
+                complete: function () { layer.close(indexLoad); } });
+            return false;
+        });
+        // 找回密码（邮箱验证码，原站接口）
+        $('#send-email-code').on('click', function () {
+            var account = $('#forget_account').val(), email = $('#forget_email').val();
+            if (!account || !email) { layer.msg('请填写账号和绑定邮箱'); return; }
+            $.ajax({ type: 'Post', url: '/Login/SendEmailCode', data: { email: email, account: account }, dataType: 'json', cache: false, timeout: 60000, error: function () { layer.msg('请求出错'); },
+                success: function (d) { layer.msg(d.msg, { time: 2500 }); if (d.code > 0) uuid = d.data && d.data.uuid ? d.data.uuid : (d.data || ''); } });
+        });
+        form.on('submit(verifyEmail)', function (data) {
+            $.ajax({ type: 'Post', url: '/Login/VerifyForgetCode', data: { uuid: uuid, code: data.field.email_code }, dataType: 'json', cache: false, timeout: 60000, error: function () { layer.msg('请求出错'); },
+                success: function (d) { layer.msg(d.msg, { time: 2000 }); if (d.code > 0) { $('#forget-step1').hide(); $('#forget-step2').show(); $('#st2').addClass('on'); } } });
+            return false;
+        });
+        form.on('submit(resetPassword)', function (data) {
+            if (data.field.new_password !== data.field.confirm_password) { layer.msg('两次输入的密码不一致'); return false; }
+            $.ajax({ type: 'Post', url: '/Login/ForgetPassword', data: { uuid: uuid, password: data.field.new_password }, dataType: 'json', cache: false, timeout: 60000, error: function () { layer.msg('请求出错'); },
+                success: function (d) { layer.msg(d.msg, { time: 2000 }); if (d.code > 0) { $('#panel-forget').hide(); $('#panel-login').show(); $('#forget-step2').hide(); $('#forget-step1').show(); $('#st2').removeClass('on'); } } });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

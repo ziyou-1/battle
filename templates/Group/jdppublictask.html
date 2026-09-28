@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>查找公共排团坑位</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style type="text/css">
+    body {
+        background-color: #F2F2F2;
+    }
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+    .taskfall {
+        column-gap: 5px;
+        -webkit-column-gap: 5px; /* Safari 和 Chrome */
+        -moz-column-gap: 5px; /* Firefox */
+        column-count: 5;
+        -moz-column-count:5; /* Firefox */
+        -webkit-column-count: 5; /* Safari 和 Chrome */
+        margin-bottom:20px;
+    }
+
+    .task_item {
+        break-inside: avoid;
+        -webkit-break-inside: avoid;
+        border-bottom-left-radius:10px;
+        border-bottom-right-radius:10px;
+    }
+    @media (min-width: 1921px) and (max-width: 3840px) {
+        .taskfall {
+            column-count: 5;
+        }
+    }
+    @media (max-width:1920px) {
+        .taskfall {
+            column-count: 4;
+        }
+    }
+    @media (max-width:1680px) {
+        .taskfall {
+            column-count: 3;
+        }
+    }
+    @media (max-width:1435px) {
+        .taskfall {
+            column-count: 3;
+        }
+    }
+     @media (max-width: 1070px) {
+        .taskfall {
+            column-count:2;
+        }
+    }
+    @media (max-width: 1069px) {
+        .taskfall {
+            column-count: 1;
+        }
+    }
+
+        .layui-btn + .layui-btn {
+            margin-left: 5px;
+        }
+
+        .jobss div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+            .jobss div a {
+                margin-left: 10px
+            }
+
+            .jobss div span {
+                font-weight: 600;
+                font-size: 14px;
+                width: 60px;
+            }
+</style>
+
+<form class="layui-form" action="" lay-filter="fm1">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form-pane">
+                <div class="layui-inline">
+                    <label class="layui-form-label">阵营</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="gameGroup" value="" title="全部" checked="" lay-filter="gameGroup">
+                        <input type="radio" name="gameGroup" value="联盟" title="联盟" lay-filter="gameGroup">
+                        <input type="radio" name="gameGroup" value="部落" title="部落" lay-filter="gameGroup">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择CD</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="weekDay" value="0" title="本CD和下个CD" checked="" lay-filter="taskDatefilter">
+                        <input type="radio" name="weekDay" value="10" title="本CD" lay-filter="taskDatefilter">
+                        <input type="radio" name="weekDay" value="20" title="下个CD" lay-filter="taskDatefilter">
+                        <input type="radio" name="weekDay" value="30" title="未来1个月" lay-filter="taskDatefilter">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">服务器</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="gameServer" id="gameServer" lay-verify="" placeholder="可以输入服务器名称查找" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">最低装等数</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="itemLevel" id="itemLevel" lay-verify="" placeholder="可以输入最低装等数值" class="layui-input" value="0" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">标题关键词</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="key" id="key" lay-verify="" placeholder="请输入" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="taskSeachBtn">搜索或刷新</button>
+                </div>
+            </div> 
+
+            <div class="layui-row" style="margin-top:10px">
+                <div class="layui-col-sm3 layui-col-xs2">
+                    <div class="jobss" style="margin-left:0px;display:flex;flex-direction:column;">
+                        <div class="" style="">
+                            <span>德鲁伊</span>
+                            <a href="javascript:void(0)" data-job="德鲁伊" data-tf="" lay-tips="点击筛选所有德鲁伊职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部德鲁伊</a>
+                            <a href="javascript:void(0)" data-job="德鲁伊" data-tf="熊德" lay-tips="点击筛选所有熊德的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">熊德</a>
+                            <a href="javascript:void(0)" data-job="德鲁伊" data-tf="猫德" lay-tips="点击筛选所有猫德的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">猫德</a>
+                            <a href="javascript:void(0)" data-job="德鲁伊" data-tf="鸟德" lay-tips="点击筛选所有鸟德的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">鸟德</a>
+                            <a href="javascript:void(0)" data-job="德鲁伊" data-tf="奶德" lay-tips="点击筛选所有奶德的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">奶德</a>
+                        </div>
+                        <div class="" style="">
+                            <span>盗贼</span>
+                            <a href="javascript:void(0)" data-job="盗贼" data-tf="" lay-tips="点击筛选所有盗贼职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部盗贼</a>
+                            <a href="javascript:void(0)" data-job="盗贼" data-tf="奇袭" lay-tips="点击筛选所有奇袭的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">奇袭</a>
+                            <a href="javascript:void(0)" data-job="盗贼" data-tf="狂徒" lay-tips="点击筛选所有狂徒的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">狂徒</a>
+                            <a href="javascript:void(0)" data-job="盗贼" data-tf="敏锐" lay-tips="点击筛选所有敏锐的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">敏锐</a>
+                        </div>
+                        <div class="" style="">
+                            <span>恶魔猎手</span>
+                            <a href="javascript:void(0)" data-job="恶魔猎手" data-tf="" lay-tips="点击筛选所有恶魔猎手职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部恶魔猎手</a>
+                            <a href="javascript:void(0)" data-job="恶魔猎手" data-tf="浩劫" lay-tips="点击筛选所有浩劫的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">浩劫</a>
+                            <a href="javascript:void(0)" data-job="恶魔猎手" data-tf="复仇" lay-tips="点击筛选所有复仇的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">复仇</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm3 layui-col-xs2">
+                    <div class="jobss" style="margin-left:0px;display:flex;flex-direction:column;">
+                        <div class="" style="">
+                            <span>法师</span>
+                            <a href="javascript:void(0)" data-job="法师" data-tf="" lay-tips="点击筛选所有法师职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部法师</a>
+                            <a href="javascript:void(0)" data-job="法师" data-tf="冰法" lay-tips="点击筛选所有冰法的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">冰法</a>
+                            <a href="javascript:void(0)" data-job="法师" data-tf="火法" lay-tips="点击筛选所有火法的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">火法</a>
+                            <a href="javascript:void(0)" data-job="法师" data-tf="奥法" lay-tips="点击筛选所有奥法的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">奥法</a>
+                        </div>
+                        <div class="" style="">
+                            <span>猎人</span>
+                            <a href="javascript:void(0)" data-job="猎人" data-tf="" lay-tips="点击筛选所有猎人职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部猎人</a>
+                            <a href="javascript:void(0)" data-job="猎人" data-tf="兽王" lay-tips="点击筛选所有兽王的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">兽王</a>
+                            <a href="javascript:void(0)" data-job="猎人" data-tf="射击" lay-tips="点击筛选所有射击的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">射击</a>
+                            <a href="javascript:void(0)" data-job="猎人" data-tf="生存" lay-tips="点击筛选所有生存的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">生存</a>
+                        </div>
+                        <div class="" style="">
+                            <span>牧师</span>
+                            <a href="javascript:void(0)" data-job="牧师" data-tf="" lay-tips="点击筛选所有牧师职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部牧师</a>
+                            <a href="javascript:void(0)" data-job="牧师" data-tf="神牧" lay-tips="点击筛选所有神牧的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">神牧</a>
+                            <a href="javascript:void(0)" data-job="牧师" data-tf="戒律" lay-tips="点击筛选所有戒律的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">戒律</a>
+                            <a href="javascript:void(0)" data-job="牧师" data-tf="暗牧" lay-tips="点击筛选所有暗牧的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">暗牧</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm3 layui-col-xs2">
+                    <div class="jobss" style="margin-left:0px;display:flex;flex-direction:column;">
+                        <div class="" style="">
+                            <span>死亡骑士</span>
+                            <a href="javascript:void(0)" data-job="死亡骑士" data-tf="" lay-tips="点击筛选所有死亡骑士职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部死亡骑士</a>
+                            <a href="javascript:void(0)" data-job="死亡骑士" data-tf="邪恶" lay-tips="点击筛选所有邪恶的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">邪恶</a>
+                            <a href="javascript:void(0)" data-job="死亡骑士" data-tf="冰霜" lay-tips="点击筛选所有冰霜的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">冰霜</a>
+                            <a href="javascript:void(0)" data-job="死亡骑士" data-tf="鲜血" lay-tips="点击筛选所有鲜血的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">鲜血</a>
+                        </div>
+                        <div class="" style="">
+                            <span>圣骑士</span>
+                            <a href="javascript:void(0)" data-job="圣骑士" data-tf="" lay-tips="点击筛选所有圣骑士职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部圣骑士</a>
+                            <a href="javascript:void(0)" data-job="圣骑士" data-tf="奶骑" lay-tips="点击筛选所有奶骑的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">奶骑</a>
+                            <a href="javascript:void(0)" data-job="圣骑士" data-tf="惩戒骑" lay-tips="点击筛选所有惩戒骑的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">惩戒骑</a>
+                            <a href="javascript:void(0)" data-job="圣骑士" data-tf="防骑" lay-tips="点击筛选所有防骑的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">防骑</a>
+                        </div>
+                        <div class="" style="">
+                            <span>术士</span>
+                            <a href="javascript:void(0)" data-job="术士" data-tf="" lay-tips="点击筛选所有术士职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部术士</a>
+                            <a href="javascript:void(0)" data-job="术士" data-tf="恶魔" lay-tips="点击筛选所有恶魔的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">恶魔术</a>
+                            <a href="javascript:void(0)" data-job="术士" data-tf="痛苦" lay-tips="点击筛选所有痛苦的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">痛苦术</a>
+                            <a href="javascript:void(0)" data-job="术士" data-tf="毁灭" lay-tips="点击筛选所有毁灭的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">毁灭术</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm3 layui-col-xs2">
+                    <div class="jobss" style="margin-left:0px;display:flex;flex-direction:column;">
+                        <div class="" style="">
+                            <span>萨满</span>
+                            <a href="javascript:void(0)" data-job="萨满" data-tf="" lay-tips="点击筛选所有萨满职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部萨满</a>
+                            <a href="javascript:void(0)" data-job="萨满" data-tf="奶萨" lay-tips="点击筛选所有奶萨的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">奶萨</a>
+                            <a href="javascript:void(0)" data-job="萨满" data-tf="增强" lay-tips="点击筛选所有增强的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">增强萨</a>
+                            <a href="javascript:void(0)" data-job="萨满" data-tf="元素" lay-tips="点击筛选所有元素的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">元素萨</a>
+                        </div>
+                        <div class="" style="">
+                            <span>武僧</span>
+                            <a href="javascript:void(0)" data-job="武僧" data-tf="" lay-tips="点击筛选所有武僧职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部武僧</a>
+                            <a href="javascript:void(0)" data-job="武僧" data-tf="织雾" lay-tips="点击筛选所有织雾的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">织雾</a>
+                            <a href="javascript:void(0)" data-job="武僧" data-tf="酒仙" lay-tips="点击筛选所有酒仙的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">酒仙</a>
+                            <a href="javascript:void(0)" data-job="武僧" data-tf="踏风" lay-tips="点击筛选所有踏风的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">踏风</a>
+                        </div>
+                        <div class="" style="">
+                            <span>战士</span>
+                            <a href="javascript:void(0)" data-job="战士" data-tf="" lay-tips="点击筛选所有战士职业的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">全部战士</a>
+                            <a href="javascript:void(0)" data-job="战士" data-tf="防战" lay-tips="点击筛选所有防战的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">防战</a>
+                            <a href="javascript:void(0)" data-job="战士" data-tf="武器" lay-tips="点击筛选所有武器的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">武器战</a>
+                            <a href="javascript:void(0)" data-job="战士" data-tf="狂暴" lay-tips="点击筛选所有狂暴的坑位" class="layui-btn layui-btn-primary layui-btn-sm selectJobGameTf">狂暴战</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-btn-container tag" lay-filter="tfTag" lay-allowclose="true">
+                
+            </div>
+
+        </div>
+    </div>
+
+    <div class="taskfall">
+        <div class="taskList" id="taskList">
+
+        </div>
+    </div>
+    <div id="pages"></div>
+
+    <div class="publicPostionConcatLayer" style="display:none;padding:10px 10px">
+        <blockquote class="layui-elem-quote">
+            <p>申明：平台只提供信息承载公示服务，不对双方产生的交易结果和售后负责。和对方合作前请约定好结算方式、售后、打款周期等并留好截图证据</p>
+            <p>警告：对于利用该功能有盗号、挖客户行为的商家平台有权禁止其使用该功能</p>
+        </blockquote>
+        <div class="layui-card">
+            <div class="layui-card-header head_title" style="font-size:18px;font-weight:600;color:#393D49"></div>
+            <div class="layui-card-body" style="font-size:14px;">
+                <p style="line-height: 40px;color:#526069" class="c_company"></p>
+                <p style="line-height: 40px;color:#5FB878" class="c_wechat"></p>
+                <p style="line-height: 40px;color:#FF534D" class="c_qq"></p>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script src="/JS2019/Group/jdppublictask.js?v=20260427" type="text/javascript"></script> 
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>我的排团</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+</style>
+<form class="layui-form" action="">
+    <div class="" style="padding-left: 5px;padding-top:10px">
+
+        <div class="layui-form-pane">
+            <div class="layui-inline">
+                <label class="layui-form-label">选择游戏</label>
+                <div class="layui-input-inline">
+                    <select id="gameName" name="gameName" lay-filter="selectGame">
+[% for gm in games %]<option value="[[ gm.gameId ]]" data-mobliegame="[[ gm.isMoblieGame ]]" data-pw="[[ gm.isPw ]]"[% if o and o.gameId == gm.gameId %] selected='selected'[% endif %]>[[ gm.gameName ]]</option>[% endfor %]
+</select>
+                </div>
+            </div> 
+            <div class="layui-inline">
+                <label class="layui-form-label">排团状态</label>
+                <div class="layui-input-inline">
+                    <select name="taskSta" xm-select="taskSta" xm-select-skin="default" xm-select-height="36px">
+                        <option value="">请选择</option>
+                        <option value="A">未开始</option>
+                        <option value="B">进行中</option> 
+                        <option value="D">已暂停</option>
+                    </select>
+                </div>
+            </div> 
+            <div class="layui-inline">
+                <label class="layui-form-label">搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="key" id="key" lay-verify="" placeholder="排团编号/排团名称" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div> 
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+            </div>
+        </script> 
+    </div>
+</form>
+<script src="/JS2019/Group/mygroup.js?v=20260427" type="text/javascript"></script>
+
+
+
+</body>
+</html>

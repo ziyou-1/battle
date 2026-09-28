@@ -1,0 +1,543 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>欢迎使用工作室管理系统-请登录</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="robots" content="noarchive">
+    <!-- load css -->
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/CSS/login03.css" media="all" />
+    [% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background: url("https://oss5.jidanpu.com/worksystem/Login/2021_3.jpg") no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] span {
+            color: #fff;
+        }
+
+        .layui-form-item .layui-form-checked[lay-skin=primary] i {
+            border-color: #00b8ff !important;
+            background-color: #00b8ff;
+        }
+
+        .layui-form-item .layui-form-checkbox[lay-skin=primary]:hover i {
+            border-color: #00b8ff;
+        }
+
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] {
+            padding-left: 20px;
+        }
+
+        .layui-form-item .layui-form-checkbox span {
+            font-size: 12px;
+        }
+
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] i {
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+        }
+
+        .layui-form-item .layui-form-checkbox[lay-skin=primary] span {
+            line-height: 12px;
+        }
+
+        /* 找回密码相关额外样式 */
+        .forget-link-box {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .forget-link {
+            color: #00b8ff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+            .forget-link:hover {
+                color: #0081b3;
+                text-decoration: underline;
+            }
+
+        .msg-tip {
+            color: #ff5722;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .back-icon {
+            cursor: pointer;
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <div class="layui-row larryms-layout">
+        <div class="larry-main animated shake larry-delay2">
+
+            <!-- 1. 登录面板 -->
+            <div id="panel-login">
+                <div class="title">欢迎使用</div>
+                <p class="info">内部管理系统(非平台)</p>
+                <div style="width:80px;height:5px;background:#fff;margin-bottom:20px;"></div>
+                <form class="layui-form" action="">
+                    <div class="user-info">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">登录账号</label>
+                            <input  type="text" name="uname" id="uname" required lay-verify="required" autocomplete="on" class="layui-input larry-input" placeholder="请输入您的登录账号" maxlength="18">
+                        </div>
+                        <div class="layui-form-item" id="password">
+                            <label class="layui-form-label">登录密码</label>
+                            <input type="password" name="password" required lay-verify="required|password" autocomplete="on" class="layui-input larry-input" placeholder="请输入您的登录密码" maxlength="32">
+                        </div>
+                        <div class="layui-form-item larry-verfiy-code" id="larry_code" style="display:none">
+                            <input type="text" name="code" lay-verfy="" autocomplete="off" class="layui-input larry-input" placeholder="短信验证码" maxlength="6">
+                            <div style="margin-left: 40%; width: 55%;">
+                                <button name="getCodeBtn" style="width:100%;height:40px;line-height:40px;" type="button" class="layui-btn layui-btn-normal getCodeBtn" lay-filter="getCodeBtn" lay-submit>获取短信验证码</button>
+                            </div>
+                        </div>
+                        <div class="" style="display:flex; justify-content:space-between; align-items:center;margin:5px 0" >
+                            <input type="checkbox" name="isRemember" title="3天内免登录" lay-skin="primary">
+                            <a class="" id="to-forget" style="cursor:pointer">忘记密码？</a>
+                        </div>
+
+                        <div class="layui-form-item login" style="margin-bottom: 30px;">
+                            <button class="layui-btn mylogin" type="button" id="login" style="width: 100%" lay-filter="login" lay-submit>立即登录</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 2. 找回密码面板 -->
+            <div id="panel-forget" style="display: none;">
+                <i class="layui-icon layui-icon-left back-icon to-login" title="返回登录"></i>
+                <div class="title">找回密码</div>
+                <div style="width:80px;height:5px;background:#fff;margin-bottom:20px;margin-top:10px;"></div>
+                <form class="layui-form" action="">
+                    <div class="user-info">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">系统账户</label>
+                            <input  type="text" name="forget_account" id="forget_account" required lay-verify="required" autocomplete="off" class="layui-input larry-input" placeholder="请输入系统账户">
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">绑定邮箱</label>
+                            <input  type="text" name="forget_email" id="forget_email" required lay-verify="required|email" autocomplete="off" class="layui-input larry-input" placeholder="请输入绑定邮箱">
+                        </div>
+
+                        <div class="msg-tip" id="email-send-tip">验证码已发送，请前往邮箱查收</div>
+
+                        <div class="layui-form-item" style="display: flex;">
+                            <input type="text" name="email_code" id="email_code" required lay-verify="required" autocomplete="off" class="layui-input larry-input" placeholder="验证码" maxlength="6" style="flex: 1; margin-right: 10px;">
+                            <button type="button" class="layui-btn layui-btn-normal" id="get-email-code-btn" style="width: 120px;">获取验证码</button>
+                        </div>
+
+                        <div class="layui-form-item" style="margin-top: 25px;">
+                            <button class="layui-btn mylogin" type="button" style="width: 100%" lay-filter="verifyEmail" lay-submit>下一步</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 3. 重设密码面板 -->
+            <div id="panel-reset" style="display: none;">
+                <i class="layui-icon layui-icon-left back-icon to-login" title="返回登录"></i>
+                <div class="title">重设密码</div>
+                <div style="width:80px;height:5px;background:#fff;margin-bottom:20px;margin-top:10px;"></div>
+                <form class="layui-form" action="">
+                    <div class="user-info">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">新密码</label>
+                            <input type="password" name="new_password" id="new_password" required lay-verify="required" autocomplete="off" class="layui-input larry-input" placeholder="请输入新密码">
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">确认密码</label>
+                            <input type="password" name="confirm_password" id="confirm_password" required lay-verify="required" autocomplete="off" class="layui-input larry-input" placeholder="请再次输入新密码">
+                        </div>
+
+                        <div class="layui-form-item" style="margin-top: 25px;">
+                            <button class="layui-btn mylogin" type="button" style="width: 100%" lay-filter="resetPassword" lay-submit>确认重设密码</button>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a class="forget-link to-login">想起密码，返回登录</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        layui.config({
+            base: '../layuiadmin/'
+        }).extend({
+            index: 'lib/index'
+        }).use(['index', 'form', 'util', 'layer'], function () {
+            var $ = layui.$,
+                form = layui.form,
+                layer = layui.layer,
+                util = layui.util,
+                devices = layui.device();
+
+            var isPc = true;
+            if (devices.android === true || devices.ios === true) {
+                isPc = false;
+            }
+            localStorage.setItem('bindEmail',0)
+
+            var indexLoad;
+            var re = true;
+            var InterValObj;
+            var count = 60;
+            var curCount;
+
+            getcompany();
+
+            function switchPanel(panelId) {
+                $('#forget_account').val('')
+                $('#forget_email').val('')
+                $('#email_code').val('')
+                $('#new_password').val('')
+                $('#confirm_password').val('')
+                $('#panel-login, #panel-forget, #panel-reset').hide();
+                $('#' + panelId).fadeIn(200);
+            }
+
+            $('#to-forget').click(function () {
+                switchPanel('panel-forget');
+            });
+
+            $('.to-login').click(function () {
+                switchPanel('panel-login');
+            });
+
+            var emailTimer;
+            var emailCount = 60;
+
+            var uuid = ''
+
+            $('#get-email-code-btn').click(function () {
+                var email = $('#forget_email').val();
+                var account = $('#forget_account').val();
+                var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                if (!email || !reg.test(email)) {
+                    layer.msg('请输入正确的绑定邮箱', { time: 1500 });
+                    return false;
+                }
+
+                var $btn = $(this);
+                $btn.attr("disabled", "disabled").addClass("layui-btn-disabled");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Login/SendEmailCode",
+                    //contentType: "application/json",
+                    data:{ "email": email, account: account },
+                    dataType: 'json',
+                    beforeSend: function () {
+                        indexLoad = layer.load(1, { shade: false });
+                    },
+                    success: function (res) {
+                        if (res.code>0) {
+                            layer.msg('验证码发送成功！', { time: 2000 });
+                            $('#email-send-tip').show();
+                           uuid = res.data
+                            // 倒计时
+                            var current = emailCount;
+                            $btn.text(current + "s后重发");
+                            emailTimer = setInterval(function () {
+                                current--;
+                                if (current <= 0) {
+                                    clearInterval(emailTimer);
+                                    $btn.removeAttr("disabled").removeClass("layui-btn-disabled").text("获取验证码");
+                                } else {
+                                    $btn.text(current + "s后重发");
+                                }
+                            }, 1000);
+                        } else {
+                            layer.msg(res.msg || res.message || '发送失败，请稍后重试');
+                            $btn.removeAttr("disabled").removeClass("layui-btn-disabled").text("获取验证码");
+                        }
+                    },
+                    error: function () {
+                        layer.msg('数据请求出现异常！');
+                        $btn.removeAttr("disabled").removeClass("layui-btn-disabled").text("获取验证码");
+                    },
+                    complete: function () {
+                        layer.close(indexLoad);
+                    }
+                });
+            });
+
+            form.on('submit(verifyEmail)', function (data) {
+                var code = data.field.email_code;
+                if (!uuid) {
+                    layer.msg('请先获取验证码', { time: 1500 });
+                    return false;
+                }
+                if (!code) {
+                    layer.msg('请输入验证码', { time: 1500 });
+                    return false;
+                }
+    
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Login/VerifyForgetCode",
+                    data:{ "uuid": uuid, code: code },
+                    dataType: 'json',
+                    beforeSend: function () {
+                        indexLoad = layer.load(1, { shade: false });
+                    },
+                    success: function (res) {
+                        if (res.code >0) {
+                            layer.msg('验证成功', { time: 1000 }, function () {
+                                switchPanel('panel-reset');
+                            });
+                        } else {
+                            layer.msg(res.msg || res.message || '验证码错误或已失效');
+                        }
+                    },
+                    error: function () {
+                        layer.msg('数据请求出现异常！');
+                    },
+                    complete: function () {
+                        layer.close(indexLoad);
+                    }
+                });
+
+                return false;
+            });
+
+            form.on('submit(resetPassword)', function (data) {
+                var newPwd = data.field.new_password;
+                var confirmPwd = data.field.confirm_password;
+
+                if (newPwd !== confirmPwd) {
+                    layer.msg('两次输入的密码不一致！', { time: 1500 });
+                    return false;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Login/ForgetPassword",
+                    data: { "uuid": uuid, password: newPwd },
+                    dataType: 'json',
+                    beforeSend: function () {
+                        indexLoad = layer.load(1, { shade: false });
+                    },
+                    success: function (res) {
+                        if (res.code > 0) {
+                            layer.msg('密码重置成功，请重新登录！', { time: 2000 }, function () {
+                                location.reload();
+                            });
+                        } else {
+                            layer.msg(res.msg || res.message || '验证码错误或已失效');
+                        }
+                    },
+                    error: function () {
+                        layer.msg('数据请求出现异常！');
+                    },
+                    complete: function () {
+                        layer.close(indexLoad);
+                    }
+                });
+                return false;
+            });
+
+            $(document).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    if ($('#panel-login').is(':visible')) {
+                        $("#login").trigger("click");
+                    }
+                }
+            });
+
+            $("input.layui-input[name='uname']").blur(function () {
+                var acc = $("#uname").val();
+                if (acc == undefined || acc == '') {
+                    return false;
+                }
+                if (!re) {
+                    return false;
+                }
+                re = false;
+                $.ajax({
+                    type: "Post",
+                    url: "/Login/LoginSecurityVerification",
+                    data: { acc: acc },
+                    dataType: 'json',
+                    cache: false,
+                    timeout: 5000,
+                    error: function () { re = true; },
+                    beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1, { shade: false }); },
+                    success: function (data) {
+                        re = true;
+                        if (data.code > 0) {
+                            $("#larry_code").show();
+                        } else {
+                            $("#larry_code").hide();
+                        }
+                    },
+                    complete: function (XMLHttpRequest) { layer.close(indexLoad); }
+                });
+            });
+
+            form.on('submit(getCodeBtn)', function (data) {
+                var acc = data.field.uname;
+                var pwd = data.field.password;
+                if (acc == undefined || acc == '') {
+                    layer.msg('请输入登录账号', { time: 1500 });
+                    return false;
+                }
+                if (pwd == undefined || pwd == '') {
+                    layer.msg('请输入登录密码', { time: 1500 });
+                    return false;
+                }
+                if (!re) return false;
+                re = false;
+                $.ajax({
+                    type: "Post",
+                    url: "/Login/LoginGetSmsCode",
+                    data: { acc: acc, pwd: pwd },
+                    dataType: 'json',
+                    cache: false,
+                    timeout: 60000,
+                    error: function () { layer.msg('数据请求出现异常！'); re = true; },
+                    beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1, { shade: false }); },
+                    success: function (data) {
+                        re = true;
+                        layer.msg(data.msg, { time: 3000 });
+                        if (data.code > 0) {
+                            btnhours();
+                        }
+                    },
+                    complete: function (XMLHttpRequest) { layer.close(indexLoad); }
+                });
+                return false;
+            });
+
+            function btnhours() {
+                curCount = count;
+                $('.getCodeBtn').attr("disabled", "true").addClass("layui-btn-disabled").html(curCount + "秒后再次发送");
+                InterValObj = window.setInterval(SetRemainTime, 1000);
+            }
+
+            function SetRemainTime() {
+                if (curCount == 0) {
+                    window.clearInterval(InterValObj);
+                    $('.getCodeBtn').removeAttr("disabled").html("获取短信验证码").removeClass("layui-btn-disabled");
+                } else {
+                    curCount--;
+                    $('.getCodeBtn').html(curCount + "秒后再次发送");
+                }
+            }
+
+            form.on('submit(login)', function (data) {
+                var acc = data.field.uname;
+                var pwd = data.field.password;
+                var code = data.field.code;
+                var isRemember = data.field.isRemember ? 1 : 0;
+
+                if (acc == undefined || acc == '') {
+                    layer.msg('请输入登录账号', { time: 1500 });
+                    return false;
+                }
+                if (pwd == undefined || pwd == '') {
+                    layer.msg('请输入登录密码', { time: 1500 });
+                    return false;
+                }
+                var deviceInfo = '访问设备：' + (isPc ? 'PC' : '非PC') + '，' + JSON.stringify(devices);
+
+                if (!re) return false;
+                re = false;
+                $.ajax({
+                    type: "Post",
+                    url: "/Login/Login",
+                    data: { acc: acc, pwd: pwd, code: code, deviceInfo: deviceInfo, isRemember: isRemember },
+                    dataType: 'json',
+                    cache: false,
+                    timeout: 60000,
+                    error: function () { layer.msg('数据请求出现错误！'); re = true; },
+                    beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1, { shade: false }); },
+                    success: function (data) {
+                        re = true;
+                        if (data.code > 0) {
+                            if (data.data == "Y") {
+                                layer.alert('系统检测到您的登录密码过于简单，为避免账号被盗，点击确定后请按提示更改为更复杂的登录密码', {
+                                    skin: 'layui-layer-lan',
+                                    closeBtn: 0
+                                }, function () {
+                                    window.location.href = '/User/MyInfo#userInfo=2';
+                                });
+                            } else {
+                                window.location.href = '/';
+                            }
+                        } else {
+                            if (data.msg && data.msg.indexOf('请输入短信验证码') > -1) {
+                                $("#larry_code").show();
+                                layer.msg(data.msg, { time: 3000 });
+                            } else {
+                                layer.msg(data.msg || '登录失败', { time: 3500 });
+                            }
+                        }
+                    },
+                    complete: function (XMLHttpRequest) {
+                        layer.close(indexLoad);
+                    }
+                });
+                return false;
+            });
+
+            function getcompany() {
+                $.ajax({
+                    type: "Post",
+                    url: "/Login/GetCompany",
+                    data: {},
+                    dataType: 'json',
+                    cache: false,
+                    timeout: 60000,
+                    error: function () { layer.msg('数据请求出现异常！'); re = true; },
+                    beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1, { shade: false }); },
+                    success: function (data) {
+                        if (data && data.msg) {
+                            document.title = data.msg + '工作室管理系统-请登录';
+                            $(".title").html(data.msg);
+                        }
+                        var myDate = new Date();
+                        var tYear = myDate.getFullYear();
+                        $(".year").html(tYear);
+                    },
+                    complete: function (XMLHttpRequest) { layer.close(indexLoad); }
+                });
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

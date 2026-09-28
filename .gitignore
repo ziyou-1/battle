@@ -1,0 +1,29 @@
+data/*.db*
+data/secret.key
+data/field.key
+data/*.enc
+data/*.log
+data/uploads/
+data/backups/
+data/**/*.db*
+data/**/*.key
+data/**/*.enc
+static/upload/
+__pycache__/
+*.pyc
+.venv/
+
+# Local runtime and diagnostic artifacts
+*.log
+*.bak
+*.bak-*
+*.tar.gz
+debug.log
+.claude/
+ref/
+_pc_audit.json
+_front_pc_audit.json
+
+# Do not track Android signing credentials or signature sidecars
+android/signing/password.txt
+android/dist/*.idsig

@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>录入订单</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+
+    .layui-form-item {
+        margin-bottom: 5px;
+        clear: both;
+    }
+
+        .layui-form-item .layui-inline {
+            margin-bottom: 3px;
+            margin-right: 0px;
+        }
+
+        .layui-form-item .layui-input-inline {
+            margin-right: 3px;
+        }
+
+    .layui-form-checkbox[lay-skin=primary] span {
+        font-size: 12px
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 5px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .KSPDC {
+        background-color: #ff6a00;
+        border-color: #ff0000;
+        color: #ffffff
+    }
+
+    .kszp {
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .typebox .layui-form-radio * {
+        font-size: 18px;
+    }
+
+    .KSPD {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<textarea  style="display:none" id="orderInfo" ></textarea>
+<div id="root">
+    <template id="template">
+        {{ const i18n = layui.i18n; }}
+        <div id="LAY_app">
+            <form class="layui-form" action="" style="margin-top:5px;margin-left:10px;margin-right:10px" lay-filter="form1">
+                <div class="layui-tab" lay-filter="od">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" lay-id="10">手工录入订单</li>
+                        <li lay-id="20" class="layui-hide-xs [% if o %] layui-hide[% endif %]">导入文件订单</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-xs12 layui-col-sm12 layui-col-md3 layui-col-lg3">
+                                    <div class="layui-form-pane" style="color:#444;">
+                                        <div class="layui-form-item layui-form-text" style="margin-right:0px">
+                                            <label class="layui-form-label" style="width: 100%">订单内容[% if not o %][会自动识别订单各项内容][% endif %]</label>
+                                            <div class="layui-input-block">
+                                                <textarea id="dlcontent" name="dlcontent" placeholder="可以把已经格式化好的订单文本内容直接粘贴到这里，然后用鼠标点一下框框外面任何地方，即可自动识别出订单各个内容" class="layui-textarea autokeys" style="height:500px" lay-verify="dlcontent">[[ o.orderContent if o else "" ]]</textarea>
+
+                                                <blockquote class="layui-elem-quote" style="padding:8px;margin-top:10px">
+
+                                                            [% if not o %][% if not o %]<a lay-href="/System/autodiscernset" lay-text="订单识别关键词设置" lay-tips="订单内容里有识别不了的内容，可以进入这里进行关键词设置" style="color:#ff6a00">
+                                                                <cite>识别不出来或有误？点击这里进行录单识别设置</cite>
+                                                            </a>[% else %]<span style="color:#ff0000">编辑订单时不会自动识别，请手动填写右边项或</span><div class="layui-btn layui-btn-xs layui-btn-warm disbtn" title="点击可以识别上面的订单内容到右侧">点我识别订单</div>[% endif %][% else %]<span style="color:#ff0000">编辑订单时不会自动识别，请手动填写右边项或</span><div class="layui-btn layui-btn-xs layui-btn-warm disbtn" title="点击可以识别上面的订单内容到右侧">点我识别订单</div>[% endif %]
+
+                                                </blockquote>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-col-xs12 layui-col-sm12 layui-col-md9 layui-col-lg9">
+                                    <div class="layui-form-pane" style="color:#444;">
+
+                                        <div class="layui-form-item typebox">
+                                            <label class="layui-form-label" style="color:#ff0000;font-size:20px;">订单类型</label>
+                                            <div class="layui-input-block">
+                                                <input style="color:#ff0000;font-size:20px;" lay-filter="selectorderType" type="radio" name="orderType" value="0" title="代练单" checked>
+                                                <input style="color:#ff0000;font-size:20px;" lay-filter="selectorderType" type="radio" name="orderType" value="1" title="陪玩单" >
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">游戏/区/平台/服</label>
+                                            <div class="layui-input-inline">
+                                                <select id="gameName" name="gameName" lay-filter="selectGame">
+[% for gm in games %]<option value="[[ gm.gameId ]]" data-mobliegame="[[ gm.isMoblieGame ]]" data-pw="[[ gm.isPw ]]" data-accpwd="[[ 'N' if gm.isNotAccPwd == 'Y' else 'Y' ]]"[% if o and o.gameId == gm.gameId %] selected='selected'[% endif %]>[[ gm.gameName ]]</option>[% endfor %]
+</select>
+                                            </div>
+                                            <div class="layui-input-inline">
+                                                <span style="width:0px" id="gameAreaTips"></span>
+                                                <select name="gameArea" id="gameArea" xm-select-radio lay-search="" xm-select-create xm-select="gameArea" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                                                    [% if o and o.gameArea %]<option value="[[ o.gameArea ]]">[[ o.gameArea ]]</option>[% else %]<option value="">请选择或输入</option>[% endif %]
+                                                </select>
+                                            </div>
+                                            <div class="layui-input-inline">
+                                                <span style="width:0px" id="gameServerTips"></span>
+                                                <select name="gameServer" id="gameServer" xm-select-radio lay-search="" xm-select-create xm-select="gameServer" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                                                    [% if o and o.gameServer %]<option value="[[ o.gameServer ]]">[[ o.gameServer ]]</option>[% else %]<option value="">请选择或输入</option>[% endif %]
+                                                </select>
+                                            </div>
+                                            <div class="layui-input-inline">
+                                                <select name="gameJob" xm-select-radio xm-select="gameJob" xm-select-create xm-select-skin="default" xm-select-height="36px">
+                                                    [% if o and o.gameJob %]<option value="[[ o.gameJob ]]">[[ o.gameJob ]]</option>[% else %]<option value="">请选择或输入</option>[% endif %]
+                                                </select>
+                                            </div>
+                                            <div class="layui-input-inline gamegroupsdiv">
+                                                <span style="width:0px" id="gameGroupTips"></span>
+                                                <select name="gameGroup" xm-select-radio xm-select="gameGroup" xm-select-create xm-select-skin="default" xm-select-height="36px">
+                                                    [% if o and o.gameGroup %]<option value="[[ o.gameGroup ]]">[[ o.gameGroup ]]</option>[% else %]<option value="">请选择或输入</option>[% endif %]
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline" id="gameAccDiv">
+                                                <label class="layui-form-label">游戏账号</label>
+                                                <div class="layui-input-inline" style="width:160px;">
+                                                    <input type="text" name="gameAcc" id="gameAcc" autocomplete="off" placeholder="请输入登录账号，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="[[ o.gameAcc if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" id="gamepwdiv">
+                                                <label class="layui-form-label">登录密码</label>
+                                                <div class="layui-input-inline" style="width: 160px">
+                                                    <input type="text" name="gamePwd" id="gamePwd" autocomplete="off" placeholder="请输入登录密码，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" id="zgameAccDiv" style="">
+                                                <label class="layui-form-label">子账号</label>
+                                                <div class="layui-input-inline" style="width: 160px">
+                                                    <input type="text" name="gameZAcc" id="gameZAcc" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="[[ o.zgameAcc if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" id="keyDiv" style="">
+                                                <label class="layui-form-label">暗号/口令</label>
+                                                <div class="layui-input-inline" style="width: 132px">
+                                                    <input type="text" name="loginKey" id="loginKey" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label bossNameLabel">角色名</label>
+                                                <div class="layui-input-inline" style="width: 160px">
+                                                    <input type="text" name="gameRole" id="gameRole" autocomplete="off" placeholder="请输入角色名，没有请留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="[[ o.roleName if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" id="mark1Div">
+                                                <label class="layui-form-label" id="mark1">开拓等级</label>
+                                                <div class="layui-input-inline" style="width: 160px">
+                                                    <input type="text" name="gaemTf" id="gaemTf" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="499" value="">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" id="mark2Div">
+                                                <label class="layui-form-label" id="mark2">当前信息2</label>
+                                                <div class="layui-input-inline" style="width: 160px">
+                                                    <input type="text" name="gameSQ" id="gameSQ" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="499" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item orderTypeArea" style="display:none">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" lay-tips="可进入游戏维护-->订单项目分类管理中维护这里的">项目分类</label>
+                                                <div class="layui-input-block orderTypeDiv">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">
+                                                常用代练/陪玩项目（<span style="color:#1E9FFF;font-size:12px">没有常用的?</span>
+                                                <a lay-href="/Game/projectsetting" lay-text="常用项目设置" lay-tips="进入常用代练项目设置" style="color:#1E9FFF;font-size:12px">
+                                                    <cite>点击常用项目设置</cite>
+                                                </a>
+                                                )
+                                            </div>
+                                            <div class="layui-card-body" style="padding: 8px 0px;">
+
+                                                <div class="dllistdiv">
+
+                                                </div>
+                                                <div style="margin-top:10px">
+                                                    <label class="layui-form-label projectstr" style="color:#E03636">代练/陪玩项目</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="project" id="project" required autocomplete="off" placeholder="可选择上面的项目，也可以直接在此输入项目，若有多个项目，请用/号分隔，最终代练/陪玩项目以这里填写的为准..." class="layui-input layui-input-shadow boxshadow-red" lay-verify="required" maxlength="220" value="[[ o.project if o else '' ]]">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">是否拆分订单</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="chaifen" lay-filter="splitCheck" lay-skin="primary" title='按代练项目拆分订单(项目之间用/号分隔)' value="Y" >
+                                                    <div lay-checkbox><span lay-tips="如果你需要拆分订单，请勾选这里，并且在上面的代练陪玩项目输入框里用斜杠符号/来分隔，比如：等级1-60级/第2个任务啥啥啥/第3个任务啥啥啥，这样提交后，就会出现3笔订单资料一样但代练项目不一样的订单">是</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label timetag">时间要求</label>
+                                                <div class="layui-input-inline daytag" style="width: 90px">
+                                                    <select name="day" id="day" lay-search="">
+                                                        <option value="0" >0天</option>
+                                                                <option value="1" selected>1天</option>
+                                                                <option value="2" >2天</option>
+                                                                <option value="3" >3天</option>
+                                                                <option value="4" >4天</option>
+                                                                <option value="5" >5天</option>
+                                                                <option value="6" >6天</option>
+                                                                <option value="7" >7天</option>
+                                                                <option value="8" >8天</option>
+                                                                <option value="9" >9天</option>
+                                                                <option value="10" >10天</option>
+                                                                <option value="11" >11天</option>
+                                                                <option value="12" >12天</option>
+                                                                <option value="13" >13天</option>
+                                                                <option value="14" >14天</option>
+                                                                <option value="15" >15天</option>
+                                                                <option value="16" >16天</option>
+                                                                <option value="17" >17天</option>
+                                                                <option value="18" >18天</option>
+                                                                <option value="19" >19天</option>
+                                                                <option value="20" >20天</option>
+                                                                <option value="21" >21天</option>
+                                                                <option value="22" >22天</option>
+                                                                <option value="23" >23天</option>
+                                                                <option value="24" >24天</option>
+                                                                <option value="25" >25天</option>
+                                                                <option value="26" >26天</option>
+                                                                <option value="27" >27天</option>
+                                                                <option value="28" >28天</option>
+                                                                <option value="29" >29天</option>
+                                                                <option value="30" >30天</option>
+                                                                <option value="31" >31天</option>
+                                                                <option value="32" >32天</option>
+                                                                <option value="33" >33天</option>
+                                                                <option value="34" >34天</option>
+                                                                <option value="35" >35天</option>
+                                                                <option value="36" >36天</option>
+                                                                <option value="37" >37天</option>
+                                                                <option value="38" >38天</option>
+                                                                <option value="39" >39天</option>
+                                                                <option value="40" >40天</option>
+                                                                <option value="41" >41天</option>
+                                                                <option value="42" >42天</option>
+                                                                <option value="43" >43天</option>
+                                                                <option value="44" >44天</option>
+                                                                <option value="45" >45天</option>
+                                                                <option value="46" >46天</option>
+                                                                <option value="47" >47天</option>
+                                                                <option value="48" >48天</option>
+                                                                <option value="49" >49天</option>
+                                                                <option value="50" >50天</option>
+                                                                <option value="51" >51天</option>
+                                                                <option value="52" >52天</option>
+                                                                <option value="53" >53天</option>
+                                                                <option value="54" >54天</option>
+                                                                <option value="55" >55天</option>
+                                                                <option value="56" >56天</option>
+                                                                <option value="57" >57天</option>
+                                                                <option value="58" >58天</option>
+                                                                <option value="59" >59天</option>
+                                                                <option value="60" >60天</option>
+                                                                <option value="61" >61天</option>
+                                                                <option value="62" >62天</option>
+                                                                <option value="63" >63天</option>
+                                                                <option value="64" >64天</option>
+                                                                <option value="65" >65天</option>
+                                                                <option value="66" >66天</option>
+                                                                <option value="67" >67天</option>
+                                                                <option value="68" >68天</option>
+                                                                <option value="69" >69天</option>
+                                                                <option value="70" >70天</option>
+                                                                <option value="71" >71天</option>
+                                                                <option value="72" >72天</option>
+                                                                <option value="73" >73天</option>
+                                                                <option value="74" >74天</option>
+                                                                <option value="75" >75天</option>
+                                                                <option value="76" >76天</option>
+                                                                <option value="77" >77天</option>
+                                                                <option value="78" >78天</option>
+                                                                <option value="79" >79天</option>
+                                                                <option value="80" >80天</option>
+                                                                <option value="81" >81天</option>
+                                                                <option value="82" >82天</option>
+                                                                <option value="83" >83天</option>
+                                                                <option value="84" >84天</option>
+                                                                <option value="85" >85天</option>
+                                                                <option value="86" >86天</option>
+                                                                <option value="87" >87天</option>
+                                                                <option value="88" >88天</option>
+                                                                <option value="89" >89天</option>
+                                                                <option value="90" >90天</option>
+                                                                <option value="91" >91天</option>
+                                                                <option value="92" >92天</option>
+                                                                <option value="93" >93天</option>
+                                                                <option value="94" >94天</option>
+                                                                <option value="95" >95天</option>
+                                                                <option value="96" >96天</option>
+                                                                <option value="97" >97天</option>
+                                                                <option value="98" >98天</option>
+                                                                <option value="99" >99天</option>
+                                                                <option value="100" >100天</option>
+                                                                <option value="101" >101天</option>
+                                                                <option value="102" >102天</option>
+                                                                <option value="103" >103天</option>
+                                                                <option value="104" >104天</option>
+                                                                <option value="105" >105天</option>
+                                                                <option value="106" >106天</option>
+                                                                <option value="107" >107天</option>
+                                                                <option value="108" >108天</option>
+                                                                <option value="109" >109天</option>
+                                                                <option value="110" >110天</option>
+                                                                <option value="111" >111天</option>
+                                                                <option value="112" >112天</option>
+                                                                <option value="113" >113天</option>
+                                                                <option value="114" >114天</option>
+                                                                <option value="115" >115天</option>
+                                                                <option value="116" >116天</option>
+                                                                <option value="117" >117天</option>
+                                                                <option value="118" >118天</option>
+                                                                <option value="119" >119天</option>
+                                                                <option value="120" >120天</option>
+                                                                <option value="121" >121天</option>
+                                                                <option value="122" >122天</option>
+                                                                <option value="123" >123天</option>
+                                                                <option value="124" >124天</option>
+                                                                <option value="125" >125天</option>
+                                                                <option value="126" >126天</option>
+                                                                <option value="127" >127天</option>
+                                                                <option value="128" >128天</option>
+                                                                <option value="129" >129天</option>
+                                                                <option value="130" >130天</option>
+                                                                <option value="131" >131天</option>
+                                                                <option value="132" >132天</option>
+                                                                <option value="133" >133天</option>
+                                                                <option value="134" >134天</option>
+                                                                <option value="135" >135天</option>
+                                                                <option value="136" >136天</option>
+                                                                <option value="137" >137天</option>
+                                                                <option value="138" >138天</option>
+                                                                <option value="139" >139天</option>
+                                                                <option value="140" >140天</option>
+                                                                <option value="141" >141天</option>
+                                                                <option value="142" >142天</option>
+                                                                <option value="143" >143天</option>
+                                                                <option value="144" >144天</option>
+                                                                <option value="145" >145天</option>
+                                                                <option value="146" >146天</option>
+                                                                <option value="147" >147天</option>
+                                                                <option value="148" >148天</option>
+                                                                <option value="149" >149天</option>
+                                                                <option value="150" >150天</option>
+                                                                <option value="151" >151天</option>
+                                                                <option value="152" >152天</option>
+                                                                <option value="153" >153天</option>
+                                                                <option value="154" >154天</option>
+                                                                <option value="155" >155天</option>
+                                                                <option value="156" >156天</option>
+                                                                <option value="157" >157天</option>
+                                                                <option value="158" >158天</option>
+                                                                <option value="159" >159天</option>
+                                                                <option value="160" >160天</option>
+                                                                <option value="161" >161天</option>
+                                                                <option value="162" >162天</option>
+                                                                <option value="163" >163天</option>
+                                                                <option value="164" >164天</option>
+                                                                <option value="165" >165天</option>
+                                                                <option value="166" >166天</option>
+                                                                <option value="167" >167天</option>
+                                                                <option value="168" >168天</option>
+                                                                <option value="169" >169天</option>
+                                                                <option value="170" >170天</option>
+                                                                <option value="171" >171天</option>
+                                                                <option value="172" >172天</option>
+                                                                <option value="173" >173天</option>
+                                                                <option value="174" >174天</option>
+                                                                <option value="175" >175天</option>
+                                                                <option value="176" >176天</option>
+                                                                <option value="177" >177天</option>
+                                                                <option value="178" >178天</option>
+                                                                <option value="179" >179天</option>
+                                                                <option value="180" >180天</option>
+                                                                <option value="181" >181天</option>
+                                                                <option value="182" >182天</option>
+                                                                <option value="183" >183天</option>
+                                                                <option value="184" >184天</option>
+                                                                <option value="185" >185天</option>
+                                                                <option value="186" >186天</option>
+                                                                <option value="187" >187天</option>
+                                                                <option value="188" >188天</option>
+                                                                <option value="189" >189天</option>
+                                                                <option value="190" >190天</option>
+                                                                <option value="191" >191天</option>
+                                                                <option value="192" >192天</option>
+                                                                <option value="193" >193天</option>
+                                                                <option value="194" >194天</option>
+                                                                <option value="195" >195天</option>
+                                                                <option value="196" >196天</option>
+                                                                <option value="197" >197天</option>
+                                                                <option value="198" >198天</option>
+                                                                <option value="199" >199天</option>
+                                                                <option value="200" >200天</option>
+                                                                <option value="201" >201天</option>
+                                                                <option value="202" >202天</option>
+                                                                <option value="203" >203天</option>
+                                                                <option value="204" >204天</option>
+                                                                <option value="205" >205天</option>
+                                                                <option value="206" >206天</option>
+                                                                <option value="207" >207天</option>
+                                                                <option value="208" >208天</option>
+                                                                <option value="209" >209天</option>
+                                                                <option value="210" >210天</option>
+                                                                <option value="211" >211天</option>
+                                                                <option value="212" >212天</option>
+                                                                <option value="213" >213天</option>
+                                                                <option value="214" >214天</option>
+                                                                <option value="215" >215天</option>
+                                                                <option value="216" >216天</option>
+                                                                <option value="217" >217天</option>
+                                                                <option value="218" >218天</option>
+                                                                <option value="219" >219天</option>
+                                                                <option value="220" >220天</option>
+                                                                <option value="221" >221天</option>
+                                                                <option value="222" >222天</option>
+                                                                <option value="223" >223天</option>
+                                                                <option value="224" >224天</option>
+                                                                <option value="225" >225天</option>
+                                                                <option value="226" >226天</option>
+                                                                <option value="227" >227天</option>
+                                                                <option value="228" >228天</option>
+                                                                <option value="229" >229天</option>
+                                                                <option value="230" >230天</option>
+                                                                <option value="231" >231天</option>
+                                                                <option value="232" >232天</option>
+                                                                <option value="233" >233天</option>
+                                                                <option value="234" >234天</option>
+                                                                <option value="235" >235天</option>
+                                                                <option value="236" >236天</option>
+                                                                <option value="237" >237天</option>
+                                                                <option value="238" >238天</option>
+                                                                <option value="239" >239天</option>
+                                                                <option value="240" >240天</option>
+                                                                <option value="241" >241天</option>
+                                                                <option value="242" >242天</option>
+                                                                <option value="243" >243天</option>
+                                                                <option value="244" >244天</option>
+                                                                <option value="245" >245天</option>
+                                                                <option value="246" >246天</option>
+                                                                <option value="247" >247天</option>
+                                                                <option value="248" >248天</option>
+                                                                <option value="249" >249天</option>
+                                                                <option value="250" >250天</option>
+                                                                <option value="251" >251天</option>
+                                                                <option value="252" >252天</option>
+                                                                <option value="253" >253天</option>
+                                                                <option value="254" >254天</option>
+                                                                <option value="255" >255天</option>
+                                                                <option value="256" >256天</option>
+                                                                <option value="257" >257天</option>
+                                                                <option value="258" >258天</option>
+                                                                <option value="259" >259天</option>
+                                                                <option value="260" >260天</option>
+                                                                <option value="261" >261天</option>
+                                                                <option value="262" >262天</option>
+                                                                <option value="263" >263天</option>
+                                                                <option value="264" >264天</option>
+                                                                <option value="265" >265天</option>
+                                                                <option value="266" >266天</option>
+                                                                <option value="267" >267天</option>
+                                                                <option value="268" >268天</option>
+                                                                <option value="269" >269天</option>
+                                                                <option value="270" >270天</option>
+                                                                <option value="271" >271天</option>
+                                                                <option value="272" >272天</option>
+                                                                <option value="273" >273天</option>
+                                                                <option value="274" >274天</option>
+                                                                <option value="275" >275天</option>
+                                                                <option value="276" >276天</option>
+                                                                <option value="277" >277天</option>
+                                                                <option value="278" >278天</option>
+                                                                <option value="279" >279天</option>
+                                                                <option value="280" >280天</option>
+                                                                <option value="281" >281天</option>
+                                                                <option value="282" >282天</option>
+                                                                <option value="283" >283天</option>
+                                                                <option value="284" >284天</option>
+                                                                <option value="285" >285天</option>
+                                                                <option value="286" >286天</option>
+                                                                <option value="287" >287天</option>
+                                                                <option value="288" >288天</option>
+                                                                <option value="289" >289天</option>
+                                                                <option value="290" >290天</option>
+                                                                <option value="291" >291天</option>
+                                                                <option value="292" >292天</option>
+                                                                <option value="293" >293天</option>
+                                                                <option value="294" >294天</option>
+                                                                <option value="295" >295天</option>
+                                                                <option value="296" >296天</option>
+                                                                <option value="297" >297天</option>
+                                                                <option value="298" >298天</option>
+                                                                <option value="299" >299天</option>
+                                                                <option value="300" >300天</option>
+                                                                <option value="301" >301天</option>
+                                                                <option value="302" >302天</option>
+                                                                <option value="303" >303天</option>
+                                                                <option value="304" >304天</option>
+                                                                <option value="305" >305天</option>
+                                                                <option value="306" >306天</option>
+                                                                <option value="307" >307天</option>
+                                                                <option value="308" >308天</option>
+                                                                <option value="309" >309天</option>
+                                                                <option value="310" >310天</option>
+                                                                <option value="311" >311天</option>
+                                                                <option value="312" >312天</option>
+                                                                <option value="313" >313天</option>
+                                                                <option value="314" >314天</option>
+                                                                <option value="315" >315天</option>
+                                                                <option value="316" >316天</option>
+                                                                <option value="317" >317天</option>
+                                                                <option value="318" >318天</option>
+                                                                <option value="319" >319天</option>
+                                                                <option value="320" >320天</option>
+                                                                <option value="321" >321天</option>
+                                                                <option value="322" >322天</option>
+                                                                <option value="323" >323天</option>
+                                                                <option value="324" >324天</option>
+                                                                <option value="325" >325天</option>
+                                                                <option value="326" >326天</option>
+                                                                <option value="327" >327天</option>
+                                                                <option value="328" >328天</option>
+                                                                <option value="329" >329天</option>
+                                                                <option value="330" >330天</option>
+                                                                <option value="331" >331天</option>
+                                                                <option value="332" >332天</option>
+                                                                <option value="333" >333天</option>
+                                                                <option value="334" >334天</option>
+                                                                <option value="335" >335天</option>
+                                                                <option value="336" >336天</option>
+                                                                <option value="337" >337天</option>
+                                                                <option value="338" >338天</option>
+                                                                <option value="339" >339天</option>
+                                                                <option value="340" >340天</option>
+                                                                <option value="341" >341天</option>
+                                                                <option value="342" >342天</option>
+                                                                <option value="343" >343天</option>
+                                                                <option value="344" >344天</option>
+                                                                <option value="345" >345天</option>
+                                                                <option value="346" >346天</option>
+                                                                <option value="347" >347天</option>
+                                                                <option value="348" >348天</option>
+                                                                <option value="349" >349天</option>
+                                                                <option value="350" >350天</option>
+                                                                <option value="351" >351天</option>
+                                                                <option value="352" >352天</option>
+                                                                <option value="353" >353天</option>
+                                                                <option value="354" >354天</option>
+                                                                <option value="355" >355天</option>
+                                                                <option value="356" >356天</option>
+                                                                <option value="357" >357天</option>
+                                                                <option value="358" >358天</option>
+                                                                <option value="359" >359天</option>
+                                                                <option value="360" >360天</option>
+                                                                <option value="361" >361天</option>
+                                                                <option value="362" >362天</option>
+                                                                <option value="363" >363天</option>
+                                                                <option value="364" >364天</option>
+                                                                <option value="365" >365天</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="layui-input-inline" style="width: 90px">
+                                                    <select name="hours" id="hours" lay-filter="hoursselect">
+                                                        <option value="0" selected>0小时</option>
+                                                                <option value="0.5" >0.5小时</option>
+                                                                <option value="1" >1小时</option>
+                                                                <option value="1.5" >1.5小时</option>
+                                                                <option value="2" >2小时</option>
+                                                                <option value="2.5" >2.5小时</option>
+                                                                <option value="3" >3小时</option>
+                                                                <option value="3.5" >3.5小时</option>
+                                                                <option value="4" >4小时</option>
+                                                                <option value="4.5" >4.5小时</option>
+                                                                <option value="5" >5小时</option>
+                                                                <option value="5.5" >5.5小时</option>
+                                                                <option value="6" >6小时</option>
+                                                                <option value="6.5" >6.5小时</option>
+                                                                <option value="7" >7小时</option>
+                                                                <option value="7.5" >7.5小时</option>
+                                                                <option value="8" >8小时</option>
+                                                                <option value="8.5" >8.5小时</option>
+                                                                <option value="9" >9小时</option>
+                                                                <option value="9.5" >9.5小时</option>
+                                                                <option value="10" >10小时</option>
+                                                                <option value="10.5" >10.5小时</option>
+                                                                <option value="11" >11小时</option>
+                                                                <option value="11.5" >11.5小时</option>
+                                                                <option value="12" >12小时</option>
+                                                                <option value="12.5" >12.5小时</option>
+                                                                <option value="13" >13小时</option>
+                                                                <option value="13.5" >13.5小时</option>
+                                                                <option value="14" >14小时</option>
+                                                                <option value="14.5" >14.5小时</option>
+                                                                <option value="15" >15小时</option>
+                                                                <option value="15.5" >15.5小时</option>
+                                                                <option value="16" >16小时</option>
+                                                                <option value="16.5" >16.5小时</option>
+                                                                <option value="17" >17小时</option>
+                                                                <option value="17.5" >17.5小时</option>
+                                                                <option value="18" >18小时</option>
+                                                                <option value="18.5" >18.5小时</option>
+                                                                <option value="19" >19小时</option>
+                                                                <option value="19.5" >19.5小时</option>
+                                                                <option value="20" >20小时</option>
+                                                                <option value="20.5" >20.5小时</option>
+                                                                <option value="21" >21小时</option>
+                                                                <option value="21.5" >21.5小时</option>
+                                                                <option value="22" >22小时</option>
+                                                                <option value="22.5" >22.5小时</option>
+                                                                <option value="23" >23小时</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline mimidiv" style="display:none;">
+                                                <label class="layui-form-label">密保类型</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="safeKeyType" value="10" title="无" >
+                                                    <input type="radio" name="safeKeyType" value="20" title="安全令牌" checked>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:80px;">订单来源</label>
+                                                <div class="layui-input-inline orderSoureDiv" style="">
+                                                    <span style="width:0px" id="orderSoureTips" class="orderSoureTips"></span>
+                                                    <select name="orderSoures" id="orderSoures" xm-select-radio lay-search="" xm-select="orderSoures" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title" class="orderSoures"></select>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width:80px;">来源单号</label>
+                                                <div class="layui-input-inline" style="">
+                                                    <input type="text" name="souresOrderID" id="souresOrderID" autocomplete="off" placeholder="若有多个请用逗号分隔，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="100" value="[[ o.orderIdView if o else '' ]]">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline" style="">
+                                                <label class="layui-form-label" style="color:#E03636">订单总价</label>
+                                                <div class="layui-input-inline" style="width: 90px">
+                                                    <input type="text" name="price" id="price" style="color: #ff0000; font-weight: 600; cursor: text" lay-tips="销售价格，相当于接进来的价格" lay-verify="number" autocomplete="off" placeholder="请输入接单价" class="layui-input layui-input-shadow boxshadow-red" maxlength="7" title="接下此单的价格" value="[[ o.price if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline" style="display:none">
+                                                <label class="layui-form-label">接单实收款</label>
+                                                <div class="layui-input-inline" style="width: 70px">
+                                                    <input type="text" name="priceReceipts" id="priceReceipts" lay-verify="" autocomplete="off" placeholder="实际收款额" class="layui-input layui-input-shadow boxshadow-red" maxlength="7" title="实际收钱金额" value="[[ o.netReceipts if o else 0 ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline pushplatdiv" style="margin-bottom:0px;display:none">
+                                                <div class="layui-inline ">
+                                                    <label class="layui-form-label rd">发平台价格</label>
+                                                    <div class="layui-input-inline" style="width: 70px">
+                                                        <input type="text" name="throwPrice" id="throwPrice" style="color:#ff0000;font-weight: 600;cursor:text" lay-tips="如果您需要同时将订单发到交易平台上，请在这里输入发到平台的价格。如果不需要在录单的同时直接发到交易平台，请在这里输入0" lay-verify="" autocomplete="off" placeholder="发平台的价格" class="layui-input layui-input-shadow boxshadow-red pushpriceinput" maxlength="6" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline ">
+                                                    <label class="layui-form-label rd">发内部抢单大厅价</label>
+                                                    <div class="layui-input-inline" style="width: 70px">
+                                                        <input type="text" name="throwInterPrice" id="throwInterPrice" style="color: #ff0000; font-weight: 600; cursor: text" lay-tips="如果您需要同时将订单发到内部抢单大厅，请在此输入给内部人员的抢单价。内部和交易平台的价格可以不一样。若这里为0，将不会发内部抢单。注意，这不是指派的价格" lay-verify="" autocomplete="off" placeholder="发平台的价格" class="layui-input layui-input-shadow boxshadow-red" maxlength="6" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label rd">安全保证金</label>
+                                                    <div class="layui-input-inline" style="width:70px">
+                                                        <input type="text" name="safeAmount" id="safeAmount" style="color: #ff0000; font-weight: 600; cursor: text" lay-verify="" autocomplete="off" placeholder="安全保证金" class="layui-input layui-input-shadow boxshadow-red" maxlength="6" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label rd">效率保证金</label>
+                                                    <div class="layui-input-inline" style="width: 70px">
+                                                        <input type="text" name="effAmount" id="effAmount" style="color:#ff0000;font-weight: 600" lay-verify="" autocomplete="off" placeholder="效率保证金" class="layui-input layui-input-shadow boxshadow-red" maxlength="6" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline" style="width:150px">
+                                                    <select name="pushplatformtemplte" id="pushplatformtemplte" lay-filter="">
+                                                        <option value="0">快速发单配置的要求</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item delayDiv" style="display:none">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">延迟发平台</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="isDelay" value="N" title="否" checked="checked">
+                                                    <input type="radio" name="isDelay" value="Y" title="是">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <div class="layui-form-mid layui-text-em">延迟</div>
+                                                <div class="layui-input-inline" style="width:80px">
+                                                    <input type="number" name="delaySec" id="delaySec" placeholder="" autocomplete="off" class="layui-input" min="0" max="30" step="1" lay-affix="number" value="0" lay-tips="设置这个后，系统会先发到内部抢单，在指定时间后再自动发到交易平台。最小延迟1分钟，0为不启用。为防止重复发单，在延迟期间(还没到时间)无法手动发平台。可以手动直接填写秒数">
+                                                </div>
+                                                <div class="layui-form-mid layui-text-em">秒后再发到交易平台</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item layui-hide">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="">支付方式</label>
+                                                <div class="layui-input-inline" style="">
+                                                    <select name="payMethed" id="payMethed" lay-filter="payMethed">
+                                                        <option value="0" selected=&#39;selected&#39;>默认</option>
+                                                        <option value="10" >花呗</option>
+                                                        <option value="20" >信用卡</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">产生的手续费</label>
+                                                <div class="layui-input-inline" style="">
+                                                    <input type="text" name="desServiceFee" id="desServiceFee" style="color:#ff0000;font-weight: 600" lay-verify="number" autocomplete="off" placeholder="请输入产生的手续费" class="layui-input layui-input-shadow boxshadow-red" maxlength="7" value="[[ o.serviceAmount if o else 0 ]]">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label"><i class="layui-icon layui-heimingdan2 blackListIcon" style="color:#E03636;margin-right:5px;display:none" title="该客户在黑名单中"></i>联系电话</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="tel" name="moblie" id="moblie" autocomplete="off" placeholder="可留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="40" value="">
+
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">QQ/微信</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="qq" id="qq" autocomplete="off" placeholder="可留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="[[ o.qq if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">旺旺/YY</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="ww" id="ww" autocomplete="off" placeholder="可留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" value="[[ o.WangWang if o else '' ]]">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div style="display:flex;flex-wrap: wrap;margin-bottom:10px">
+                                                <label class="layui-form-label">会员号/会员名</label>
+                                                <div class="layui-input-inline" style="margin-left:0">
+                                                    <input type="text" id="customerName" name="customerName" lay-verify=""  autocomplete="off" value="" placeholder="会员号或老板名" class="layui-input" maxlength="50" title="如果需要从会员余额扣款，请在这里输入会员名称或会员号">
+                                                </div>
+                                                <div class="layui-form-mid layui-word-aux customerTip">
+                                                    <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" style="color:#16b777;display:none"></i>
+                                                    <i class="layui-icon layui-icon-ok" style="color:#16b777;display:none"></i>
+                                                    <i class="layui-icon layui-icon-close" style="color:#ff5722;display:none"></i>
+                                                    <span class="customerText"></span>
+                                                </div>
+                                                <div class="layui-form-item vipDedCheckBox" style="display:none;display:inline-block">
+                                                    <div class="layui-inline">
+                                                        <input type="checkbox" name="vipDedCheck" id="vipDedCheck" value="Y" lay-filter="vipDedCheck">
+                                                        <div lay-checkbox>
+                                                            <span class="viplabel layui-font-black" lay-tips="勾选此项后将从会员余额扣钱，同时累计消费并产生消费明细">需要从余额扣款</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">重要备注</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="remark" id="remark" autocomplete="off" placeholder="可写重要的备注内容" class="layui-input layui-input-shadow boxshadow-success" maxlength="500" value="[[ o.orderRemark if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">自定义标记</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="tag" id="tag" autocomplete="off" placeholder="可自定义标识，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="20" value="[[ o.customizeTag if o else '' ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label">是否加急</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="jiaji" value="N" title="否" checked>
+                                                    <input type="radio" name="jiaji" value="Y" title="是" >
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item interpushdiv">
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label">内部派单</label>
+                                                <div class="layui-input-inline kdti">
+                                                    <a href="javascript:void(0)" style="margin-bottom:0px;height:38px;width:190px" class="layui-btn layui-btn-outline-secondary layui-btn-sm KSPD" title="将订单快速指派给指定接手人或抛单至内部接单大厅里让大家抢单">暂不指派</a>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline   throwFeelayer">
+                                                <label class="layui-form-label throwFeestr">发给打手价格</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="throwFee" id="throwFee" style="color:#ff0000;font-weight: 600" autocomplete="off" placeholder="抛单价" class="layui-input layui-input-shadow boxshadow-red" maxlength="7" value="0">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline saveassbtn" style="display:none">
+                                                <div class="layui-input-inline">
+                                                    <a href="javascript:;" lay-tips="勾选后，将此人设为默认接手人(打手)，下次录单默认指派给这个人。当你取消打勾后提交，将自动清除该设置">
+                                                        <input type="checkbox" name="defAss" lay-filter="" lay-skin="primary" title='默认指派此人' value="Y">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label">接单销售客服</label>
+                                                <div class="layui-input-block cf">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style="height: 10px"></div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <button class="layui-btn layui-btn-normal layui-btn-lg savebtnclass" type="button" lay-submit lay-filter="savebtn" style="width: 190px">提交保存</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="layui-tab-item">
+
+                            <blockquote class="layui-elem-quote">如果你的订单文件是从其它渠道来的，可以在下面选择文件来源，然后上传文件，点击确定导入</blockquote>
+
+                            <div class="layui-form-pane">
+
+                                <div class="layui-form-item" style="margin-top:15px">
+                                    <label class="layui-form-label">要导入的游戏</label>
+                                    <div class="layui-input-block gm">
+[% for gm in games_real %]<input type="radio" name="importGameName" value="[[ gm.gameName ]]" title="[[ gm.gameName ]]" lay-filter="importGameName">[% endfor %]
+
+
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item" style="margin-top:15px">
+                                    <label class="layui-form-label">导入格式</label>
+                                    <div class="layui-input-block imfomart">
+                                        <input type="radio" name="fileSoure" value="20" title="格式化好的订单内容1(Execl)" lay-filter="fileSoure">
+                                        <input type="radio" name="fileSoure" value="30" title="格式化好的订单内容2(Execl)" lay-filter="fileSoure">
+                                        <input type="radio" name="fileSoure" value="50" title="账号----密码----服务器----项目/目标代币数----订单号----旺旺----手机号----角色名的LOL脚本订单(txt)" lay-filter="fileSoure">
+                                        <input type="radio" name="fileSoure" value="60" title="空格换行的TXT文本格式订单" checked="checked" lay-filter="fileSoure">
+                                        <input type="radio" name="fileSoure" value="70" title="从平台导出的表格格式" lay-filter="fileSoure">
+                                        <input type="radio" name="fileSoure" value="80" title="导入到代练通的表格格式" lay-filter="fileSoure">
+                                        <input type="radio" name="fileSoure" value="10" title="来自魔游客的订单(Execl)" lay-filter="fileSoure">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="margin-top:15px">
+                                    <label class="layui-form-label" style="">选择订单来源</label>
+                                    <div class="layui-input-inline" style="">
+                                        <select name="orderSoures2" id="orderSoures2" lay-filter="orderSoures2">
+                                                    <option value="订单来源错误">订单来源错误</option>
+                                                    <option value="云序工作室淘宝店">云序工作室淘宝店</option>
+                                                    <option value="小小优优">小小优优</option>
+                                                    <option value="西片同学">西片同学</option>
+                                                    <option value="归山的小铺子">归山的小铺子</option>
+                                                    <option value="野原的小店">野原的小店</option>
+                                                    <option value="椎名真白">椎名真白</option>
+                                                    <option value="幽幽子">幽幽子</option>
+                                                    <option value="蝶野雏">蝶野雏</option>
+                                                    <option value="北白川玉子">北白川玉子</option>
+                                                    <option value="藤原千花">藤原千花</option>
+                                                    <option value="玛露西尔">玛露西尔</option>
+                                                    <option value="天野阳菜">天野阳菜</option>
+                                                    <option value="宫水三叶">宫水三叶</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item throwaction" style="margin-top:15px;display:none">
+                                    <label class="layui-form-label">发单动作</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="throwAction" value="0" title="无动作" lay-filter="throwAction" checked="checked">
+                                        <input type="radio" name="throwAction" value="10" title="发单价大于0时就抛内部接单大厅" lay-filter="throwAction">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="margin-top:15px;">
+                                    <label class="layui-form-label">是否过滤重复</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="filterRepeat" value="0" checked="checked">
+                                        <div lay-radio><span lay-tips="会以单号、账号、代练项目等为依据检测是否重复的订单">过滤</span></div>
+                                        <input type="radio" name="filterRepeat" value="10">
+                                        <div lay-radio><span lay-tips="不做重复性检测，忽略重复项">忽略</span></div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="margin-top:15px">
+                                    <label class="layui-form-label">操作提示</label>
+                                    <div class="layui-input-block">
+                                        <div style="color:red;font-weight:600;line-height:40px;margin-left:10px" class="ctips">
+                                            <a style="color:#1E9FFF" href="https://oss4.jidanpu.com/file/%E9%B8%A1%E8%9B%8B%E9%93%BATXT%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF%E6%A0%BC%E5%BC%8F.txt" target="_blank" title="点击下载参考格式">请点击这里下载参考导入格式，鼠标右键选择：将链接另存为</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="margin-top:15px">
+                                    <label class="layui-form-label">导入结果</label>
+                                    <div class="layui-input-block">
+                                        <div style="color:#5FB878; font-weight:600;line-height:40px;margin-left:10px" class="successTips"></div>
+                                        <br />
+                                        <div style="color:#E03636; font-weight:600;line-height:40px;margin-left:10px" class="errorTips"></div>
+                                    </div>
+                                    <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter="filter-demo">
+                                        <div class="layui-progress-bar" lay-percent=""></div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item" style="margin-top:15px">
+                                    <label class="layui-form-label">要导入的文件</label>
+                                    <div class="layui-input-block" style="margin-left:120px">
+                                        <a class="layui-btn demo-class-accept up1" id="upmypic10">
+                                            <i class="layui-icon layui-icon-upload"></i>
+                                            选择订单文件
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <input type="hidden" id="gameNumber" name="gameNumber" value="[[ games_real|length ]]" />
+                <input type="hidden" id="orderID" name="orderID" value="[[ o.orderId if o else '' ]]" />
+                <input type="hidden" id="readPriceIsAllowEdit" name="readPriceIsAllowEdit" value="[[ flags.readPriceIsAllowEdit ]]" />
+                <input type="hidden" id="isChangeService" name="isChangeService" value="[[ flags.isChangeService ]]" />
+                <input type="hidden" id="tGameArea" name="tGameArea" value="[[ o.gameArea if o else '' ]]" />
+                <input type="hidden" id="tGameServer" name="tGameServer" value="[[ o.gameServer if o else '' ]]" />
+                <input type="hidden" id="tGameJob" name="tGameJob" value="[[ o.gameJob if o else '' ]]" />
+                <input type="hidden" id="tGameGroup" name="tGameGroup" value="[[ o.gameGroup if o else '' ]]" />
+                <input type="hidden" id="editCustomerService" name="editCustomerService" value="[[ o.kefu if o else '' ]]" />
+                <input type="hidden" id="editOrderSoure" name="editOrderSoure" value="[[ o.orderSoure if o else '' ]]" />
+                <input type="hidden" id="tproject" name="tproject" value="[[ o.project if o else '' ]]" />
+                <input type="hidden" id="ypwd" name="ypwd" value="[[ o.gamePwd if o else '' ]]" />
+                <input type="hidden" id="isDis" name="isDis" value="0" />
+                <input type="hidden" id="userBussType" value="[[ user.bussType or 0 ]]" />
+                <input type="hidden" id="gameIsPw" />
+                <input type="hidden" id="ispushplattag" value="N" />
+                <input type="hidden" id="tbPayTime" name="tbPayTime" value="" />
+                <input type="hidden" id="defOrderType" name="defOrderType" value="" />
+                <input type="hidden" id="memberDedSwitch" name="memberDedSwitch" value="[[ flags.memberDedSwitch ]]" />
+
+                <div class="kszpDiv" style="display:none">
+                    <div class="layui-form-pane">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="padding: 8px 6px;" title="">排序方式</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="userOrderBy" value="0" title="默认排序" checked=&#39;checked&#39; lay-filter="userOrderBy">
+                                    <input type="radio" name="userOrderBy" value="1" title="按用户排序值大到小"  lay-filter="userOrderBy">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-pane">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">搜索</label>
+                            <div class="layui-input-inline" style=" ">
+                                <input type="text" name="seachUserKey1" id="seachUserKey1" lay-verify="" placeholder="用户名/名称/标记" autocomplete="off" class="layui-input searchinput" value="">
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline" style="">
+                                    <div class="layui-btn layui-btn-normal seachBtn" style="">搜索</div>
+                                    <div class="layui-btn layui-btn-danger resetSeachBtn" style="">重置</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-pane">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="padding: 8px 6px;" title="">可指派接手人</label>
+                                <div class="layui-input-block kszp">
+                                    <input type="radio" name="recUser" lay-skin="primary" title="暂不指派" value="0" lay-filter="userlist" checked="checked">
+                                </div>
+                                <div id="laypagenormal" style=" display: flex; justify-content: center; margin-top:10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <input type="hidden" class="customerId" name="customerId" value="0" />
+                <input type="hidden" class="assMode" name="assMode" value="0" />
+            </form>
+
+        </div>
+    </template>
+</div>
+
+<script src="/JS2019/jquery-3.3.1.min.js"></script>
+<script src="/JS2019/Order/addorder.js?v=2026055431" type="text/javascript"></script>
+
+</body>
+</html>

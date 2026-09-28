@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>交易订单自动调价机制设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<form class="layui-form" action="" lay-filter="form">    
+    <fieldset class="layui-elem-field"> 
+        <div class="layui-field-box">
+            <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+            <script type="text/html" id="switchTpl1">
+                <input type="checkbox" name="status" value="{{d.id2}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="staChecked" {{ d.id5 == 1 ? 'checked' : '' }}>
+            </script>
+            <script type="text/html" id="switchTpl2">
+                <input type="checkbox" name="status2" value="{{d.id2}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="loopChecked" {{ d.str3 == 'Y' ? 'checked' : '' }}>
+            </script>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增一个发交易平台的自动调价机制"><i class="layui-icon layui-icon-add-1"></i>添加自动调价机制</button>
+                </div>
+            </script>
+            <script type="text/html" id="baroperating">
+                <a class="layui-btn layui-btn-xs layui-btn-warm" style="" lay-event="submitEdit" title="编辑参数"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="submitDel" title="删除"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </fieldset>
+
+    <div class="modifyParamDiv" style="display:none;padding:10px 10px">       
+        <div class="layui-form-pane" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">设定游戏</label>
+                <div class="layui-input-inline">
+                    <select id="gameName" name="gameName" lay-filter="selectGame">
+                        <option value="">请选择一款游戏</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+                                    <option value="伊莫">伊莫</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">指定项目分类</label>
+                <div class="layui-input-inline">
+                    <select name="projectType" id="projectType" xm-select-radio lay-search="" xm-select-create xm-select="projectType" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">全部</option>
+                    </select>
+                </div>
+                <div class="layui-form-mid layui-text-em">说明：没指定代表全部，指定具体项目分类时优先级大于全部</div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">加价模式</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="addPriceMode" value="0" title="固定价" lay-filter="addPriceMode">
+                    <div lay-radio><span lay-tips="只按固定价格加价">固定价</span></div>
+                    <input type="radio" name="addPriceMode" value="1" title="百分比" lay-filter="addPriceMode">
+                    <div lay-radio><span lay-tips="将按照初使发单价的百分比加价。例如初始发单价是100元，设置按2%加价，那就是每次加价2元">百分比</span></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">每次加价</label>
+                <div class="layui-input-inline layui-input-wrap">
+                    <input type="number" name="addPrice" id="addPrice" lay-verify="" autocomplete="off" placeholder="不能小于1" maxlength="3" value="1" class="layui-input" min="1" step="1" lay-affix="number">
+                </div>
+                <div class="layui-form-mid layui-text-em bp">元</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">调价频率</label>
+                <div class="layui-input-inline layui-input-wrap">
+                    <input type="number" name="actionInterval" id="actionInterval" placeholder="" autocomplete="off" class="layui-input" min="10" max="180" step="10" lay-affix="number" value="10" lay-tips="自动执行调价间隔时间(分钟数)">
+                </div>
+                <div class="layui-form-mid layui-text-em">分钟</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">最多加价</label>
+                <div class="layui-input-inline layui-input-wrap">
+                    <input type="number" name="maxPushPrice" id="maxPushPrice" lay-verify="" title="每轮加价最多加到多少元，为0代表不限制，同样受亏损上限限制" autocomplete="off" value="0" maxlength="3" class="layui-input" min="1" step="1" lay-affix="number">
+                </div>
+                <div class="layui-form-mid layui-text-em">元</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">亏损上限</label>
+                <div class="layui-input-inline layui-input-wrap">
+                    <input type="number" name="lossCap" id="lossCap" lay-verify="" autocomplete="off" title="最多超过接单价多少元" placeholder="不能小于0" maxlength="4" class="layui-input" value="0" min="0" step="1" lay-affix="number">
+                </div>
+                <div class="layui-form-mid layui-text-em">元</div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行时间</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" name="actionStartTime" id="actionStartTime" placeholder="" autocomplete="off" class="layui-input" min="0" max="23" step="1" lay-affix="number" lay-tips="0-0点代表全天">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" name="actionEndTime" id="actionEndTime" placeholder="" autocomplete="off" class="layui-input" min="0" max="23" step="1" lay-affix="number" lay-tips="0-0点代表全天">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">循环调价</label>
+                <div class="layui-input-inline layui-input-wrap">
+                    <input type="checkbox"  value='1' id="loopAction" name="loopAction" title="开启循环调价">
+                </div>
+            </div>
+
+        </div>
+            <div style="margin-left:110px">
+                <a class="layui-btn layui-btn-normal layui-btn-lg w-lg saveInterfaceBtn">保存设置</a>
+            </div>
+        </div>
+    <input type="hidden" id="ptid" name="ptid" value="0"/>
+</form>
+<script type="text/javascript" src="/JS2019/System/AutomaticAdJustPriceSet.js?v=20260427"></script>
+</body>
+</html>

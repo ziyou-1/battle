@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>指派接手人</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-form-radio * {
+        font-size: 12px;
+    }
+
+    .layui-form-item {
+        margin-bottom: 5px;
+        clear: both;
+    }
+
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+</style>
+
+<form class="layui-form layui-form-pane" action="" style="margin-left:10px;margin-right:10px">
+    <div class="layui-field-box" style="margin-left:0px;padding: 0px 0px;margin-top:3px">
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">用户职位</label>
+            <div class="layui-input-block">
+                <input type="radio" name="userRole" lay-filter="userRole" value="0" title="全部" checked="">
+[% for r in roles %]<input type="radio" name="userRole" lay-filter="userRole" value="[[ r.id ]]" title="[[ r.roleName ]]">[% endfor %]
+
+
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-bottom:0px">
+            <label class="layui-form-label">搜索用户</label>
+            <div class="layui-input-inline" style=" ">
+                <input type="text" name="key1" id="key1" lay-verify="" placeholder="用户名/名称/标记" autocomplete="off" class="layui-input" value="">
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList" title="" style=""></table>
+        <script type="text/html" id="baroperating">
+            <a class="layui-btn layui-btn-xs layui-btn-normal" style="" lay-event="addAss" title="将该账号指派给这个接手人">指派给TA</a>
+        </script>
+    </div>
+    <a class="layui-btn layui-btn-sm layui-btn-danger cleanRec" style="" title="清除当前该账号的接手人">清除当前接手人</a>
+    <input type="hidden" id="gameName" name="gameName" value="[[ acc.gameName if acc else "" ]]" />
+    <input type="hidden" id="accId" name="accId" value="[[ acc.gameAccId if acc else 0 ]]" />
+    <input type="hidden" id="currentRecUserName" name="currentRecUserName" value="[[ acc.recUserName if acc else "" ]]" />
+</form>
+<script src="/JS2019/GameAccounts/assignationgamacc.js?v=1101" type="text/javascript"></script>
+
+</body>
+</html>

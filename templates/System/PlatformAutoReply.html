@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>平台消息自动回复打手设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="form">
+    <blockquote class="layui-elem-quote" style="font-size:14px">
+        <p style="font-weight:600">功能介绍：</p>
+        <p>您可以按需在此配置自动回复交易平台的打手留言消息，当交易平台有对应动作时，将会自动回复消息给打手；</p>
+        <p style="font-weight:600">前提条件：</p>
+        <p>要求您已在本系统对接过第三方交易平台</p>
+    </blockquote>
+
+    <div class="layui-elem-field">
+        <legend style="margin-top:10px">自动回复平台打手消息设置</legend>
+        <div class="layui-field-box">
+            <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+            <script type="text/html" id="switchTpl1">
+                <input type="checkbox" name="status" value="{{d.PlatformAutoReplySetId}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="staChecked" {{ d.ReplyStatus == 0 ? 'checked' : '' }}>
+            </script>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增一个平台自动回复消息"><i class="layui-icon layui-icon-add-1"></i>新增自动回复</button>
+                    <button class="layui-btn layui-btn-xs" lay-event="batchEdit" type="button" title="刷新当前数据"><i class="layui-icon layui-icon-edit"></i>批量修改自动回复内容</button>
+                </div>
+            </script>
+            <script type="text/html" id="baroperating">
+                <a class="layui-btn layui-btn-xs layui-btn-warm" style="" lay-event="submitEdit" title="编辑参数"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="submitDel" title="删除该条自动回复"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+
+
+    <div class="modifyParamDiv" style="display:none">
+        <blockquote class="layui-elem-quote">
+            <span>根据实际需要，请在下面配置</span>
+        </blockquote>
+        <div class="layui-form-pane" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">限定游戏</label>
+                <div class="layui-input-block">
+                    <select id="gameName" name="gameName" lay-filter="selectGame">
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+                                <option value="伊莫">伊莫</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">回复时机</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="replyOcc" value="0" title="接单后">
+                    <input type="radio" name="replyOcc" value="10" title="申请验收后">
+                    <input type="radio" name="replyOcc" value="15" title="提交异常后">
+                    <input type="radio" name="replyOcc" value="20" title="申请撤销后">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding:8px 2px">指定专用人员类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="replyUserType" value="-1" title="不指定" checked="checked" lay-filter="replyUserType">
+                    <input type="radio" name="replyUserType" value="1" title="发单客服" lay-filter="replyUserType">
+                    <input type="radio" name="replyUserType" value="0" title="接单销售" lay-filter="replyUserType">
+                </div>
+            </div>
+            <div class="layui-form-item inputOrderKefuDiv" style="display:none">
+                <label class="layui-form-label">指定专用人员</label>
+                <div class="layui-input-block">
+                    <select name="inputOrderKefu" id="inputOrderKefu" xm-select-radio lay-search="" xm-select="inputOrderKefu" xm-select-skin="default" xm-select-height="36px" xm-select-search="" class="" title="">
+                        <option value="">选择或输入</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">自动回复内容</label>
+                <div class="layui-input-block">
+                    <textarea id="replycontent" name="replycontent" placeholder="请在这里输入要自动回复的内容，不要有任何特殊代码" class="layui-textarea" style="height:80px" maxlength="200"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上传图片</label>
+                <div>
+                    <button type="button" class="layui-btn" id="upbtn" style="margin-right:15px;">上传</button>
+                    <span class="pic" style="cursor:pointer;"></span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用在哪些平台</label>
+                <div class="layui-input-block">
+                                <input type="checkbox" name="platformIds" value="0" title="内部" />
+                                <input type="checkbox" name="platformIds" value="8" title="全能代" />
+                                <input type="checkbox" name="platformIds" value="10" title="代练通" />
+                                <input type="checkbox" name="platformIds" value="30" title="代练妈妈" />
+                                <input type="checkbox" name="platformIds" value="50" title="咕噜代练" />
+                                <input type="checkbox" name="platformIds" value="60" title="易代练" />
+                                <input type="checkbox" name="platformIds" value="80" title="代练丸子" />
+                                <input type="checkbox" name="platformIds" value="90" title="趣代练" />
+                                <input type="checkbox" name="platformIds" value="91" title="代练多" />
+                                <input type="checkbox" name="platformIds" value="92" title="代游通" />
+                                <input type="checkbox" name="platformIds" value="93" title="天玩代练" />
+                                <input type="checkbox" name="platformIds" value="94" title="通天代练" />
+                                <input type="checkbox" name="platformIds" value="95" title="享代练" />
+
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align:center;align-items:center">
+            <a class="layui-btn layui-btn-normal layui-btn-lg w-lg saveBtn">保存设置</a>
+        </div>
+    </div>
+
+    <div id="batchRelyContent" style="display:none;">
+        <blockquote class="layui-elem-quote">
+            <span>这个功能是作用于自动回复内容一致的游戏设置，当您在填写完回复内容保存后，所有已勾选的游戏消息设置，都将统一变更为刚保存的自动回复内容</span>
+        </blockquote>
+        <div class="layui-form-pane" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">自动回复内容</label>
+                <div class="layui-input-block">
+                    <textarea id="batchContent" name="batchContent" placeholder="请在这里输入要自动回复的内容，不要有任何特殊代码" class="layui-textarea" style="height:80px" maxlength="200"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="ptid" id="ptid" />
+    <input type="hidden" name="defGame" id="defGame" value="[[ defaultGame ]]" />
+</form>
+<script src="/JS2019/System/PlatformAutoReply.js?v=20260428" type="text/javascript"></script>
+
+
+
+</body>
+</html>

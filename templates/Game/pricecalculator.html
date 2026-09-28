@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>报价计算器</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    body{
+        background:#f2f2f2;
+    }
+    .layui-form{
+        font-size:15px;
+    }
+    .bold {
+        font-weight: 600
+    }
+    .size14 {
+        font-size: 14px;
+    }
+    .size20 {
+        font-size: 20px;
+    }
+   
+    .dwdiv .item {
+        display: flex;
+    }
+     
+        .dwdiv .name {
+            height: 30px;
+            line-height: 30px;
+            min-width: 40px;
+            border: 1px solid #ccc;
+            margin: 5px;
+            border-radius: 2px;
+            text-align: center;
+            padding:0 5px;
+        }
+
+    .dwdiv .item .level {
+        display: flex;
+        flex-wrap: wrap;
+        flex: 1;
+    }
+
+        .dwdiv .item .level div {
+            height: 30px;
+            line-height: 30px;
+            width: 40px;
+            border: 1px solid #ccc;
+            margin: 5px;           
+            border-radius: 2px;
+            cursor: pointer;
+            text-align:center;
+        }
+            .dwdiv .item .level div.activenum {
+                background: #0094ff;
+                color:#fff;
+            }
+            .layui-inlines .start, .layui-inlines .end, .layui-inlines .startbtn, .layui-inlines .endbtn {
+                display: flex;
+                align-items: center;
+            }
+    .layui-inlines .start, .layui-inlines .end {
+        margin-top: 10px;
+    }
+    .layui-inlines .startbtn, .layui-inlines .endbtn {
+        margin-left: 10px;
+    }
+    .dwdiv .layui-inline01 {
+        font-size: 16px;
+        padding-left: 35px;
+    }
+    .startbtn input, .endbtn input {
+        width: 70px;
+        height: 30px;
+        border-color: #d2d2d2;
+        text-align:center;
+    }
+    .flex-row{
+        display:flex;
+    }
+        .flex-row .flex-item:first-child{
+            margin-right:20px;
+        }
+        .flex-row .flex-item:last-child {
+           width:780px;
+        }
+        .layui-form-label {
+            width: 175px;
+        }
+    .startsd .item {
+        border: 1px solid #ccc;
+        margin-right: 5px;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+        .startsd .item.active {
+            background: #1E9FFF;
+            color: #fff;
+            border-color: #1E9FFF;            
+        }
+        .layui-tab-title li{
+            font-weight:bold;
+        }
+        .layui-tab.sidetab {
+            display: flex;
+            align-items: flex-start;
+        }
+        .layui-tab-title.sidetitle{
+            width: 120px;
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+            background: #fff;
+            position: static;
+            height: auto;
+        }
+        .layui-tab-content{
+            background:#fff;
+            flex:1;
+        }
+    .sidetab.layui-tab-brief > .layui-tab-more li, .sidetab.layui-tab-brief > .layui-tab-title li {
+        border-right: 4px solid transparent;
+    }
+    .sidetab.layui-tab-brief > .layui-tab-more li.layui-this, .sidetab.layui-tab-brief > .layui-tab-title .layui-this {
+        border-right: 4px solid #5FB878;
+    }
+        .sidetab.layui-tab-brief > .layui-tab-more li.layui-this:after, .sidetab.layui-tab-brief > .layui-tab-title .layui-this:after {
+            border-bottom: 0px solid #5FB878;
+        }
+
+
+    @media screen and (max-width:767px) {
+        .flex-row {
+            flex-direction: column;
+        }
+            .flex-row .flex-item:last-child {
+                width: 100%;
+            }
+        .layui-form-label {
+            width: auto;
+        }
+    }
+</style>
+<form class="layui-form" action="" lay-filter="pro">
+
+    <div class="layui-tab layui-tab-brief sidetab" lay-filter="selectTab">
+        <ul class="layui-tab-title sidetitle">
+            <li class="layui-this" data-game="王者荣耀">王者荣耀</li>
+            <li class="" data-game="英雄联盟手游">英雄联盟手游</li>
+            <li class="" data-game="英雄联盟手游2">英雄联盟手游2</li>
+            <li class="" data-game="英雄联盟">英雄联盟</li>
+            <li class="" data-game="幻塔">幻塔</li>
+            <li class="" data-game="永劫无间">永劫无间</li>
+            <li class="" data-game="和平精英">和平精英</li>
+            <li class="" data-game="金铲铲之战">金铲铲之战</li>
+            <li class="" data-game="云顶之弈">云顶之弈</li>
+            <li class="" data-game="原神">原神</li>
+            <li class="" data-game="哈利波特">哈利波特</li>
+            <li class="" data-game="APEX英雄">APEX英雄</li>
+            <li class="" data-game="新世界">新世界</li>
+            <li class="" data-game="守望先锋">守望先锋</li>
+            <li class="" data-game="穿越火线">穿越火线</li>
+            <li class="" data-game="QQ飞车">QQ飞车</li>
+            <li class="" data-game="跑跑卡丁车手游">跑跑卡丁车手游</li>
+            <li class="" data-game="暗区突围">暗区突围</li>
+            <li class="" data-game="暗黑不朽">暗黑不朽</li>
+            <li class="" data-game="第五人格">第五人格</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <blockquote class="layui-elem-quote tosetting">
+                    报价器-王者荣耀，如需设置报价参数，请<a lay-href="/Game/pricecalculatorsetting" style="color:#0094ff" lay-text="王者荣耀报价设置" lay-tips="王者荣耀报价设置">点击这里</a>
+                </blockquote>
+                <blockquote class="layui-elem-quote">
+                    <span style="color:#ff0000">注意：平台已推出全新独立的万能游戏报价器工具，免费使用。系统里此功能将在5月1日前移除，请尽快使用独立的报价器工具<a href="https://www.jidanpu.com/html/calculator.html" style="color:#0094ff;font-size:14px;" target="_blank" lay-tips="点这里下载独立版报价器工具">==下载地址点这里==</a></span>
+                </blockquote>
+                <div class="layui-tab layui-tab-brief" lay-filter="project">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li class="" data-project="巅峰赛">巅峰赛</li>
+                        <li class="" data-project="战力">战力</li>
+                    </ul>
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-tab flex-row ">
+                            <div class="flex-item" style="margin-right:20px;">
+                                <div class="layui-form-item dwdiv">
+                                    <div class="layui-inlines layui-inline01">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="flex-item">
+
+                                <div class="layui-form-item dwdiv">
+                                    <div class="layui-inlines">
+                                        <div class="start">
+                                            <label class="layui-form-label">起始：</label>
+                                            <div class="layui-input-block" style="display: flex; align-items: center;margin-left: 0;">
+                                                <span class="start0">段位</span>
+                                                <div class="startbtn" style="display:none">
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm mystarreduce01">
+                                                        <i class="layui-icon">&#xe67e;</i>
+                                                    </button>
+                                                    <input class="layui-input" type="text" onkeyup="value=value.replace(/[^\d]/g,'')" name="starcur01" />
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm mystaradd01">
+                                                        <i class="layui-icon">&#xe654;</i>
+                                                    </button>
+                                                    <span style="margin-left:10px;" class="startxt">星</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="end">
+                                            <label class="layui-form-label">结束：</label>
+                                            <div class="layui-input-block" style="display: flex; align-items: center;margin-left: 0;">
+                                                <span class="end0">段位</span>
+                                                <div class="endbtn" style="display:none">
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm myendreduce01">
+                                                        <i class="layui-icon">&#xe67e;</i>
+                                                    </button>
+                                                    <input class="layui-input" type="text" onkeyup="value=value.replace(/[^\d]/g,'')" name="endcur01" value="" />
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm myendadd01">
+                                                        <i class="layui-icon">&#xe654;</i>
+                                                    </button>
+                                                    <span style="margin-left:10px;" class="startxt">星</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item pingtaidiv">
+                                    <label class="layui-form-label">平台：</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="platfrom" value="0" title="安卓" checked>
+                                        <input type="radio" name="platfrom" value="1" title="苹果">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item servicetypediv">
+                                    <label class="layui-form-label">服务类型：</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="wzservicetype" value="10" title="代练" checked="">
+                                        <input type="radio" name="wzservicetype" value="20" title="陪练">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item dfsdiv" style="display:none">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">当前：</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="dfs_rate1" id="dfs_rate1" lay-verify="" autocomplete="off" class="layui-input" maxlength="5">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">目标：</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="dfs_rate2" lay-verify="" autocomplete="off" class="layui-input" maxlength="5">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">铭文区间：</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="mingwenvalue" value="1" title="1-50">
+                                        <input type="radio" name="mingwenvalue" value="2" title="51-100">
+                                        <input type="radio" name="mingwenvalue" value="3" title="101-120">
+                                        <input type="radio" name="mingwenvalue" value="4" title="121-140">
+                                        <input type="radio" name="mingwenvalue" value="5" title="141-150">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">需要报价的套餐：</label>
+                                    <div class="layui-input-block taocao">                                        
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">报价文本包含预计时间：</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="isbaohan" checked lay-skin="switch" value="1">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item projectname">
+                                    <label class="layui-form-label">报价文本包含项目名称：</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="isproject1" lay-skin="switch" value="1" checked>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item projectname">
+                                    <label class="layui-form-label">报价文本包含首单特价：</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="isfirstorder1" lay-skin="switch" value="1" checked>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block mytotalbtn">
+                                        <button type="submit" class="layui-btn " lay-submit="" lay-filter="JSbtn_WZRY">计算报价</button>
+                                        <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="JSbtn_WZRY" data-pricetype="10">计算挽留折扣</button>
+                                        <button type="submit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="refsh">刷新</button>
+                                        <button type="button" class="layui-btn layui-btn-primary copycontent" lay-submit="">一键复制</button>
+                                    </div>
+                                </div>
+                                <div class="layadmin-shortcut" style="margin-top:20px;">
+                                    <div style="padding:20px;padding-top: 0px;">
+                                        <textarea name="desc" placeholder="报价内容" style="height:400px;" class="layui-textarea resultUL resultUL01"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item ">
+                <blockquote class="layui-elem-quote tosetting">
+                    报价器-王者荣耀，如需设置报价参数，请到游戏维护->游戏报价器设置，也可以<a lay-href="/Game/commonpricesetting?gameName=王者荣耀" style="color:#0094ff" lay-text="王者荣耀报价设置" lay-tips="王者荣耀报价设置" class="goset">点击这里快速进入设置</a>
+                </blockquote>
+                <blockquote class="layui-elem-quote">
+                    <span style="color:#ff0000">注意：平台已推出全新独立的万能游戏报价器工具，免费使用。系统里此功能将在3月1日前移除，请尽快使用独立的报价器工具<a href="https://www.jidanpu.com/html/calculator.html" style="color:#0094ff;font-size:14px;" target="_blank" lay-tips="点这里下载独立版报价器工具">==下载地址点这里==</a></span>
+                </blockquote>
+                <div class="layui-tab layui-tab-brief" lay-filter="project">
+                    <ul class="layui-tab-title noapex" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li class="" data-project="分数区间">分数区间</li>
+                        <li class="single" data-project="段位-单排" style="display:none;">段位-单排</li>
+                        <li class="single" data-project="分数区间-单排" style="display:none;">分数区间-单排</li>
+                    </ul>
+                    <ul class="layui-tab-title apex" style="display:none;">
+                        <li class="layui-this" data-project="大逃杀段位">大逃杀段位</li>
+                        <li class="" data-project="分数区间-大逃杀">分数区间-大逃杀</li>
+                        <li data-project="竞技段位">竞技段位</li>
+                        <li data-project="分数区间-竞技">分数区间-竞技</li>
+                    </ul>
+                    <ul class="layui-tab-title threes" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li class="" data-project="分数区间-生活技能">分数区间-生活技能</li>
+                        <li data-project="分数区间-武器等级">分数区间-武器等级</li>
+                    </ul>
+                    <ul class="layui-tab-title heros" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-大师上分">分数区间-大师上分</li>
+                        <li data-project="分数区间-宗师上分">分数区间-宗师上分</li>
+                        <li data-project="分数区间-王者上分">分数区间-王者上分</li>
+                    </ul>
+                    <ul class="layui-tab-title herossy" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="段位-峡谷之巅">段位-峡谷之巅</li>
+                        
+                        <li data-project="分数区间-宗师上分">分数区间-宗师上分</li>
+                        <li data-project="分数区间-王者上分">分数区间-王者上分</li>
+                    </ul>
+                    <ul class="layui-tab-title xianf" style="display:none;">
+                        <li class="layui-this" data-project="分数区间-重装">分数区间-重装</li>
+                        <li data-project="分数区间-输出">分数区间-输出</li>
+                        <li data-project="分数区间-支援">分数区间-支援</li>
+                        <li data-project="分数区间-开放">分数区间-开放</li>
+                    </ul>
+                    <ul class="layui-tab-title cyhx" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="军衔等级段位">军衔等级段位</li>
+                        <li data-project="分数区间-荣耀枪王上分">分数区间-荣耀枪王上分</li>
+                    </ul>
+                    <ul class="layui-tab-title huanta" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-元帅上分">分数区间-元帅上分</li>
+                        <li data-project="分数区间-星岛地图">分数区间-星岛地图</li>
+                        <li data-project="分数区间-班吉斯地图">分数区间-班吉斯地图</li>
+                        <li data-project="分数区间-纳维亚地图">分数区间-纳维亚地图</li>
+                        <li data-project="分数区间-克罗恩地图">分数区间-克罗恩地图</li>
+                        <li data-project="分数区间-沃兰地图">分数区间-沃兰地图</li>
+                    </ul>
+                    <ul class="yuanshen layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间">分数区间</li>
+                        <li data-project="段位-冒险等级">段位-冒险等级</li>
+                        <li data-project="分数区间-璃月探索度">分数区间-璃月探索度</li>
+                        <li data-project="分数区间-稻妻探索度">分数区间-稻妻探索度</li>
+                        <li data-project="分数区间-渊下宫探索度">分数区间-渊下宫探索度</li>
+                        <li data-project="分数区间-蒙德探索度">分数区间-蒙德探索度</li>
+                    </ul>
+                    <ul class="hepinjy layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-王牌上分">分数区间-王牌上分</li>
+                        <li data-project="分数区间">分数区间</li>
+                    </ul>
+                    <ul class="anqutw layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-传说上分">分数区间-传说上分</li>
+                        <li data-project="分数区间">分数区间</li>
+                        <li data-project="段位-等级">段位-等级</li>
+                        <li data-project="段位-通行证等级">段位-通行证等级</li>
+                    </ul>
+                    <ul class="anhbx layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位-普通等级">段位-普通等级</li>
+                        <li data-project="段位-巅峰等级">段位-巅峰等级</li>
+                    </ul>
+                    <ul class="jincc layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-大师到王者上分">分数区间-大师到王者上分</li>
+                    </ul>
+                    <ul class="ppkdc layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-车王上星">分数区间-车王上星</li>
+                    </ul>
+                    <ul class="dwreng layui-tab-title" style="display:none;">
+                        <li class="layui-this" data-project="段位">段位</li>
+                        <li data-project="分数区间-七阶上星">分数区间-七阶上星</li>
+                    </ul>
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-tab flex-row">
+                            <div class="flex-item">
+                                <div class="layui-form-item dwdiv">
+                                    <div class="layui-inlines layui-inline01">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-item">
+                                <div class="layui-form-item dwdiv">
+                                    <div class="layui-inlines">
+                                        <div class="start">
+                                            <label class="layui-form-label">起始：</label>
+                                            <div class="layui-input-block" style="display: flex;align-items: center;margin-left: 0;">
+                                                <span class="start0">段位</span>
+                                                <div class="startbtn" style="display:none;">
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm  mystarreduce02">
+                                                        <i class="layui-icon">&#xe67e;</i>
+                                                    </button>
+                                                    <input class="layui-input" type="text" onkeyup="value=value.replace(/[^\d]/g,'')" name="starcur02" />
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm mystaradd02">
+                                                        <i class="layui-icon">&#xe654;</i>
+                                                    </button>
+                                                    <span style="margin-left:10px;" class="startxt startxts">星</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="startsd" style="display:none;padding-top: 5px;">
+                                            <label class="layui-form-label jintxt">晋位赛胜率：</label>
+                                            <div class="layui-input-block myjinlist" style="display: flex;align-items: center;margin-left: 0;">
+                                                <div class="item">0胜0负</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="end">
+                                            <label class="layui-form-label"> 结束：</label>
+                                            <div class="layui-input-block" style="display: flex; align-items: center;margin-left:0;">
+                                                <span class="end0">段位</span>
+                                                <div class="endbtn" style="display:none;">
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm myendreduce02">
+                                                        <i class="layui-icon">&#xe67e;</i>
+                                                    </button>
+                                                    <input class="layui-input" type="text" onkeyup="value=value.replace(/[^\d]/g,'')" name="endcur02" value="" />
+                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm myendadd02">
+                                                        <i class="layui-icon">&#xe654;</i>
+                                                    </button>
+                                                    <span style="margin-left:10px;" class="startxt startxtd">星</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item pingtaidiv">
+                                    <label class="layui-form-label">平台：</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="platfrom2" value="0" title="安卓" checked>
+                                        <input type="radio" name="platfrom2" value="1" title="苹果">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item servicetypediv">
+                                    <label class="layui-form-label">服务类型：</label>
+                                    <div class="layui-input-block">
+                                        <input type="radio" name="wzservicetype2" value="10" title="代练" checked="">
+                                        <input type="radio" name="wzservicetype2" value="20" title="陪练">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item dfsdiv" style="display:none">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">当前：</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="dfs_rate11" id="dfs_rate11" lay-verify="" autocomplete="off" class="layui-input" maxlength="5">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">目标：</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="dfs_rate22" lay-verify="" autocomplete="off" class="layui-input" maxlength="5">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">需要报价的套餐：</label>
+                                    <div class="layui-input-block taocao2">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">报价文本包含预计时间：</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="isbaohan2" lay-skin="switch" value="1" checked>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item projectname">
+                                    <label class="layui-form-label">报价文本包含项目名称：</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="isproject2" lay-skin="switch" value="1" checked>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item projectname">
+                                    <label class="layui-form-label">报价文本包含首单特价：</label>
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="isfirstorder2" lay-skin="switch" value="1" checked>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type="submit" class="layui-btn subbtn" lay-submit="" lay-filter="JSbtn_WZRY">计算报价</button>
+                                        <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="JSbtn_WZRY" data-pricetype="10">计算挽留折扣</button>
+                                        <button type="submit" class="layui-btn layui-btn-normal refsh" lay-submit="" lay-filter="refsh">刷新</button>
+                                        <button type="button" class="layui-btn layui-btn-primary copycontent" lay-submit="">一键复制</button>
+                                    </div>
+                                </div>
+                                <div class="layadmin-shortcut" style="margin-top:20px;">
+                                    <div style="padding:20px;padding-top: 0px;">
+                                        <textarea name="desc" placeholder="报价内容" style="height:400px;" class="layui-textarea resultUL resultUL02"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="gameName" id="gameName" value="[[ request.args.get("gameName") or "王者荣耀" ]]" />
+</form>
+
+<script src="/JS2019/Game/pricecalculator.js?v=20260427" type="text/javascript"></script>
+</body>
+</html>

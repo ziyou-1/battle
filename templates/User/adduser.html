@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新开/编辑系统子账户</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 3px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .layui-form-radio {
+        line-height: 28px;
+        margin: 6px 10px 0 0;
+        padding-right: 0px;
+        cursor: pointer;
+        font-size: 0;
+    }
+
+    .layui-form-item .layui-inline {
+        margin-bottom: 5px;
+        margin-right: 10px;
+    }
+</style>
+<div id="root">
+    <template id="template">
+        {{ const i18n = layui.i18n; }}
+        <div id="LAY_app">
+            <form class="layui-form layui-form-pane" action="" style="margin-right:5px">
+
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
+                        <div class="admin-info" style="padding: 10px 10px 20px 10px;">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="color:#ff0000">自定义登录账号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="loginAcc" id="loginAcc" lay-tips="你帮TA定义一个登录系统的账号，建议用手机号，TA后面可以自己更改" lay-verify="required|loginAcc" autocomplete="off" placeholder="可以用手机号/QQ号/姓名做为登录账号，必填" class="layui-input layui-input-shadow" maxlength="16" value="[[ eu.loginAcc if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="color:#ff0000">账号名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="userName" id="userName" lay-tips="这个人的真实姓名或昵称，不要带特殊符号或空格，允许用下划线" lay-verify="required|userName" autocomplete="off" placeholder="用户的姓名或昵称都可以，不允许有任何特殊符号、空格，必填" class="layui-input layui-input-shadow" maxlength="24" value="[[ eu.userName if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-hide">
+                                <label class="layui-form-label">真实姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="" autocomplete="off" placeholder="" title="这个子账号已通过了人脸识别实名认证，身份证号已锁定无法修改" disabled="disabled" class="layui-input layui-input-shadow boxshadow-success">
+                                </div>
+                                <div class="layui-form-mid" style="padding: 0!important;">
+                                    <div class="layui-btn layui-btn-primary layui-border-blue resetRnameCertBtn">重新实名</div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item ">
+                                <label class="layui-form-label">身份证号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="sid" autocomplete="off" title=&#39;有就填没有可不填&#39; placeholder="有则填，没有可以不填" class="layui-input layui-input-shadow boxshadow-success" value="">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" pane="">
+                                <label class="layui-form-label">业务类型</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="bussType" value="0" title="默认" [% if (eu.bussType if eu else 1)|string == "0" %]checked[% endif %] />
+                                    <div lay-radio><span lay-tips="如果这个人做代练+陪玩业务的就选这个">代练+陪玩</span></div>
+                                    <input type="radio" name="bussType" value="1" title="默认" [% if (eu.bussType if eu else 1)|string == "1" %]checked[% endif %] />
+                                    <div lay-radio><span lay-tips="如果这个人只做代练业务就选这个">专做代练</span></div>
+                                    <input type="radio" name="bussType" value="2" title="默认" [% if (eu.bussType if eu else 1)|string == "2" %]checked[% endif %] />
+                                    <div lay-radio><span lay-tips="如果这个人只做陪玩陪练的就选这个">专做陪玩</span></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" pane="">
+                                <label class="layui-form-label">成员类型</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="userType" value="0" title="默认" [% if (eu.userType if eu else 0)|string == "0" %]checked[% endif %]>
+                                    <div lay-radio><span lay-tips="用来区分这人是外部还是内部的人，内部的员工或线下人员可选这个，该选项并无实际作用">内部成员</span></div>
+                                    <input type="radio" name="userType" value="1" title="默认" [% if (eu.userType if eu else 0)|string == "1" %]checked[% endif %]>
+                                    <div lay-radio><span lay-tips="外部或线上的可选这个，该选项并无实际作用">合作用户</span></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="display:none">
+                                <label class="layui-form-label" style="color:#ff0000">基本底薪</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="basicSalary" lay-tips="记录该人员的基本底薪" lay-verify="required|number" maxlength="6" autocomplete="off" placeholder="该用户的每月基本底薪金额，可不填" class="layui-input layui-input-shadow boxshadow-success" value="[[ eu.basicSalary if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" pane="">
+                                <label class="layui-form-label">销售/代练提成模式</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="autoBrokerageType" lay-filter="autoBrokerageTypeFilter" value="10" title="默认" >
+                                    <div lay-radio><span lay-tips="用来给打手或销售客服记录提成的模式，选这个后两种情况下会起作用：<br>1、这个子账号是销售客服时：订单变成已完成后将按照在下面设定的金额为该子账户记录提成金额；<br>2、把单子指派给这个子账户时：读取在下面你设置的金额作为默认发单价给这个子账号记录提成金额">固定金额</span></div>
+                                    <input type="radio" name="autoBrokerageType" lay-filter="autoBrokerageTypeFilter" value="20" title="默认"  checked=&#39;checked&#39;>
+                                    <div lay-radio><span lay-tips="用来给打手或销售客服记录提成的模式，选这个后两种情况下会起作用：<br>1、这个子账号是销售客服时：将按照订单接单价*设定的百分比数值=这个子账号的客服提成金额；<br>2、把单子指派给这个子账户时：订单接单价格*在下面设定的百分比数值作为发单价给这个子账号记录提成金额">订单价百分比</span></div>
+                                    <input type="radio" name="autoBrokerageType" lay-filter="autoBrokerageTypeFilter" value="30" title="默认" >
+                                    <div lay-radio><span lay-tips="这个选项只适合给录单的销售客服用，代练打手不要选这个。<br>订单变成已完成时，将按照：(接单价-总的发单价)*在下面设定的百分比数值作为这个子账号的提成（系统开启了自动记录接单提成情况下才有效）。如果没有把订单指派出去，是无法算出利润的">利润的百分比</span></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label tcLabel" style="color:#ff0000">提成金额/百分比</label>
+                                <div class="layui-input-block ">
+                                    <input type="text" name="brokerageAmount" id="brokerageAmount" lay-verify="required|number" maxlength="6" autocomplete="off" placeholder="固定金额或百分比的数字，例如：5或者20" class="layui-input layui-input-shadow boxshadow-success" value="[[ eu.brokerageAmount if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">结算支付宝账号</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="setAlipayAcc" autocomplete="off" lay-tips="用来给这个人结算用的，也可以让TA自己补充" placeholder="用来收款支付宝账号，没有请留空" class="layui-input layui-input-shadow" maxlength="32" value="[[ eu.alipayAcc if eu else '' ]]">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">结算支付宝姓名</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="setAlipayAccName" autocomplete="off"  lay-tips="用来给这个人结算用的，也可以让TA自己补充" placeholder="用来收款支付宝姓名，没有请留空" class="layui-input layui-input-shadow" maxlength="50" value="[[ eu.alipayName if eu else '' ]]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">结算银行名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="setBankName" autocomplete="off" lay-tips="用来给这个人结算用的，或者帮他代报个税时需要，也可以让TA自己补充" placeholder="没有请留空" class="layui-input layui-input-shadow" maxlength="32" value="[[ eu.bankName if eu else '' ]]">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">结算银行卡号</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="setBankCardNo" autocomplete="off" lay-tips="用来给这个人结算用的，或者帮他代报个税时需要，也可以让TA自己补充" placeholder="没有请留空" class="layui-input layui-input-shadow" maxlength="100" value="[[ eu.bankCardNo if eu else '' ]]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="color:#ff0000">内部抢代练单上限</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="recOrderMaxCount" autocomplete="off" lay-verify="required|number" lay-tips="限制TA在系统内部抢单页面接代练类型的单子数量，这里填0代表不限制。比如你想让TA同时只能接2笔代练类型的单子，这里就填2" placeholder="限制通过内部接单同时接单数量" class="layui-input layui-input-shadow" maxlength="4" value="[[ eu.recOrderMaxCount if eu else '' ]]">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="color:#ff0000">内部抢陪玩单上限</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="recOrderMaxCount2" autocomplete="off" lay-verify="required|number" lay-tips="限制TA在系统内部抢单页面接陪玩类型的单子数量，这里填0代表不限制。比如你想让TA同时只能接2笔陪玩类型的单子，这里就填2" placeholder="限制通过内部接单同时接单数量" class="layui-input layui-input-shadow" value="0" maxlength="4">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">内部抢单价范围</label>
+                                    <div class="layui-input-inline" style="width:68px">
+                                        <input type="text" name="recPriceMin" id="recPriceMin" placeholder="￥" lay-tips="可设置在内部大厅抢单时需满足多少接单价才能接" autocomplete="off" class="layui-input" value="[[ eu.recPriceMinValue if eu else '' ]]">
+                                    </div>
+                                    <div class="layui-form-mid">-</div>
+                                    <div class="layui-input-inline" style="width: 68px">
+                                        <input type="text" name="recPriceMax" id="recPriceMax" placeholder="￥" autocomplete="off" lay-tips="可设置在内部大厅抢单时需满足多少接单价才能接" class="layui-input" value="[[ eu.recPriceMaxValue if eu else '' ]]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">打手直播地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="livestreaming" id="livestreaming" lay-verify="" maxlength="500" autocomplete="off" placeholder="打手直播的URL地址，没有请留空" class="layui-input layui-input-shadow boxshadow-success" value="[[ eu.livestreaming if eu else '' ]]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
+                        <div class="admin-info" style="padding: 10px 10px 20px 10px;">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">QQ/微信</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="qq" lay-verify="" autocomplete="off" placeholder="能联系到该用户的QQ或微信，可留空" class="layui-input layui-input-shadow" maxlength="50" value="[[ eu.qq if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="moblie" lay-verify="moblie" lay-tips="尽量填好每一个真实的代练打手或员工的手机号" autocomplete="off" placeholder="能联系到该用户的手机号，可留空" class="layui-input layui-input-shadow boxshadow-success" maxlength="11" value="[[ eu.moblie if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="color:#ff0000">入职日期</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="inputDate" id="inputDate" lay-verify="required" autocomplete="off" placeholder="" class="layui-input layui-input-shadow boxshadow-success" value="[[ eu.inputDate if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">标记</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="tips" autocomplete="off" placeholder="给用户写个标记，没有请留空" class="layui-input layui-input-shadow" maxlength="100" value="[[ eu.tips if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">备注说明</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="remark" autocomplete="off" placeholder="备注说明，没有请留空" class="layui-input layui-input-shadow" maxlength="50" value="[[ eu.remark if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="color:#ff0000">已交保证金</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="insureAmount" lay-tips="如果这个人已向你们缴纳了押金，请在这里填上具体的金额，方便后期你们查阅或退押金用" lay-verify="required|number" maxlength="6" autocomplete="off" placeholder="该用户已交纳保证金" class="layui-input layui-input-shadow boxshadow-success" value="[[ eu.insureAmount if eu else '' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" title="该用户录入系统的订单，当订单状态发生变化需要发送短信时，是否阻止发送">录的单不发短信</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="addOrderNotSendSms" value="N" title="默认" checked=&#39;&#39;>
+                                    <div lay-radio><span lay-tips="如果这个人是录单的客服，他录的单子能不能发出短信？如果能，就选这个(前提是系统已开通短信服务并且短信量足够，默认情况下没开通短信)，一般情况下不建议动这里，保持默认即可。如果是打手，不用管这里">允许发送</span></div>
+                                    <input type="radio" name="addOrderNotSendSms" value="Y" title="默认" >
+                                    <div lay-radio><span lay-tips="如果这个人是录单的客服，并且不让他录的单子发短信，就选这个。一般情况下不建议动这里，保持默认即可.如果是打手，不用管这里">不发短信</span></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="color:#ff0000">勾选游戏权限</label>
+                                <div class="layui-input-block">
+[% for gm in games %]<div class="layui-inline" style="margin-right:5px; margin-top:0px"><input type="checkbox" name="games" lay-skin="tag" value="[[ gm.gameName ]]"  title="[[ gm.gameName ]]" [% if eu and gm.gameName in eu_games %]checked=""[% endif %]/></div>[% endfor %]
+
+                                            <div class="layui-inline" style="margin-right:5px; margin-top:0px">
+                                                <input type="checkbox" name="games" lay-skin="tag" value="伊莫"  title="伊莫" />
+                                            </div>
+[% for gm in games %]<div class="layui-inline" style="margin-right:5px; margin-top:0px"><input type="checkbox" name="games" lay-skin="tag" value="[[ gm.gameName ]]"  title="[[ gm.gameName ]]" [% if eu and gm.gameName in eu_games %]checked=""[% endif %]/></div>[% endfor %]
+
+
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="color:#ff0000">他的角色职位</label>
+                                <div class="layui-input-block">
+[% for r in roles %]<div class="layui-inline" style="width:130px; margin-top:0px"><input type="radio" name="userRole" value="[[ r.id ]]" data-name="[[ r.roleName ]]" title="[[ r.roleName ]]" [% if eu and eu.jobId == r.id %]checked[% endif %] lay-filter="roleFilter" /></div>[% endfor %]
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align:center;align-items:center">
+                    <button type="button" class="layui-btn layui-icon layui-toast layui-btn-normal w-lg" lay-submit="" lay-filter="savebtn">保存资料</button>
+                </div>
+
+                <div class="copyurl" style="display:none"></div>
+
+
+                <input type="hidden" name="uid" id="uid" value="[[ eu.id if eu else 0 ]]" />
+                <input type="hidden" name="recommend" id="recommend" />
+                <input type="hidden" name="aid" id="aid" />
+            </form>
+        </div>
+    </template>
+</div>
+
+<script src="/JS2019/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="/JS2019/User/adduser.js?v=20260429" type="text/javascript"></script>
+
+
+</body>
+</html>

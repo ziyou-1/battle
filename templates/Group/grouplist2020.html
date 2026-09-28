@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新版排团</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style type="text/css">
+    body {
+        background-color: #F2F2F2;
+    }
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+        
+    }
+    .layui-table-tool-temp {
+        padding-right: 0px;
+    }
+    .gameTeamList .layui-btn-container .layui-btn {
+        margin-right: 1px;
+    }
+    .rightDiv {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    .gameTeamList.mouseMoveActive .layui-table-box {
+        border: 0.1px solid #ff6a00;
+    }
+    .moveOrderTable {
+        position: fixed;
+        z-index: -99;
+        top: 0;
+        left: 0;
+        box-shadow: 0 0 20px rgba(0,0,0,.2);
+        display: none;
+    }
+    .moveOrderTable table, .moveOrderTable .layui-table-view {
+            margin: 0;
+            overflow: hidden;
+        }
+    .moveOrderTable .layui-table-header {
+            display: none;
+        }
+    .moveOrderTable .layui-table-body {
+            overflow: hidden !important;
+        }
+    .taskfall {
+        column-gap: 5px;
+        -webkit-column-gap: 5px; /* Safari 和 Chrome */
+        -moz-column-gap: 5px; /* Firefox */
+        column-count: 2;
+        -moz-column-count: 2; /* Firefox */
+        -webkit-column-count: 2; /* Safari 和 Chrome */
+        margin-bottom:20px;
+    }
+
+    .task_item {
+        break-inside: avoid;
+        -webkit-break-inside: avoid;
+        border-bottom-left-radius:10px;
+        border-bottom-right-radius:10px;
+    }
+    @media (min-width: 992px) and (max-width: 1920px) {
+        .taskfall {
+            column-count: 2;
+        }
+        }
+        @media (min-width: 768px) and (max-width: 991px) {
+            .taskfall {
+                column-count: 1;
+            }
+        }
+        @media (max-width: 767px) {
+            .taskfall {
+                column-count: 1;
+            }
+        }
+    .layui-btn + .layui-btn {
+        margin-left: 5px;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="fm1">
+
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form-pane">
+                <div class="layui-block">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">排团游戏</label>
+                        <div class="layui-input-inline">
+                            <select id="gameName" name="gameName" lay-filter="selectGame">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">团名称/团号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="taskName" id="taskName" lay-verify="" placeholder="请输入" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">阵营</label>
+                        <div class="layui-input-inline">
+                            <select name="gameGroup_group" id="gameGroup_group">
+                                <option value="">全部</option>
+                                <option value="联盟">联盟</option>
+                                <option value="部落">部落</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">团长指挥</label>
+                        <div class="layui-input-inline">
+                            <select name="leader" id="leader" lay-search="">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">排团状态</label>
+                        <div class="layui-input-inline" style="width:190px">
+                            <select id="groupSta" name="groupSta" xm-select="groupSta" xm-select-skin="default" xm-select-height="36px">
+                                <option value="">全部</option>
+                                <option value="A" selected="selected">未开始</option>
+                                <option value="B" selected="selected">进行中</option>
+                                <option value="C">已完成</option>
+                                <option value="D">已暂停</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="taskSeachBtn">搜索或刷新</button>
+                    </div>
+                </div>
+                <div class="layui-block">
+                    <label class="layui-form-label">CD日期</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="taskDate" value="-2" title="1周以前" lay-filter="taskDatefilter" lay-skin="tag">
+                        <input type="checkbox" name="taskDate" value="-1" title="上个CD" lay-filter="taskDatefilter" lay-skin="tag">
+                        <input type="checkbox" name="taskDate" value="0" title="本周CD" id="thisWeek" checked="checked" lay-filter="taskDatefilter" lay-skin="tag">
+                        <input type="checkbox" name="taskDate" value="1" title="下个CD" checked="checked" lay-filter="taskDatefilter" lay-skin="tag">
+                        <input type="checkbox" name="taskDate" value="2" title="本月" lay-filter="taskDatefilter" lay-skin="tag">
+                    </div>
+                </div>
+                <div class="layui-block">
+                    <div class="layui-inline" style="display:none">
+                        <label class="layui-form-label">展示顺序</label>
+                        <div class="layui-input-inline">
+                            <select name="taskSort" id="taskSort">
+                                <option value="0" selected="selected">按自定义排序大到小</option>
+                                <option value="1">按建团时间最近到之前</option>
+                                <option value="2">按建团时间之前到最近</option>
+                                <option value="3">按开团时间最近到之前</option>
+                                <option value="4">按开团时间之前到最近</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="margin-top:10px">
+                        <div class="layui-inline">
+                            <a class="layui-btn layui-btn-danger addNewTask" lay-tips="点击新开一个排团">新建一个团</a>
+                        </div>
+                        <div class="layui-inline" style="margin-left:20px">
+                            <span class="taskTotal" style="color:#526069;font-size:14px;font-weight:600"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-elem-quote layui-quote-nm qjob" style="margin-top:5px;font-size:14px;color:#526069">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="taskfall">
+        <div class="taskList">
+
+        </div>
+        <div id="pagediv" style="padding-top:20px"></div>
+    </div>
+
+    <div class="orderDiv" style="display:none">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-form-pane layui-row">
+                    <div class="layui-inline"> 
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width: 80px">排团团号</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <select name="taskSelect" id="taskSelect" xm-select-radio xm-select="taskSelect" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                                    <option value="10">未参团的</option>
+                                    <option value="20">已参过团</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">订单状态</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <select id="orderSta" name="orderSta" lay-filter="">
+                                    <option value="">全部</option>
+                                    <option value="未分配">未分配</option>
+                                    <option value="代练中">代练中</option>
+                                    <option value="待上号">待上号</option>
+                                    <option value="待验收">待验收</option>
+                                    <option value="已完成">已完成</option>
+                                    <option value="问题单">问题单</option>
+                                    <option value="已退单">已退单</option>
+                                    <option value="已暂停">已暂停</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">服务器</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <input type="text" name="gameServer" id="gameServer" lay-verify="" placeholder="请输入" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width: 80px">订单来源</label>
+                            <div class="layui-input-inline" style="width: 160px">
+                                <select name="orderSoures" id="orderSoures" xm-select-radio lay-search="" xm-select="orderSoures" xm-select-search="" xm-select-search-type="title" xm-select-skin="default" xm-select-height="36px" class="" title=""></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">职业</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <div id="gameJob" class="xm-select-demo"></div>
+                                <select name="gameJob" id="gameJob" xm-select-radio lay-search="" xm-select-create xm-select="gameJob" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                                    <option value="">选择或输入</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">阵营</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <select name="gameGroup_order" id="gameGroup_order">
+                                    <option value="">全部</option>
+                                    <option value="联盟">联盟</option>
+                                    <option value="部落">部落</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">搜索1</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <input type="text" name="key1" id="key1" lay-verify="" placeholder="订单号/角色名/手机号" class="layui-input" value="">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">代练项目</label>
+                            <div class="layui-input-inline" style="width:160px">
+                                <input type="text" name="project" id="project" lay-verify="" placeholder="支持模糊搜索" class="layui-input" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">装等</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <input type="text" name="gameZhuang" id="gameZhuang" lay-verify="" placeholder="请输入" class="layui-input" value="">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">天赋专精</label>
+                            <div class="layui-input-inline" style="width:140px">
+                                <input type="text" name="gameTF" id="gameTF" lay-verify="" placeholder="请输入" class="layui-input" value="">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:80px;padding:8px 5px;">录单时间</label>
+                            <div class="layui-input-inline" style="width:130px">
+                                <input type="text" name="sDate" id="sDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(92) ]] 00:00:00">
+                            </div>
+                            <div class="layui-input-inline">-</div>
+                            <div class="layui-input-inline" style="width:130px">
+                                <input type="text" name="eDate" id="eDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(0) ]] 23:59:59">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="orderSeachBtn">搜索</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+
+                    </div>
+                </div>
+
+                <div class="" style="">
+                    <table class="layui-hide" id="orderList" lay-filter="orderList"></table>
+                    <script type="text/html" id="toolbarDemo_orderList">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                        </div>
+                        <div style="color:#ff6a00" id="total"></div>
+                    </script>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="edittaskmain" style="display:none;padding:10px 10px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">排团名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="edit_taskName" lay-verify="" autocomplete="off" placeholder="请输入排团名称，必填" class="layui-input" maxlength="30">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="edit_taskProject" lay-verify="" autocomplete="off" placeholder="请输入项目名，可空" class="layui-input" maxlength="20">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">指定团长</label>
+            <div class="layui-input-block">
+                <select name="taskMangeUid" id="taskMangeUid" xm-select-radio lay-search="" xm-select="taskMangeUid" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                    <option value="">请选择这个团的团长，可不选</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">阵营</label>
+            <div class="layui-input-block">
+                <input type="radio" name="edit_group" value="全部" title="全部" checked="">
+                <input type="radio" name="edit_group" value="部落" title="部落">
+                <input type="radio" name="edit_group" value="联盟" title="联盟">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">服务器名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="edit_gameServer" id="edit_gameServer" autocomplete="off" lay-verify="" placeholder="写上打团的服务器，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="15" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">CD日期</label>
+            <div class="layui-input-block">
+                <input type="text" name="edit_taskdate" id="edit_taskdate" lay-verify="" autocomplete="off" placeholder="yyyy-MM-dd" class="layui-input" maxlength="10">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="edit_taskRemark" lay-verify="" autocomplete="off" placeholder="可对该排团做备注说明" class="layui-input" maxlength="20">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="edit_save" id="edit_save">保存</button>
+                <button type="submit" class="layui-btn layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="edit_save2" id="edit_save2" style="display:none">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none" class="selectUser">
+        <div class="layui-field-box" style="margin-left:0px;padding: 0px 0px;margin-top:3px">
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">用户职位</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="userRole" lay-filter="userRole" value="0" title="全部" checked="">
+                                <input type="radio" name="userRole" lay-filter="userRole" value="3" title="客服" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="5" title="总经理" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="6" title="系统管理员" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="7" title="客服主管" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="13" title="代练员" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="19" title="系统开发员" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="20" title="外部录单用" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="21" title="售后客服" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="22" title="机器人专用" >
+
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom:0px">
+                <label class="layui-form-label">搜索用户</label>
+                <div class="layui-input-inline" style=" ">
+                    <input type="text" name="seachUser_key1" id="seachUser_key1" lay-verify="" placeholder="用户名/名称/标记" autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline" style="">
+                        <a href="#" class="layui-btn layui-btn-info seachUserBtn" style="">搜索</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="seachUser_user" style="margin-left:10px;line-height:25px">
+        </div>
+
+    </div>
+
+    <div class="automatchlayer" style="display:none;padding:10px 10px">
+        <blockquote class="layui-elem-quote">
+            说明：默认情况下系统将只匹配订单状态为：未分配+待上号且没有被排团的订单，你也可以设置匹配规则<br />
+            <span style="color:#ff0000;">特别要求：每笔订单必须填好了<span style="color:#ff0000;font-weight:600;font-size:14px">装等</span>与<span style="color:#ff0000;font-weight:600;font-size:14px">天赋</span>栏，否则会导致无法自动排团</span>
+        </blockquote>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">服务器名</label>
+                <div class="layui-input-block" style="width:150px">
+                    <input type="text" name="match_server" lay-verify="" autocomplete="off" lay-tips="若输入完整服务器名，则只匹配该服务器的订单" placeholder="可留空" class="layui-input" maxlength="10">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">阵营</label>
+                <div class="layui-input-block" style="width:150px;">
+                    <select name="match_gameGroup" id="match_gameGroup" lay-filter="match_gameGroup">
+                        <option value="全部">全部</option>
+                        <option value="部落">部落</option>
+                        <option value="联盟">联盟</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">代练项目</label>
+                <div class="layui-input-block" style="width:190px">
+                    <input type="text" name="match_project" lay-verify="" autocomplete="off" lay-tips="若输入关键词，将只匹配代练项目包含该关键词的订单" placeholder="可留空" class="layui-input" maxlength="20">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">录单日期范围</label>
+                <div class="layui-input-inline" style="width:190px">
+                    <input type="text" class="layui-input" lay-tips="若选择录单时间范围，则只匹配在此日期范围之内的订单。如果留空，将默认匹配最近1个月范围内录的单" name="match_AddOrderDate" id="match_AddOrderDate" placeholder=" - " readonly="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">订单标记/备注</label>
+                <div class="layui-input-block" style="width:150px;">
+                    <input type="text" name="match_sameonetips" lay-verify="" autocomplete="off" lay-tips="若需要将相同的订单标记或订单重要备注的单子排在这一个团里，请在这里输入订单标记或备注内容。你可以利用该功能，将相同标记或相同备注的订单排到同一个团里来" placeholder="可留空" class="layui-input" maxlength="20">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">子账号</label>
+                <div class="layui-input-block" style="width:150px;">
+                    <input type="text" name="match_zacc" lay-verify="" autocomplete="off" lay-tips="若需要将相同游戏子账号的单子排在这一个团里，请在这里输入子账号。你可以利用该功能，将相同子账号的订单排到同一个团里来" placeholder="可留空" class="layui-input" maxlength="20">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">订单状态</label>
+                <div class="layui-input-block" style="width:150px;">
+                    <select name="match_orderStatus" id="match_orderStatus" lay-filter="">
+                        <option value="" selected="selected">未分配和待上号</option>
+                        <option value="10">未分配</option>
+                        <option value="20">待上号</option>
+                        <option value="30">代练中</option>
+                        <option value="40">未分配+待上号+代练中</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否指派打手</label>
+                <div class="layui-input-block" style="width:150px;">
+                    <select name="match_isHaveAss" id="match_isHaveAss" lay-search="">
+                        <option value="" selected="selected">无所谓</option>
+                        <option value="10">未指派过打手的</option>
+                        <option value="20">指派过打手的</option>
+                        <optgroup label="选择具体打手" class="actrec">
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">指定排团号</label>
+                <div class="layui-input-block" style="width:150px;">
+                    <input type="number" name="tid" id="tid" class="layui-input" />
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">天赋匹配模式</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="match_gameTfMode" value="10" checked="">
+                        <div lay-radio><span lay-tips="宽松模式下如果订单没有填写天赋时，也将纳入匹配范围">宽松</span></div>
+                        <input type="radio" name="match_gameTfMode" value="20">
+                        <div lay-radio><span lay-tips="严格模式下如果订单没有填写天赋或天赋名称不规范时，将无法纳入排团">严格</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-btn-danger layui-btn-lg matchanim" lay-submit="" lay-filter="match_OkBtn" id="edit_save">开始自动配号</button>
+                </div>
+            </div>
+            <div class="layui-progress layui-progress-big" lay-showpercent="false" lay-filter="pr">
+                <div class="layui-progress-bar layui-bg-green" lay-percent="0%" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="publicPostionLayer" style="display:none;padding:10px 10px">
+        <blockquote class="layui-elem-quote">
+            <p>说明：为了方便大家相互帮助排团，您可以在此配置哪些坑位需要公开给其它系统商家看到。当本系统的坑位被删除、配号后，将自动取消公开变成屏蔽。</p>
+            <p>提示：对于不需要公开的坑位，请在列表里排除</p>
+        </blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:#ff0000">公开标题名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="public_title" lay-verify="" autocomplete="off" placeholder="请输入要公开的标题名称" class="layui-input" maxlength="20">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:#ff0000">预计开团日期</label>
+            <div class="layui-input-block">
+                <input type="text" name="public_taskdate" id="public_taskdate" lay-verify="" readonly="" autocomplete="off" placeholder="yyyy-MM-dd" class="layui-input" maxlength="10">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:#ff0000">你家联络微信</label>
+            <div class="layui-input-block">
+                <input type="text" name="public_concantwechat" id="public_concantwechat" lay-verify="" autocomplete="off" placeholder="必填" class="layui-input" maxlength="50">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color:#ff0000">你家的联络QQ</label>
+            <div class="layui-input-block">
+                <input type="text" name="public_concantqq" id="public_concantqq" lay-verify="" autocomplete="off" placeholder="必填" class="layui-input" maxlength="50">
+            </div>
+        </div>
+        <div>
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend style="font-size:12px;color:#0094ff">以下不想公开的请点击排除，没有排除的坑位提交后将会公开</legend>
+            </fieldset>
+
+            <table class="layui-hide" id="tableList_public" lay-filter="tableList_public" title=""></table>
+            <script type="text/html" id="baroperating_public">
+                <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-right:1px" lay-event="removePublicPostion" lay-tips="不需要公开此坑位，请点击排除这个坑位">排除</a>
+            </script>
+        </div>
+
+        <div class="layui-form-item" style="margin-top:20px">
+            <div class="layui-input-inline">
+                <button type="submit" class="layui-btn layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="publice_save">确定提交公开方案</button>
+            </div>
+            <div class="layui-input-inline">
+                <button type="submit" class="layui-btn layui-btn-danger layui-btn-lg" lay-submit="" lay-filter="publice_CancelSave">撤回该团已公开的坑位</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="setStaDiv" style="display:none">
+        <div class="layui-form-item" style="margin-top:10px">
+            <label class="layui-form-label">选择状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="taskStaSet" value="A" title="未开始">
+                <input type="radio" name="taskStaSet" value="B" title="进行中">
+                <input type="radio" name="taskStaSet" value="C" title="已完成">
+                <input type="radio" name="taskStaSet" value="D" title="已暂停">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top:20px">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="saveSettbtn"><i class="layui-icon">&#x1005;</i>保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="selectFileDiv" style="display:none">
+        <blockquote class="layui-elem-quote layui-text">
+            <p>如果你在EXCEL表中排好了团，可以复制EXCEL表格中用鼠标选中的排团区域，粘贴到下面的大框框里，然后选择要识别的动作即可快速导入排团数据，你可以点击下面的参考图看看案例。</p>
+            <p>
+                <a href="https://oss4.jidanpu.com/images/systemTemp/%E5%A4%8D%E5%88%B6%E8%A1%A8%E6%A0%BC%E5%86%85%E5%AE%B9%E5%AF%BC%E5%85%A5%E5%88%B0%E6%8E%92%E5%9B%A2%E4%BE%8B%E5%AD%903.jpg" target="_blank" title="点击查看参考图1">查看表格复制操作图第1种</a>
+                &nbsp;&nbsp;
+                <a href="https://oss4.jidanpu.com/images/systemTemp/%E5%A4%8D%E5%88%B6%E8%A1%A8%E6%A0%BC%E5%86%85%E5%AE%B9%E5%AF%BC%E5%85%A5%E5%88%B0%E6%8E%92%E5%9B%A2%E4%BE%8B%E5%AD%901.jpg" target="_blank" title="点击查看参考图2">查看表格复制操作图第2种</a>
+                &nbsp;&nbsp;
+                <a href="https://oss4.jidanpu.com/images/systemTemp/%E5%A4%8D%E5%88%B6%E8%A1%A8%E6%A0%BC%E5%86%85%E5%AE%B9%E5%AF%BC%E5%85%A5%E5%88%B0%E6%8E%92%E5%9B%A2%E4%BE%8B%E5%AD%902.jpg" target="_blank" title="点击查看参考图3">查看表格复制操作图第3种</a>
+            </p>
+            <p style="color:#ff6a00">支持各种自定义EXCEL排团模板，但鼠标选中的区域第1列必须是代练员名称，最后一列必须是<span style="color:#000000;font-weight:600">系统内置单号</span>或者<span style="color:#000000;font-weight:600">角色名</span>(管理订单页面导出到EXCEL时会有系统内置单号的)，强烈建议参考上面3种常见的排团案例</p>
+        </blockquote>
+        <div class="layui-form-item" style="margin-left:10px;margin-right:10px">
+            <textarea id="selectContent" name="selectContent" placeholder="请把从表格中选定的内容复制到这里" class="layui-textarea" style="height:320px"></textarea>
+        </div>
+        <div class="layui-form-item" style="margin-top:20px;">
+            <div class="layui-input-inline" style="margin-left:25px">
+                <button class="layui-btn layui-btn-danger layui-btn-sm" type="button" lay-submit="" lay-filter="checkGroupFull" lay-tips="核对您从EXCEL中复制过来的数据和系统里此团是否匹配"><i class="layui-icon">&#xe692;</i>核对此团订单完整度</button>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top:10px">
+            <label class="layui-form-label">要识别的动作</label>
+            <div class="layui-input-block">
+                <input type="radio" name="selectaction" value="1" title="" />
+                <div lay-radio>
+                    <span lay-tips='匹配该排团里已有的账号，按导入的数据指派系统里已有的接手人，如果匹配不到接手人就失败'>仅指派接手人</span>
+                </div>
+                <input type="radio" name="selectaction" value="2" title="" />
+                <div lay-radio>
+                    <span lay-tips='对于此排团里没有的账号，将新增订单到该排团并匹配接手人，已有的订单将只更新或指派接手人，如果匹配接手人不成功将返回失败'>关联订单到此团并指派</span>
+                </div>
+                <input type="radio" name="selectaction" value="3" title="" />
+                <div lay-radio>
+                    <span lay-tips='对于此排团里没有的账号，将新增订单到该排团，但不会自动匹配接手人'>仅关联订单到此团不指派</span>
+                </div>
+                <input type="radio" name="selectaction" value="4" checked="checked" title="" />
+                <div lay-radio>
+                    <span lay-tips='对于此排团里没有的账号，将新增订单到该排团并匹配接手人，不管是否能匹配到接手人都返回成功'>关联订单到此团指派是否成功不作要求</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top:20px">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal layui-layer-btn-l" type="button" lay-submit="" lay-filter="selectDicbtn"><i class="layui-icon">&#x1005;</i>开始识别处理</button>
+            </div>
+        </div>
+    </div> 
+    <input type="hidden" id="gameId" name="gameId" value="0" />
+    <div class="copyHide" style="display:none"></div>
+
+</form>
+<div class="moveOrderTable">
+    <table class="layui-hide" id="moveOrderTable" lay-filter="moveOrderTable"></table>
+</div>
+<script src="/JS2019/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="/JS2019/Group/grouplist2020.js?v=20260427" type="text/javascript"></script> 
+</body>
+</html>

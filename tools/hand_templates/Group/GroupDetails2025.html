@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>排团详情2025</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+    <style>
+        body { background-color: #fff; font-size: 12px }
+        .info td { padding: 6px 10px; line-height: 20px }
+        .info td.t { color: #888; width: 80px; text-align: right; white-space: nowrap }
+        .lableb { display: inline-block; padding: 2px 6px; font-size: 12px; line-height: 14px; color: #fff; border-radius: 3px; }
+        .sta-A { background: #FF5722 } .sta-B { background: #1E9FFF } .sta-C { background: #5FB878 } .sta-D { background: #999 }
+    </style>
+</head>
+<body id="iosiframe">
+<div style="margin:10px">
+    [% if not task %]
+    <div class="layui-elem-quote layui-quote-nm" style="color:#FF5722">排团不存在或已删除</div>
+    [% else %]
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md5">
+            <fieldset class="layui-elem-field">
+                <legend>排团信息</legend>
+                <div class="layui-field-box">
+                    <table class="info" style="width:100%">
+                        <tr><td class="t">团名</td><td><b>[[ task.taskName ]]</b>　<span class="lableb sta-[[ task.taskStatus ]]">[[ {'A': '待成团', 'B': '已成团', 'C': '已开打', 'D': '已完成'}.get(task.taskStatus, task.taskStatus) ]]</span></td></tr>
+                        <tr><td class="t">游戏</td><td>[[ task.gameName ]] [[ task.gameArea ]]</td></tr>
+                        <tr><td class="t">项目</td><td>[[ task.proJectName ]]</td></tr>
+                        <tr><td class="t">难度</td><td>[[ task.difficulty ]]</td></tr>
+                        <tr><td class="t">团长</td><td>[[ task.leaderUserName ]]</td></tr>
+                        <tr><td class="t">开打时间</td><td>[[ task.startTime ]]</td></tr>
+                        <tr><td class="t">结束时间</td><td>[[ task.endTime ]]</td></tr>
+                        <tr><td class="t">坑位</td><td>已排 [[ task.gameAccCount ]] / 共 [[ task.totalCount ]]，坑位费合计 [[ task.postionAmount ]] 元</td></tr>
+                        <tr><td class="t">缺位</td><td style="color:#FF5722">[[ task.lackJobName or '不缺人' ]]</td></tr>
+                        <tr><td class="t">公开招募</td><td>[[ '是' if task.isPublic == 'Y' else '否' ]]</td></tr>
+                        <tr><td class="t">备注</td><td>[[ task.remark ]]</td></tr>
+                        <tr><td class="t">创建</td><td>[[ task.createTime ]]</td></tr>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-col-md7">
+            <fieldset class="layui-elem-field">
+                <legend>坑位明细</legend>
+                <div class="layui-field-box">
+                    <table class="layui-table" lay-size="sm" style="margin:0">
+                        <thead><tr><th>坑位</th><th>职业</th><th>需求</th><th>坑位费</th><th>接手人</th><th>关联订单</th><th>备注</th></tr></thead>
+                        <tbody>
+                        [% for j in task.jobs %]
+                        <tr>
+                            <td>[[ j.index ]]</td>
+                            <td>[[ j.jobName ]]</td>
+                            <td>[[ j.needItemLevel ]] [[ j.gameTf ]]</td>
+                            <td>[[ j.postionPrice ]]</td>
+                            <td>[% if j.userName %]<span style="color:#1E9FFF">[[ j.userName ]]</span>[% else %]<span style="color:#FF5722">空位</span>[% endif %]</td>
+                            <td>[% if j.orderId %]<a href="javascript:;" class="viewOrder" data-id="[[ j.orderId ]]" style="color:#009688">[[ j.orderIdView or j.orderId ]]</a>[% endif %]</td>
+                            <td>[[ j.remark ]]</td>
+                        </tr>
+                        [% else %]
+                        <tr><td colspan="7" style="text-align:center;color:#999">还没有配置坑位</td></tr>
+                        [% endfor %]
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>操作记录</legend>
+                <div class="layui-field-box" style="max-height:220px;overflow:auto">
+                    [% for l in task_logs %]<p style="line-height:26px;color:#999">【[[ l.createTime ]]】[[ l.userName ]]：[[ l.content ]]</p>[% else %]<p style="color:#999">暂无记录</p>[% endfor %]
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    [% endif %]
+</div>
+<script>
+    layui.config({ base: '../layuiadmin/' }).extend({ index: 'lib/index' }).use(['index', 'layer'], function () {
+        var $ = layui.$, layer = layui.layer;
+        $(document).on('click', '.viewOrder', function () {
+            parent.layer.open({ title: '订单详情', type: 2, shade: [0.3, '#333'], shadeClose: true, skin: 'layui-layer-lan', anim: 8, area: ['1280px', '980px'],
+                content: '/Order/OrderView?orderId=' + $(this).attr('data-id') + '&viewType=10' });
+        });
+    });
+</script>
+</body>
+</html>

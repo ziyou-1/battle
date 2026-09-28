@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>淘宝发货对接</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="form">
+    <blockquote class="layui-elem-quote">
+        <p>功能介绍：</p>
+        <p>淘宝店铺使用客户自己的阿奇索应用和授权。订单读取、自动发货及旺旺消息待接口权限和文档联调后启用。</p>
+
+    </blockquote>
+
+    <fieldset class="layui-elem-field">
+        <legend>接口设置步骤教程</legend>
+        <div class="layui-field-box">
+            <div style="margin-bottom:15px">第1步：客户在 <a href="https://www.agiso.com/detail/1552" target="_blank">阿奇索开发平台</a> 创建自己的应用并申请淘宝接口权限。</div>
+            <div style="margin-bottom:15px">第2步：客户授权自己的店铺，取得应用 AppId、AppSecret 与店铺 AccessToken。</div>
+            <div style="margin-bottom:15px">第3步：在下方保存配置。接口调用量以客户阿奇索账户实际数据为准，本地暂未取得余额。</div>
+        </div>
+    </fieldset>
+
+    <fieldset class="layui-elem-field">
+        <legend>店铺对接设置</legend>
+        <div class="layui-field-box">
+            <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增一个店铺对接"><i class="layui-icon layui-icon-add-1"></i>新增一个店铺对接</button>
+                </div>
+            </script>
+            <script type="text/html" id="baroperating">
+                <a class="layui-btn layui-btn-xs layui-btn-warm" style="" lay-event="submitEdit" title="编辑对接参数"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="submitDel" title="删除该店铺的对接"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </fieldset>
+
+
+    <div class="modifyParamDiv" style="display:none">
+        <blockquote class="layui-elem-quote">
+            <span>请在下面填上对接参数，如何对接请参考界面上方的接口设置步骤教程</span>
+        </blockquote>
+        <div class="layui-form-pane" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">AppId</label>
+                <div class="layui-input-block">
+                    <input type="text" name="appId" id="appId" lay-verify="" autocomplete="off" placeholder="客户阿奇索应用 AppId" maxlength="64" class="layui-input layui-input-shadow boxshadow-success appId">
+                </div>
+            </div>
+            <div class="layui-form-item appSecretDiv">
+                <label class="layui-form-label">AppSecret</label>
+                <div class="layui-input-block">
+                    <input type="password" name="appSecret" id="appSecret" lay-verify="" autocomplete="off" placeholder="新增时填写；修改时留空保留原值" maxlength="100" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">授权码</label>
+                <div class="layui-input-inline layui-input-wrap" style="width:62%">
+                    <input type="password" name="accessToken" id="accessToken" lay-verify="" autocomplete="off" placeholder="店铺授权令牌；修改时留空保留原值" maxlength="512" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+                <div class="layui-form-mid" style="padding: 0!important;">
+                    <a href="javascript:void(0)" class="layui-btn layui-btn-primary getAuth">授权说明</a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">店铺卖家昵称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shopSellerNick" id="shopSellerNick" lay-verify="" autocomplete="off" placeholder="该店铺卖家昵称" maxlength="50" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" id="remark" lay-verify="" autocomplete="off" placeholder="" maxlength="50" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">对应订单来源</label>
+                <div class="layui-input-block">
+                    <select name="tbsoure" id="tbsoure" lay-filter="">
+                        <option value="">不设置</option>
+                                <option value="订单来源错误">订单来源错误</option>
+                                <option value="云序工作室淘宝店">云序工作室淘宝店</option>
+                                <option value="小小优优">小小优优</option>
+                                <option value="西片同学">西片同学</option>
+                                <option value="归山的小铺子">归山的小铺子</option>
+                                <option value="野原的小店">野原的小店</option>
+                                <option value="椎名真白">椎名真白</option>
+                                <option value="幽幽子">幽幽子</option>
+                                <option value="蝶野雏">蝶野雏</option>
+                                <option value="北白川玉子">北白川玉子</option>
+                                <option value="藤原千花">藤原千花</option>
+                                <option value="玛露西尔">玛露西尔</option>
+                                <option value="天野阳菜">天野阳菜</option>
+                                <option value="宫水三叶">宫水三叶</option>
+
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align:center;align-items:center">
+            <a class="layui-btn layui-btn-normal layui-btn-lg w-lg saveInterfaceBtn">保存设置</a>
+        </div>
+    </div>
+
+
+    <fieldset class="layui-elem-field">
+        <legend>功能设置（对所有店都生效）</legend>
+        <div class="layui-field-box">
+            <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        1、淘宝订单自动发货功能开关
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                        <input type="radio" name="TaoBaoSwith" value="N" title="关闭"  [% if (taobaoShip_settings.TaoBaoSwith if taobaoShip_settings.TaoBaoSwith is defined else "Y")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoSwith if taobaoShip_settings.TaoBaoSwith is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoSwith" value="Y" title="打开" [% if (taobaoShip_settings.TaoBaoSwith if taobaoShip_settings.TaoBaoSwith is defined else "Y")|string == "Y" %][% endif %] [% if (taobaoShip_settings.TaoBaoSwith if taobaoShip_settings.TaoBaoSwith is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        1.2、是否关闭录单时自动读取电商平台订单价格（默认开启，此选项将影响所有平台的读取，谨慎设置）
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="OpenReadPrice" value="Y" title="开启读价" [% if (taobaoShip_settings.OpenReadPrice if taobaoShip_settings.OpenReadPrice is defined else "Y")|string == "Y" %][% endif %] [% if (taobaoShip_settings.OpenReadPrice if taobaoShip_settings.OpenReadPrice is defined else "Y")|string == "Y" %]checked[% endif %]>
+                        <input type="radio" name="OpenReadPrice" value="N" title="关闭读价"  [% if (taobaoShip_settings.OpenReadPrice if taobaoShip_settings.OpenReadPrice is defined else "Y")|string == "N" %][% endif %] [% if (taobaoShip_settings.OpenReadPrice if taobaoShip_settings.OpenReadPrice is defined else "Y")|string == "N" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        2、订单状态改成什么情况下自动发货
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                        <input type="radio" name="TaoBaoShipSwith" value="N" title="不设置"  [% if (taobaoShip_settings.TaoBaoShipSwith if taobaoShip_settings.TaoBaoShipSwith is defined else "Y")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoShipSwith if taobaoShip_settings.TaoBaoShipSwith is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoShipSwith" value="D" title="待验收"  [% if (taobaoShip_settings.TaoBaoShipSwith if taobaoShip_settings.TaoBaoShipSwith is defined else "Y")|string == "D" %][% endif %] [% if (taobaoShip_settings.TaoBaoShipSwith if taobaoShip_settings.TaoBaoShipSwith is defined else "N")|string == "D" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoShipSwith" value="Y" title="已完成" [% if (taobaoShip_settings.TaoBaoShipSwith if taobaoShip_settings.TaoBaoShipSwith is defined else "Y")|string == "Y" %][% endif %] [% if (taobaoShip_settings.TaoBaoShipSwith if taobaoShip_settings.TaoBaoShipSwith is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        4、对于拆分的订单，是否需要有任意一笔改成已完成时就执行发货(默认在最后一笔订单改成已完成时才执行发货，此选项也适用于其它非淘宝的店铺发货)
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="SK78" value="N" title="否" [% if (taobaoShip_settings.SK78 if taobaoShip_settings.SK78 is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.SK78 if taobaoShip_settings.SK78 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="SK78" value="Y" title="是"  [% if (taobaoShip_settings.SK78 if taobaoShip_settings.SK78 is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.SK78 if taobaoShip_settings.SK78 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        5、是否在发货时自动发旺旺消息给淘宝客户（需要登录旺旺助手+对应的千牛，如何设置旺旺发送助手请<a href="http://www.agiso.com/detail/47.html" target="_blank" style="color:#0094ff">点击这里</a>）
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                        <input type="radio" name="TaoBaoSendWWMsgSwith" value="N" title="否" [% if (taobaoShip_settings.TaoBaoSendWWMsgSwith if taobaoShip_settings.TaoBaoSendWWMsgSwith is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoSendWWMsgSwith if taobaoShip_settings.TaoBaoSendWWMsgSwith is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoSendWWMsgSwith" value="Y" title="是"  [% if (taobaoShip_settings.TaoBaoSendWWMsgSwith if taobaoShip_settings.TaoBaoSendWWMsgSwith is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.TaoBaoSendWWMsgSwith if taobaoShip_settings.TaoBaoSendWWMsgSwith is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <label class="layui-form-label">旺旺消息内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="TaoBaoSendWWMsg" id="TaoBaoSendWWMsg" lay-verify="" autocomplete="off" placeholder="请输入自动发送给淘宝客户旺旺的消息" maxlength="100" class="layui-input layui-input-shadow boxshadow-success" value="[[ taobaoShip_settings.TaoBaoSendWWMsg if taobaoShip_settings.TaoBaoSendWWMsg is defined else '' ]]">
+                        <p style="margin-top:5px;color:#ff6a00">变量：{project}代表订单代练项目，例如在消息内容中有{project}字符的，将被替换成订单代练项目名称</p>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        6、当淘宝/天猫接口读取成功后，是否以淘宝买家付款时间作为系统录单时间(默认以录入时间)
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="Tb_1" value="N" title="否" [% if (taobaoShip_settings.Tb_1 if taobaoShip_settings.Tb_1 is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.Tb_1 if taobaoShip_settings.Tb_1 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="Tb_1" value="Y" title="是"  [% if (taobaoShip_settings.Tb_1 if taobaoShip_settings.Tb_1 is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.Tb_1 if taobaoShip_settings.Tb_1 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        7、录单时若发现来源单号为淘宝订单时，是否需要自动将订单来源选为默认的第1个
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="SK100" value="N" title="否" [% if (taobaoShip_settings.SK100 if taobaoShip_settings.SK100 is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.SK100 if taobaoShip_settings.SK100 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="SK100" value="Y" title="是"  [% if (taobaoShip_settings.SK100 if taobaoShip_settings.SK100 is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.SK100 if taobaoShip_settings.SK100 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        8、对于未付款的淘宝订单是否不允许录入订单(默认允许录单)
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="SK45" value="N" title="否"  [% if (taobaoShip_settings.SK45 if taobaoShip_settings.SK45 is defined else "Y")|string == "N" %][% endif %] [% if (taobaoShip_settings.SK45 if taobaoShip_settings.SK45 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="SK45" value="Y" title="是" [% if (taobaoShip_settings.SK45 if taobaoShip_settings.SK45 is defined else "Y")|string == "Y" %][% endif %] [% if (taobaoShip_settings.SK45 if taobaoShip_settings.SK45 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        9、是否启用录单时通过来源单号自动识别出店铺来源（默认不启用）
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                        <input type="radio" name="TaoBaoAutoDisSoure" value="N" title="不启用"  [% if (taobaoShip_settings.TaoBaoAutoDisSoure if taobaoShip_settings.TaoBaoAutoDisSoure is defined else "Y")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoAutoDisSoure if taobaoShip_settings.TaoBaoAutoDisSoure is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoAutoDisSoure" value="Y" title="启用" [% if (taobaoShip_settings.TaoBaoAutoDisSoure if taobaoShip_settings.TaoBaoAutoDisSoure is defined else "Y")|string == "Y" %][% endif %] [% if (taobaoShip_settings.TaoBaoAutoDisSoure if taobaoShip_settings.TaoBaoAutoDisSoure is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        10、录单时是否自动提取买家的留言内容到左侧订单内容大框里（默认自动提取识别）
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                        <input type="radio" name="TaoBaoDisBuyMess" value="N" title="开启"  [% if (taobaoShip_settings.TaoBaoDisBuyMess if taobaoShip_settings.TaoBaoDisBuyMess is defined else "Y")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoDisBuyMess if taobaoShip_settings.TaoBaoDisBuyMess is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoDisBuyMess" value="Y" title="关闭" [% if (taobaoShip_settings.TaoBaoDisBuyMess if taobaoShip_settings.TaoBaoDisBuyMess is defined else "Y")|string == "Y" %][% endif %] [% if (taobaoShip_settings.TaoBaoDisBuyMess if taobaoShip_settings.TaoBaoDisBuyMess is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        11、当订单状态改成已完成时，是否自动同步淘宝价格(默认不同步，注意：符合淘宝发货条件时才会同步价格)
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="SK82" value="N" title="否" [% if (taobaoShip_settings.SK82 if taobaoShip_settings.SK82 is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.SK82 if taobaoShip_settings.SK82 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="SK82" value="Y" title="是"  [% if (taobaoShip_settings.SK82 if taobaoShip_settings.SK82 is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.SK82 if taobaoShip_settings.SK82 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        12、内部账号卖出操作时，是否需要检测卖出淘宝单号付款情况(默认不检测)
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="SK105" value="N" title="不检测" [% if (taobaoShip_settings.SK105 if taobaoShip_settings.SK105 is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.SK105 if taobaoShip_settings.SK105 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="SK105" value="Y" title="检测"  [% if (taobaoShip_settings.SK105 if taobaoShip_settings.SK105 is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.SK105 if taobaoShip_settings.SK105 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        13、当淘宝买家付款后，是否自动创建系统订单（创建的订单包含淘宝单号、价格、买家旺旺、留言），注意：该功能需要联系我们技术人确认是否可用
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                        <input type="radio" name="TaoBaoAutoCreateOrderSwith" value="N" title="否" lay-filter="TaoBaoAutoCreateOrderSwith" [% if (taobaoShip_settings.TaoBaoAutoCreateOrderSwith if taobaoShip_settings.TaoBaoAutoCreateOrderSwith is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoAutoCreateOrderSwith if taobaoShip_settings.TaoBaoAutoCreateOrderSwith is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="TaoBaoAutoCreateOrderSwith" value="Y" title="是"  lay-filter="TaoBaoAutoCreateOrderSwith" [% if (taobaoShip_settings.TaoBaoAutoCreateOrderSwith if taobaoShip_settings.TaoBaoAutoCreateOrderSwith is defined else "N")|string == "Y" %][% endif %] [% if (taobaoShip_settings.TaoBaoAutoCreateOrderSwith if taobaoShip_settings.TaoBaoAutoCreateOrderSwith is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="autoCreateOrderSet" style="margin-left:10px; display:none">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            如果你想阻止部分宝贝订单不自动录入系统，可以设置宝贝标题关键词，包含以下关键词的宝贝订单将不会录入系统。多个关键词用英文逗号分隔，如果不设置关键词将默认允许所有宝贝订单录入
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:5px;margin-top:10px">
+                            <input type="text" name="TaobaoShopItemKey" id="TaobaoShopItemKey" lay-verify="" autocomplete="off" placeholder="宝贝标题关键词，用英文逗号分隔" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ taobaoShip_settings.TaobaoShopItemKey if taobaoShip_settings.TaobaoShopItemKey is defined else '' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            自动创建的订单以什么作为订单标题？(默认代练项目为空，3选1)，注意：该功能需要联系我们技术人确认是否可用，否则无效
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                            <input type="radio" name="TaoBaoAddOrderProject" value="N" title="空" [% if (taobaoShip_settings.TaoBaoAddOrderProject if taobaoShip_settings.TaoBaoAddOrderProject is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoAddOrderProject if taobaoShip_settings.TaoBaoAddOrderProject is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="TaoBaoAddOrderProject" value="T" title="标题"  [% if (taobaoShip_settings.TaoBaoAddOrderProject if taobaoShip_settings.TaoBaoAddOrderProject is defined else "N")|string == "T" %][% endif %] [% if (taobaoShip_settings.TaoBaoAddOrderProject if taobaoShip_settings.TaoBaoAddOrderProject is defined else "N")|string == "T" %]checked[% endif %]>
+                            <input type="radio" name="TaoBaoAddOrderProject" value="S" title="SKU"  [% if (taobaoShip_settings.TaoBaoAddOrderProject if taobaoShip_settings.TaoBaoAddOrderProject is defined else "N")|string == "S" %][% endif %] [% if (taobaoShip_settings.TaoBaoAddOrderProject if taobaoShip_settings.TaoBaoAddOrderProject is defined else "N")|string == "S" %]checked[% endif %]>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            自动创建订单时的默认订单状态是什么？默认是待完善状态
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:5px">
+                            <input type="radio" name="TaoBaoAddOrderDefStatus" value="N" title="待完善" [% if (taobaoShip_settings.TaoBaoAddOrderDefStatus if taobaoShip_settings.TaoBaoAddOrderDefStatus is defined else "N")|string == "N" %][% endif %] [% if (taobaoShip_settings.TaoBaoAddOrderDefStatus if taobaoShip_settings.TaoBaoAddOrderDefStatus is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="TaoBaoAddOrderDefStatus" value="W" title="未分配"  [% if (taobaoShip_settings.TaoBaoAddOrderDefStatus if taobaoShip_settings.TaoBaoAddOrderDefStatus is defined else "N")|string == "W" %][% endif %] [% if (taobaoShip_settings.TaoBaoAddOrderDefStatus if taobaoShip_settings.TaoBaoAddOrderDefStatus is defined else "N")|string == "W" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-lg w-lg" lay-submit="" lay-filter="savebtn">保存以上设置</button>
+        </div>
+
+    </fieldset>
+    <input type="hidden" name="ptid" id="ptid" />
+</form>
+<script src="/JS2019/System/taobaoshipsetting.js?v=20260924" type="text/javascript"></script>
+
+
+
+</body>
+</html>

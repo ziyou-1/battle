@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>群发短信模板</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+</style>
+<form class="layui-form" action="">
+    <blockquote class="layui-elem-quote" style="color:#ff0000">
+    提示：若需要群发短信，请务必先在这里申请一个短信模板，其它地方发送的短信无需申请短信模板，可以直接发送。
+    </blockquote>
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="申请新的群发短信模板"><i class="layui-icon layui-icon-add-1"></i>申请新的群发短信模板</button>
+            </div> 
+            <div id="total" style="color:#ff6a00"></div>
+        </script> 
+    </div>
+
+    <div class="addDiv" style="display:none">
+        <blockquote class="layui-elem-quote" style="color:#ff0000">
+            <div style="color:red">
+                <p>提示：带有任何营销内容或性质的短信，均为营销类短信，短信类型请选择“营销短信”，否则将无法通过审核</p>
+                <p>1、每天最多提交5次，每次提交后审核没通过的，只能重新再次提交审核，请珍惜机会；</p>
+                <p>2、正常通知可选常规通知类，带营销性质的短信请选择营销短信，否则100%无法通过审核；</p>
+                <p>3、短信内容里不允许带QQ、好评、返现、红包、VX、微信、加群、Q群、网址或识别码等内容；</p>
+            </div>
+        </blockquote>
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">短信类型：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="smsType" value="10" title="常规通知(不带任何推广、广告、邀请类字符)">
+                    <input type="radio" name="smsType" value="20" title="营销短信(带推广、营销、邀请类字符)">
+                </div>
+            </div>
+            <div class="layui-form-item" id="fjdiv">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">短信内容：</label>
+                    <div class="layui-input-block">
+                        <textarea name="content" lay-verify="required" placeholder="请输入短信模板内容，不需要带任何“退订”、“拒收”字符" class="layui-textarea" maxlength="300"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <div style="text-align:center;align-items:center">
+                <button type="button" class="layui-btn  layui-btn-normal w-lg" lay-submit="" lay-filter="savebtn">确定提交申请</button>
+            </div>
+        </div>
+    </div>
+</form>  
+
+<script src="/JS2019/Sms/smstemplatelist.js?v=10071" type="text/javascript"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>查订单进度 - [[ company ]]</title>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <style>
+        body { background: #f2f2f2; font-size: 14px; }
+        .box { max-width: 560px; margin: 0 auto; padding: 12px; }
+        .card { background: #fff; border-radius: 8px; padding: 16px 12px; margin-bottom: 12px; }
+        .card h2 { font-size: 17px; margin-bottom: 10px; color: #333; }
+        .row { display: flex; line-height: 28px; }
+        .row span:first-child { width: 80px; color: #999; }
+        .sta { color: #1E9FFF; font-weight: bold; }
+        .bulletin { color: #FF5722; white-space: pre-wrap; line-height: 22px; }
+        .log { border-left: 2px solid #e6e6e6; padding-left: 12px; margin-left: 6px; }
+        .log div { position: relative; padding: 4px 0 10px; color: #555; }
+        .log div:before { content: ''; position: absolute; left: -17px; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #1E9FFF; }
+        .log small { color: #999; display: block; }
+        .q { margin-bottom: 8px; } .q b { display: block; color: #333; } .q p { color: #666; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="card">
+        <h2>[[ company or '订单进度查询' ]]</h2>
+        [% if bulletin %]<div class="bulletin">[[ bulletin ]]</div>[% endif %]
+        <form class="layui-form" method="get" action="/Public/SearchOrder" style="margin-top:10px">
+            <div class="layui-form-item" style="display:flex;margin-bottom:0">
+                <input type="text" name="no" value="[[ no ]]" class="layui-input" placeholder="请输入来源单号 / 订单号" autocomplete="off">
+                <button class="layui-btn" style="margin-left:8px">查询</button>
+            </div>
+        </form>
+    </div>
+    [% if no and not o %]<div class="card" style="color:#FF5722">没有查到该单号的订单，请核对后重试或联系客服</div>[% endif %]
+    [% if o %]
+    <div class="card">
+        <div class="row"><span>订单状态</span><span class="sta">[[ o.orderSta ]]</span></div>
+        <div class="row"><span>游戏</span><span>[[ o.gameName ]]</span></div>
+        <div class="row"><span>项目</span><span>[[ o.project ]]</span></div>
+        <div class="row"><span>角色</span><span>[[ o.roleName ]]</span></div>
+        <div class="row"><span>下单时间</span><span>[[ (o.createTime or '')[:16] ]]</span></div>
+        [% if o.startTime %]<div class="row"><span>开始时间</span><span>[[ (o.startTime or '')[:16] ]]</span></div>[% endif %]
+        [% if o.expectEndTime %]<div class="row"><span>预计完成</span><span>[[ o.expectEndTime[:16] ]]</span></div>[% endif %]
+        [% if o.completeTime %]<div class="row"><span>完成时间</span><span>[[ (o.completeTime or '')[:16] ]]</span></div>[% endif %]
+    </div>
+    <div class="card"><h2>进度记录</h2><div class="log">[% for l in logs %]<div>[[ l.content ]]<small>[[ (l.createTime or '')[:16] ]]</small></div>[% else %]<div>暂无记录</div>[% endfor %]</div></div>
+    [% endif %]
+    [% set qs = questions|selectattr('Status', 'ne', 'N')|list %]
+    [% if qs %]<div class="card"><h2>常见问题</h2>[% for q in qs %]<div class="q"><b>[[ q.SeachQuestion_Title ]]</b><p>[[ (q.SeachQuestion_Content or '')|striptags ]]</p></div>[% endfor %]</div>[% endif %]
+</div>
+</body>
+</html>

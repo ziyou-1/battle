@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>订单虚拟号设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+<style>
+    .layui-elem-quote {
+        margin-bottom: 10px;
+        padding: 0px;
+        line-height: 22px;
+        border-left: 5px solid #009688;
+        border-radius: 0 2px 2px 0;
+        background-color: #f2f2f2;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+</style>
+
+<form class="layui-form" action="">
+     
+    <div class="layui-card" hidden=&#39;&#39;>
+        <div class="layui-card-header">提示</div>
+        <div class="layui-card-body" style="font-size:14px">
+            系统还没绑定平台官方账号（不是系统子账号），无法使用该功能模块，
+            <a lay-href="/System/systemsetting" lay-tips="系统各项设置管理" lay-text="系统各项设置管理" style="color:#1E9FFF;font-size:20px">
+                <cite>请点击这里进行绑定</cite>
+            </a>
+            ，如若已绑定，请点击
+            <a href="javascript:location.reload();" class="" style="color:#1E9FFF;font-size:20px">刷新该界面</a>
+        </div>
+    </div>
+
+    <div class="layui-tab" lay-filter="private" >
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="10">订单虚拟号设置</li>
+            <li lay-id="20">拨打呼叫记录</li>
+        </ul>
+
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show" style="padding:10px 10px">
+                <blockquote class="layui-elem-quote" style="padding:10px 10px 10px 10px;">
+                    <p style="font-weight:600;color:#000">功能介绍：</p>
+                    <p style="font-size:14px;color:#000">打手提取订单时会自动生成一个虚拟号，此时打手看不到老板真实的电话。上号时，打手只能拨打这个虚拟号联系老板。该功能对隔离打手与老板双方的联系有很大的帮助，避免老板电话被打手直接获取，防止打手挖客户、盗号。
+                    同时在正式通话后，还会自动产生通话录音，方便日后追溯。当订单打完交单后，虚拟号就自动释放作废。</p>
+
+                </blockquote>
+                <blockquote class="layui-elem-quote" style="padding:10px 10px 10px 10px;color:#808080;font-size:14px">
+                    <p style="font-weight:600;color:#000">操作步骤：</p>
+                    <p>1、在本页面，点击购买通话套餐。</p>
+                    <p>2、在本页面下方，打开虚拟电话总开关。是否自动提取自行决定。</p>
+                    <p>3、去系统用户/用户管理，想让哪个下家用虚拟号，就把他的“隐藏客户电话”的开关激活成绿色。</p>
+                </blockquote>
+                <blockquote class="layui-elem-quote" style="padding:10px 10px 10px 10px;">
+                    <p style="font-weight: 600; color: #000">费用说明：</p>
+                    <p>1、按实际产生的通话时间计费，从虚拟电话通话套餐包中扣除。</p>
+                    <p>2、若账户虚拟电话套餐包不足50分钟时将无法提取新的虚拟号码且呼叫可能不正常</p>
+                </blockquote>
+                <blockquote class="layui-elem-quote" style="padding:10px 10px 10px 10px;">
+                    <p style="font-weight: 600; color: #000">使用说明</p>
+                    <p>系统产生的每一个虚拟电话号码机制是循环使用的，一笔订单绑定一个虚拟号，订单完成就解绑释放掉了。之后，这个虚拟号在2小时至14天内是有机率被其它家系统的某笔订单绑定使用，此时再拨打这个虚拟号，将是最后一次绑定的老板，各位商家在使用过程中请务必注意这一点，以免产生误会！</p>
+                </blockquote>
+
+                <div class="layui-form-pane">
+                    <div class="layui-form-item" style="">
+                        <span style="color:#ee5959">截至[[ now_cn ]]您的平台个人账户([[ sys.ownerAccount ]])可用余额为：[[ sys.balance ]]元，短信余量：[[ sys.smsLeft ]]条，虚拟电话套餐剩余：[[ sys.phoneMinutes ]]分钟，实名认证套餐包：0次</span>
+                    </div>
+
+                    <div class="layui-form-item" style="">                       
+                        <div class="layui-inline" style="margin-top:10px">
+                            <button type="button" class="layui-btn  layui-btn-normal" lay-submit="" lay-filter="payczBtn2">点击购买通话时长套餐包</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            1、虚拟号总开关(默认为关，若需要使用请点击开)
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="PrivacyPhoneServiceSwicth" value="N" title="关" [% if (privacyPhone_settings.PrivacyPhoneServiceSwicth if privacyPhone_settings.PrivacyPhoneServiceSwicth is defined else "N")|string == "N" %][% endif %] [% if (privacyPhone_settings.PrivacyPhoneServiceSwicth if privacyPhone_settings.PrivacyPhoneServiceSwicth is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="PrivacyPhoneServiceSwicth" value="Y" title="开"  [% if (privacyPhone_settings.PrivacyPhoneServiceSwicth if privacyPhone_settings.PrivacyPhoneServiceSwicth is defined else "N")|string == "Y" %][% endif %] [% if (privacyPhone_settings.PrivacyPhoneServiceSwicth if privacyPhone_settings.PrivacyPhoneServiceSwicth is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            2、当打开订单详情时，要不要自动生成虚拟号放到订单内容区域？(默认需要手动点击提取按钮)
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="SK104" value="N" title="手动提取" [% if (privacyPhone_settings.SK104 if privacyPhone_settings.SK104 is defined else "N")|string == "N" %][% endif %] [% if (privacyPhone_settings.SK104 if privacyPhone_settings.SK104 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="SK104" value="Y" title="自动提取"  [% if (privacyPhone_settings.SK104 if privacyPhone_settings.SK104 is defined else "N")|string == "Y" %][% endif %] [% if (privacyPhone_settings.SK104 if privacyPhone_settings.SK104 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            3、提取虚拟号码失败时，是返回真实电话还是空白？(默认失败时返回真实号码)
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="SK144" value="N" title="真实号码"  [% if (privacyPhone_settings.SK144 if privacyPhone_settings.SK144 is defined else "Y")|string == "N" %][% endif %] [% if (privacyPhone_settings.SK144 if privacyPhone_settings.SK144 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="SK144" value="Y" title="空白" [% if (privacyPhone_settings.SK144 if privacyPhone_settings.SK144 is defined else "Y")|string == "Y" %][% endif %] [% if (privacyPhone_settings.SK144 if privacyPhone_settings.SK144 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" style="margin-left:10px;margin-top:20px">
+                        <button type="button" class="layui-btn  layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="save1btn">保存设置</button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <a lay-href="/Emp/privatephonecalllog" lay-text="客户隐私号呼叫记录" lay-tips="进入客户隐私号呼叫记录" style="color:#ff6a00">
+                    <cite>点击这里进入客户隐私号呼叫记录</cite>
+                </a>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="jdp" id="jdp" value="[[ sys.jdpId ]]" />
+</form>
+<script src="/JS2019/System/customerphoneprivatesetting.js?v=20110080122" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>用户登录限制设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="form">
+    <div class="" style="padding-left: 5px;padding-top:10px"> 
+        <div class="layui-form-pane">
+            <div class="layui-inline" style="width: 400px;">
+                <label class="layui-form-label" style="width: 80px">系统用户</label>
+                <div class="layui-input-inline" style="width: 320px;">
+                    <select name="userList" xm-select="userList" xm-select-skin="default" xm-select-height="36px" xm-select-search=""></select>
+                </div>
+            </div>
+            <div class="layui-inline" style="width: 400px;">
+                <label class="layui-form-label" style="width: 80px">IP范围</label>
+                <div class="layui-input-inline" style="width: 320px;">
+                    <input type="text" name="IPWhitelist" id="IPWhitelist" lay-verify="" placeholder="搜索IP范围" autocomplete="off" class="layui-input" value="">
+
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="width: 80px">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="switchTpl1">
+            <input type="checkbox" name="sta" value="{{d.UserLoginRestrictId}}" lay-skin="switch" lay-text="生效|禁用" lay-filter="statusChecked" {{ d.Status == '0' ? 'checked' : '' }}>
+        </script>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" style="margin-right:5px" lay-event="refresh" type="button" title="刷新列表"><i class="layui-icon layui-zhuce"></i>刷新列表</button>
+                <button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-right:5px" lay-event="addUserLoginRestrictBtn" type="button" title="新增限制子账号规则">新增限制子账号规则</button>
+                <button class="layui-btn layui-btn-xs" style="margin-right:5px" lay-event="batchEditUserLoginRestrictBtn" type="button" title="批量修改子账号规则">批量修改子账号规则</button>
+                <button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-right:5px" lay-event="addUserLoginRestrictIPBtn" type="button" title="新增一个按IP限制登录的规则">新增按IP禁封规则</button>
+                <button class="layui-btn layui-btn-xs layui-btn-warm" style="margin-right:5px" lay-event="batchDelUserLoginRestrictBtn" type="button" title="新增删除规则">批量刪除规则</button>
+
+            </div>
+            <div style="color:#ff6a00" id="total"></div>
+        </script>
+        <script type="text/html" id="baroperating">
+            <a class="layui-btn layui-btn-xs" style="margin-right:0px" lay-event="submitEdit" title="修改规则"><i class="layui-icon layui-icon-edit"></i></a>
+        </script>
+    </div>
+
+    <div class="addDislabelIPDiv" style="padding:10px 10px;display:none">
+        <div class="layui-form-pane">            
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 8px 6px;" title="">限制IP地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="blackIP" id="blackIP" placeholder="请输入要限制的IP，支持网段添加 如：100.100.100.1/24" autocomplete="off" class="layui-input" value="">
+                </div>
+                <div style="padding-top:10px;color:#ff0000">支持网段添加 如：100.100.100.1/24  代表从100.100.100.1到100.100.100.254都将无法访问</div>
+            </div>            
+            <div class="layui-form-item" style="text-align:center;margin:0 auto">
+                <a href="javascript:void(0)" class="layui-btn layui-btn-normal saveBlackIPBtn" style="margin-top:50px;margin-left:50px; width:150px">保存规则</a>
+            </div>
+        </div>
+    </div>
+   
+</form>
+<script src="/JS2019/User/UserLoginRestrict.js?v=20260428" type="text/javascript"></script>
+
+
+
+</body>
+</html>

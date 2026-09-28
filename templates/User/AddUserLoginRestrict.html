@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新增/编辑用户登录限制设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 3px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .layui-form-radio {
+        line-height: 28px;
+        margin: 6px 10px 0 0;
+        padding-right: 0px;
+        cursor: pointer;
+        font-size: 0;
+    }
+    .layui-form-item .layui-inline {
+        margin-bottom: 5px;
+        margin-right: 10px;
+    }
+</style>
+<form class="layui-form layui-form-pane" action="" style="margin-right:5px">
+
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs12 layui-col-sm12">
+            <div class="admin-info" style="padding: 10px 10px 20px 10px;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">限制用户</label>
+                    <div class="layui-input-block">
+                        <select id="userList" name="userList" xm-select="userList" xm-select-skin="default" xm-select-height="36px" lay-search="" xm-select-search="" xm-select-search-type="title"></select>
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">限制周期</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="weekDay" value="1" [% if rr and "1" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "1" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周一"  />
+                        <input type="checkbox" name="weekDay" value="2" [% if rr and "2" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "2" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周二"  />
+                        <input type="checkbox" name="weekDay" value="3" [% if rr and "3" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "3" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周三"  />
+                        <input type="checkbox" name="weekDay" value="4" [% if rr and "4" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "4" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周四"  />
+                        <input type="checkbox" name="weekDay" value="5" [% if rr and "5" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "5" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周五"  />
+                        <input type="checkbox" name="weekDay" value="6" [% if rr and "6" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "6" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周六"  />
+                        <input type="checkbox" name="weekDay" value="0" [% if rr and "0" in (rr.weekDay or "").split(",") %]checked[% endif %] [% if rr and "0" in (rr.weekDay or "").split(",") %]checked[% endif %] lay-filter="weekDay" title="周日"  />
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">限制登录开始时间</label>
+                        <div class="layui-input-block">
+                            <select id="restrictTimeS" name="restrictTimeS">
+                                        <option value="0" [% if (rr and (rr.restrictTimeS|string) == "0") or (not rr and "0" == "-1") %]selected[% endif %]>0 时</option>
+                                        <option value="1" [% if (rr and (rr.restrictTimeS|string) == "1") or (not rr and "1" == "-1") %]selected[% endif %]>1 时</option>
+                                        <option value="2" [% if (rr and (rr.restrictTimeS|string) == "2") or (not rr and "2" == "-1") %]selected[% endif %]>2 时</option>
+                                        <option value="3" [% if (rr and (rr.restrictTimeS|string) == "3") or (not rr and "3" == "-1") %]selected[% endif %]>3 时</option>
+                                        <option value="4" [% if (rr and (rr.restrictTimeS|string) == "4") or (not rr and "4" == "-1") %]selected[% endif %]>4 时</option>
+                                        <option value="5" [% if (rr and (rr.restrictTimeS|string) == "5") or (not rr and "5" == "-1") %]selected[% endif %]>5 时</option>
+                                        <option value="6" [% if (rr and (rr.restrictTimeS|string) == "6") or (not rr and "6" == "-1") %]selected[% endif %]>6 时</option>
+                                        <option value="7" [% if (rr and (rr.restrictTimeS|string) == "7") or (not rr and "7" == "-1") %]selected[% endif %]>7 时</option>
+                                        <option value="8" [% if (rr and (rr.restrictTimeS|string) == "8") or (not rr and "8" == "-1") %]selected[% endif %]>8 时</option>
+                                        <option value="9" [% if (rr and (rr.restrictTimeS|string) == "9") or (not rr and "9" == "-1") %]selected[% endif %]>9 时</option>
+                                        <option value="10" [% if (rr and (rr.restrictTimeS|string) == "10") or (not rr and "10" == "-1") %]selected[% endif %]>10 时</option>
+                                        <option value="11" [% if (rr and (rr.restrictTimeS|string) == "11") or (not rr and "11" == "-1") %]selected[% endif %]>11 时</option>
+                                        <option value="12" [% if (rr and (rr.restrictTimeS|string) == "12") or (not rr and "12" == "-1") %]selected[% endif %]>12 时</option>
+                                        <option value="13" [% if (rr and (rr.restrictTimeS|string) == "13") or (not rr and "13" == "-1") %]selected[% endif %]>13 时</option>
+                                        <option value="14" [% if (rr and (rr.restrictTimeS|string) == "14") or (not rr and "14" == "-1") %]selected[% endif %]>14 时</option>
+                                        <option value="15" [% if (rr and (rr.restrictTimeS|string) == "15") or (not rr and "15" == "-1") %]selected[% endif %]>15 时</option>
+                                        <option value="16" [% if (rr and (rr.restrictTimeS|string) == "16") or (not rr and "16" == "-1") %]selected[% endif %]>16 时</option>
+                                        <option value="17" [% if (rr and (rr.restrictTimeS|string) == "17") or (not rr and "17" == "-1") %]selected[% endif %]>17 时</option>
+                                        <option value="18" [% if (rr and (rr.restrictTimeS|string) == "18") or (not rr and "18" == "-1") %]selected[% endif %]>18 时</option>
+                                        <option value="19" [% if (rr and (rr.restrictTimeS|string) == "19") or (not rr and "19" == "-1") %]selected[% endif %]>19 时</option>
+                                        <option value="20" [% if (rr and (rr.restrictTimeS|string) == "20") or (not rr and "20" == "-1") %]selected[% endif %]>20 时</option>
+                                        <option value="21" [% if (rr and (rr.restrictTimeS|string) == "21") or (not rr and "21" == "-1") %]selected[% endif %]>21 时</option>
+                                        <option value="22" [% if (rr and (rr.restrictTimeS|string) == "22") or (not rr and "22" == "-1") %]selected[% endif %]>22 时</option>
+                                        <option value="23" [% if (rr and (rr.restrictTimeS|string) == "23") or (not rr and "23" == "-1") %]selected[% endif %]>23 时</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    至   &nbsp;
+                    <div class="layui-inline">
+                        <label class="layui-form-label">限制登录结束时间</label>
+                        <div class="layui-input-block">
+                            <select id="restrictTimeE" name="restrictTimeE">
+                                        <option value="0" [% if (rr and (rr.restrictTimeE|string) == "0") or (not rr and "0" == "-1") %]selected[% endif %]>0 时</option>
+                                        <option value="1" [% if (rr and (rr.restrictTimeE|string) == "1") or (not rr and "1" == "-1") %]selected[% endif %]>1 时</option>
+                                        <option value="2" [% if (rr and (rr.restrictTimeE|string) == "2") or (not rr and "2" == "-1") %]selected[% endif %]>2 时</option>
+                                        <option value="3" [% if (rr and (rr.restrictTimeE|string) == "3") or (not rr and "3" == "-1") %]selected[% endif %]>3 时</option>
+                                        <option value="4" [% if (rr and (rr.restrictTimeE|string) == "4") or (not rr and "4" == "-1") %]selected[% endif %]>4 时</option>
+                                        <option value="5" [% if (rr and (rr.restrictTimeE|string) == "5") or (not rr and "5" == "-1") %]selected[% endif %]>5 时</option>
+                                        <option value="6" [% if (rr and (rr.restrictTimeE|string) == "6") or (not rr and "6" == "-1") %]selected[% endif %]>6 时</option>
+                                        <option value="7" [% if (rr and (rr.restrictTimeE|string) == "7") or (not rr and "7" == "-1") %]selected[% endif %]>7 时</option>
+                                        <option value="8" [% if (rr and (rr.restrictTimeE|string) == "8") or (not rr and "8" == "-1") %]selected[% endif %]>8 时</option>
+                                        <option value="9" [% if (rr and (rr.restrictTimeE|string) == "9") or (not rr and "9" == "-1") %]selected[% endif %]>9 时</option>
+                                        <option value="10" [% if (rr and (rr.restrictTimeE|string) == "10") or (not rr and "10" == "-1") %]selected[% endif %]>10 时</option>
+                                        <option value="11" [% if (rr and (rr.restrictTimeE|string) == "11") or (not rr and "11" == "-1") %]selected[% endif %]>11 时</option>
+                                        <option value="12" [% if (rr and (rr.restrictTimeE|string) == "12") or (not rr and "12" == "-1") %]selected[% endif %]>12 时</option>
+                                        <option value="13" [% if (rr and (rr.restrictTimeE|string) == "13") or (not rr and "13" == "-1") %]selected[% endif %]>13 时</option>
+                                        <option value="14" [% if (rr and (rr.restrictTimeE|string) == "14") or (not rr and "14" == "-1") %]selected[% endif %]>14 时</option>
+                                        <option value="15" [% if (rr and (rr.restrictTimeE|string) == "15") or (not rr and "15" == "-1") %]selected[% endif %]>15 时</option>
+                                        <option value="16" [% if (rr and (rr.restrictTimeE|string) == "16") or (not rr and "16" == "-1") %]selected[% endif %]>16 时</option>
+                                        <option value="17" [% if (rr and (rr.restrictTimeE|string) == "17") or (not rr and "17" == "-1") %]selected[% endif %]>17 时</option>
+                                        <option value="18" [% if (rr and (rr.restrictTimeE|string) == "18") or (not rr and "18" == "-1") %]selected[% endif %]>18 时</option>
+                                        <option value="19" [% if (rr and (rr.restrictTimeE|string) == "19") or (not rr and "19" == "-1") %]selected[% endif %]>19 时</option>
+                                        <option value="20" [% if (rr and (rr.restrictTimeE|string) == "20") or (not rr and "20" == "-1") %]selected[% endif %]>20 时</option>
+                                        <option value="21" [% if (rr and (rr.restrictTimeE|string) == "21") or (not rr and "21" == "-1") %]selected[% endif %]>21 时</option>
+                                        <option value="22" [% if (rr and (rr.restrictTimeE|string) == "22") or (not rr and "22" == "-1") %]selected[% endif %]>22 时</option>
+                                        <option value="23" [% if (rr and (rr.restrictTimeE|string) == "23") or (not rr and "23" == "-1") %]selected[% endif %]>23 时</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <span class="" style="color:#ff6a00">若选择了0点至0点，则代表全天</span>
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">限制方式</label>
+                    <div class="layui-input-block">
+                        <select id="restrictType" name="restrictType" lay-filter="restrictType">
+                            <option value="0" [% if (rr and (rr.restrictType|string) == "0") or (not rr and "0" == "0") %]selected[% endif %]>IP白名单限制</option>
+                            <option value="1" [% if (rr and (rr.restrictType|string) == "1") or (not rr and "1" == "0") %]selected[% endif %]>允许登录</option>
+                            <option value="2" [% if (rr and (rr.restrictType|string) == "2") or (not rr and "2" == "0") %]selected[% endif %]>禁止登录</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item content">
+                    <div class="layui-input-block">
+                        <textarea name="ipWhitelist" id="ipWhitelist" lay-verify="ip" placeholder="外网IP地址，每行一个，不要有任何其它字符，支持按网段" maxlength="480" style="height: 100px; " class="layui-textarea resultUL">[[ rr.ipWhitelist if rr else "" ]]</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div style="text-align:center;align-items:center">
+        <button type="button" class="layui-btn layui-icon layui-toast layui-btn-normal w-lg" lay-submit="" lay-filter="savebtn">保存规则</button>
+    </div>
+
+    <input type="hidden" name="uid" id="uid" value="[[ user.id ]]" />
+    <input type="hidden" name="userLoginRestrictIds" id="userLoginRestrictIds" value="[[ rr.id if rr else 0 ]]" />
+    <input type="hidden" name="weekDayStr" id="weekDayStr" value="[[ rr.weekDay if rr else '' ]]" />
+</form>
+
+<script src="/JS2019/User/AddUserLoginRestrict.js?v=20260428" type="text/javascript"></script>
+
+
+</body>
+</html>

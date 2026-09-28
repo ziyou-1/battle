@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>我的资料</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .privateServerXY p {
+        font-size: 14px;
+        line-height: 30px;
+    }
+
+    .certNextDiv {
+        font-size: 14px;
+    }
+
+    html {
+        background: #fff
+    }
+
+    .admin-info .layui-form-item .layui-form-label {
+        width: 150px
+    }
+
+    .admin-info .layui-form-item .layui-input-block {
+        margin-left: 150px;
+    }
+
+    #upIDCardBtn {
+        opacity: 0;
+        display: block;
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        top: 0;
+        left: 1px
+    }
+
+    .plus-sign {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        left: 36px;
+        top: 23px;
+    }
+
+    .upIDCardBoxtext {
+        width: 100%;
+        text-align: center;
+        color: #888;
+        margin-top: 71px
+    }
+
+    .plus-sign::before,
+    .plus-sign::after {
+        content: '';
+        position: absolute;
+        background-color: #888888;
+    }
+
+    .plus-sign::before {
+        top: 50%;
+        left: 10px;
+        right: 10px;
+        height: 3px;
+        transform: translateY(-50%);
+    }
+
+    .plus-sign::after {
+        left: 50%;
+        top: 10px;
+        bottom: 10px;
+        width: 3px;
+        transform: translateX(-50%);
+    }
+
+    .upIDCardBox {
+        width: 120px;
+        height: 120px;
+        border: 1px dashed #888
+    }
+
+    #upIDCardImg {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        display: none;
+        top: 0;
+        left: 1px
+    }
+
+    .userPhonePop .layui-form-pane .layui-input-inline {
+        margin-left: 10px;
+        line-height: 38px;
+    }
+
+    #WxImg {
+        max-width: 60%;
+        max-height: 60%;
+        margin: 50px auto;
+        display: block;
+    }
+    .highlight-box {
+        background: #fffbe6;
+        border: 1px solid #ffe58f;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin: 12px 0;
+    }
+    .placeholder {
+        color: #d4380d;
+        background: #fff2e8;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-family: monospace;
+    }
+    ul, ol {
+        padding-left: 20px;
+        margin: 8px 0;
+    }
+
+    li {
+        margin: 4px 0;
+        font-size: 14px;
+    }
+
+    strong {
+        color: #000;
+    }
+</style>
+<div id="root">
+        <template id="template">
+            {{ const i18n = layui.i18n; }}
+            <div id="LAY_app">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-tab" style="margin-left:10px;margin-top:10px" lay-filter="userInfo">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="0">{{= i18n.$t('page.userInfo') }}</li>
+                            <li lay-id="1" id="funcSet">{{= i18n.$t('page.funcSet') }}</li>
+                            <li lay-id="2" id="pwdSet">{{= i18n.$t('page.pwdSet') }}</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-row layui-col-space10">
+                                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md3 layui-col-lg3">
+                                        <div class="" style="align-content:center;text-align:center;margin-top:30px">
+                                            <div class="user-photo" style="">
+                                                <img id="avatar" style="max-width:240px" class="layui-circle" src="/images/userPic.png">
+                                            </div>
+                                            <div class="layui-upload" style="margin-top:20px">
+                                                <button type="button" class="layui-btn layui-icon layui-shangchuan layui-btn-success" id="upimgBtn">{{= i18n.$t('page.upimgBtn') }}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md9 layui-col-lg9">
+                                        <div class="admin-info" style="margin-top:20px">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.loginAcc') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="loginAcc" lay-verify="required" autocomplete="off" placeholder="" class="layui-input layui-input-shadow" value="[[ user.loginAcc ]]" maxlength="16">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item layui-hide">
+                                                <label class="layui-form-label">{{= i18n.$t('page.CertName') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="" autocomplete="off" placeholder="" disabled="disabled" class="layui-input layui-input-shadow boxshadow-success">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.SID') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="sid" autocomplete="off" placeholder="" disabled="disabled" class="layui-input layui-input-shadow boxshadow-success" value="[[ user.rname ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.IsRnameCertification') }}</label>
+                                                        <div class="layui-input-inline layui-input-wrap" style="width:120px">
+                                                            <i class="layui-icon layui-icon-tips-fill" style="margin-left:10px;color:#ff5722"></i>
+                                                            <span style="font-weight:600;font-size:14px; color: #ff5722">{{= i18n.$t('page.tipsfill') }}</span>
+                                                        </div>
+                                                        <div class="layui-form-mid layui-hide" style="padding: 0!important;">
+                                                            <div class="layui-btn layui-btn-primary layui-border-blue toCer">{{= i18n.$t('page.CertSwicth') }}</div>
+                                                        </div>
+
+                                            </div>
+                                    
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">绑定邮箱</label>
+                                                <div class="layui-input-inline layui-input-wrap unbindEmile" style="width: 120px; display: none">
+                                                    <i class="layui-icon layui-icon-tips-fill" style="margin-left:10px;color:#ff5722"></i>
+                                                    <span style="font-weight:600;font-size:14px; color: #ff5722">未绑定</span>
+                                                </div>
+                                                <div class="layui-form-mid unbindEmile" style="padding: 0!important; display:none" >
+                                                    <button type="button" class="layui-btn layui-bg-orange bindEmileBtn">去绑定</button>
+                                                </div>
+                                                <div class="layui-input-inline layui-input-wrap bindEmile" style=" display: none">
+                                                    <span style="font-weight: 600; font-size: 14px; margin:0 10px" class="myBindEmile"></span>
+                                                </div>
+                                                <div class="layui-form-mid bindEmile" style="padding: 0 !important; display: none">
+                                                    <button type="button" class="layui-btn layui-bg-red  changeEmileBtn">更换绑定</button>
+                                                </div>
+                                            </div>
+                                       
+
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.basicSalary') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="basicSalary" autocomplete="off" placeholder="" disabled="disabled" class="layui-input layui-input-shadow boxshadow-success" value="[[ user.basicSalary or "0.00" ]]"0.00" ]]">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.setAlipayAcc') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="setAlipayAcc" autocomplete="off" placeholder="{{= i18n.$t('page.setAlipayAccplaceholder') }}" class="layui-input layui-input-shadow" value="[[ user.alipayAcc ]]" maxlength="32">
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.setAlipayAccName') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="setAlipayAccName" autocomplete="off" placeholder="{{= i18n.$t('page.setAlipayAccNameplaceholder') }}" class="layui-input layui-input-shadow" value="[[ user.alipayName ]]"  maxlength="50">
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">{{= i18n.$t('page.setBankName') }}</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="setBankName" autocomplete="off" lay-tips="{{= i18n.$t('page.setBankNametips') }}" placeholder="{{= i18n.$t('page.setBankNameplaceholder') }}" class="layui-input layui-input-shadow" value="[[ user.bankName ]]" maxlength="32">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">{{= i18n.$t('page.setBankCardNo') }}</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="setBankCardNo" autocomplete="off" lay-tips="{{= i18n.$t('page.setBankCardNotips') }}" placeholder="{{= i18n.$t('page.setBankCardNoplaceholder') }}" class="layui-input layui-input-shadow" value="[[ user.bankCardNo ]]" maxlength="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label tcLabel">{{= i18n.$t('page.tcLabel') }}</label>
+                                                <div class="layui-input-block">
+                                                    <div type="button" class="lookWxImg layui-btn layui-icon " style="display:none">{{= i18n.$t('page.lookWxImg') }}</div>
+                                                    <div type="button" class="uploadWx layui-btn layui-icon layui-toast layui-btn-normal w-lg">{{= i18n.$t('page.uploadWx') }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.qq') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="qq" autocomplete="off" placeholder="" class="layui-input layui-input-shadow" value="[[ user.qq ]]" maxlength="20">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.moblie') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="moblie" autocomplete="off" placeholder="" class="layui-input layui-input-shadow" value="[[ user.moblie ]]" maxlength="11">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.livestreaming') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="livestreaming" autocomplete="off" placeholder="" class="layui-input layui-input-shadow" value="[[ user.livestreaming ]]" maxlength="500">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{{= i18n.$t('page.gamelist') }}</label>
+                                                <div class="layui-input-block">
+[% for gm in games %]<div class="layui-inline" style="width:110px; margin-top:0px"><input type="checkbox" disabled="disabled" value="[[ gm.gameName ]]" name="gamelist" lay-skin="primary" title="[[ gm.gameName ]]" [% if gm.gameName in user_games %]checked=""[% endif %]></div>[% endfor %]
+
+
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" style="margin-top:30px">
+                                                <div class="layui-input-block">
+                                                    <button type="button" class="layui-btn layui-icon layui-toast layui-btn-info w-lg" lay-submit="" lay-filter="savebtn">{{= i18n.$t('page.savebtn') }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-row layui-col-space10">
+                                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
+                                        <div class="admin-info" style="margin-top:20px">
+                                            <blockquote class="layui-elem-quote layui-font-14" style="color:#E03636;font-weight:600">
+                                                <p>请回到您自己的管理系统里操作绑定。功能入口：系统维护->绑定上家系统设置</p>
+                                            </blockquote>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
+                                        <div class="admin-info layui-hide" style="margin-top:20px">
+                                            <blockquote class="layui-elem-quote" style=" color:#FF5722;font-weight:600">
+                                                <p>
+                                                    {{= i18n.$t('page.elemquote') }}
+                                                </p>
+                                            </blockquote>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.jdpAcc') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="jdpAcc" autocomplete="off" placeholder="{{= i18n.$t('page.jdpAccplaceholder') }}" class="layui-input layui-input-shadow">
+                                                    <a href="javascript:void(0)" class="regacc" style="color:#1E9FFF;" target="_blank" title="{{= i18n.$t('page.regacctitle') }}">{{= i18n.$t('page.regacc') }}</a>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.jdpAccPwd') }}</label>
+                                                <div class="layui-input-block">
+                                                    <input type="password" name="jdpAccPwd" autocomplete="off" placeholder="请输入登录平台个人版的密码" class="layui-input layui-input-shadow layui-password">
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item" style="margin-top:30px">
+                                                <div class="layui-input-block">
+                                                    <button type="button" class="layui-btn layui-icon layui-toast layui-btn-info w-lg" lay-submit="" lay-filter="savebtn3">{{= i18n.$t('page.savebtn3') }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12">
+                                    <div class="admin-info" style="margin-top:20px">
+                                        <blockquote class="layui-elem-quote" style="color:#ff0000">{{= i18n.$t('page.layuielemquote') }}</blockquote>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.ypwd') }}</label>
+                                            <div class="layui-input-block">
+                                                <input type="password" name="ypwd" autocomplete="off" placeholder="{{= i18n.$t('page.ypwdplaceholder') }}" class="layui-input layui-input-shadow" value="" maxlength="18">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.newPwd') }}</label>
+                                            <div class="layui-input-block">
+                                                <input type="password" name="newPwd" autocomplete="off" placeholder="{{= i18n.$t('page.newPwdplaceholder') }}" class="layui-input layui-input-shadow" value="" maxlength="18">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" style="padding:8px 10px">{{= i18n.$t('page.renewPwd') }}</label>
+                                            <div class="layui-input-block">
+                                                <input type="password" name="renewPwd" autocomplete="off" placeholder="{{= i18n.$t('page.renewPwdplaceholder') }}" class="layui-input layui-input-shadow" value="" maxlength="18">
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item" style="margin-top:30px">
+                                            <div class="layui-input-block">
+                                                <button type="button" class="layui-btn layui-icon layui-toast layui-btn-info w-lg" lay-submit="" lay-filter="savePwdBtn">{{= i18n.$t('page.savePwdBtn') }}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-pane rnameCertDiv" style="display:none">
+                        <blockquote class="layui-elem-quote">
+                            <span>{{= i18n.$t('page.blockquote2') }}</span>
+                        </blockquote>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{{= i18n.$t('page.certName') }}</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="certName" id="certName" autocomplete="off" placeholder="您的真实姓名" lay-verify="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{{= i18n.$t('page.certSid') }}</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="certSid" id="certSid" autocomplete="off" placeholder="您的身份证号" lay-verify="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="margin-top:30px">
+                            <div class="layui-input-block">
+                                <div class="layui-btn layui-btn-info w-lg startCertBtn">{{= i18n.$t('page.startCertBtn') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="privateServerXY" style="display:none;margin:10px 10px">
+                        <h1>实名认证服务隐私协议</h1>
+                        <div class="meta">
+                            首次生效日期：<span class="placeholder">2024.01.01</span><br>
+                            最近更新日期：<span class="placeholder">2026.06.18</span>
+                        </div>
+
+                        <h2>一、前言</h2>
+                        <p>欢迎您使用由平台（以下简称“我们”）提供的实名认证服务。我们深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。本《实名认证服务隐私协议》（以下简称“本协议”）旨在向您清晰、透明地说明我们在您使用本服务时，如何收集、使用、存储、共享及保护您的个人信息，以及您享有的相关权利。</p>
+                        <div class="highlight-box">
+                            <p><strong>请您在使用本服务前，务必仔细阅读并充分理解本协议全部内容。特别是涉及敏感个人信息处理、信息保存期限及您权利行使的条款，我们将以加粗形式提示您重点关注。</strong>若您不同意本协议的任何内容，请立即停止使用本服务；若您选择继续使用，即表示您已充分理解并自愿接受本协议的全部约束。</p>
+                        </div>
+
+                        <h2>二、服务前提与适用范围</h2>
+                        <ol>
+                            <li>本服务仅限平台授权的系统商家 <strong>[[ company ]]</strong>（以下简称“本商家”）内部使用，核心用途为核实该商家雇员的真实身份，保障系统操作安全与业务合规。</li>
+                            <li>本服务不提供面向公众的开放注册功能，仅针对入职商家的在职或拟入职雇员开放。若系统变量渲染异常导致商家名称显示不完整，请以您实际入职的商家主体为准。</li>
+                        </ol>
+
+                        <h2>三、我们收集的个人信息类型</h2>
+                        <p>为完成实名认证，我们会遵循合法、正当、必要原则，收集以下信息：</p>
+                        <ol>
+                            <li><strong>基础身份信息（必选）</strong>：您的姓名、身份证号码。该信息是完成实名核验的基础数据，若您拒绝提供，将无法使用本服务。</li>
+                            <li><strong>人脸生物识别信息（可选/敏感个人信息）</strong>：仅当入职商家在系统中明确开启人脸认证功能时，我们才会收集您的人脸图像数据用于身份比对。<strong>该信息属于敏感个人信息，非实名认证的强制要求</strong>；若您拒绝提供，仍可通过基础身份信息完成认证，不影响核心功能使用。</li>
+                            <li><strong>设备与安全信息（可选）</strong>：设备型号、操作系统版本、IP地址、网络状态等。该信息仅用于风控校验、防止身份冒用及服务优化，不涉及个人身份识别。</li>
+                        </ol>
+
+                        <h2>四、敏感个人信息特别告知</h2>
+                        <div class="highlight-box">
+                            <p>若您所在商家启用人脸认证，请您特别注意：</p>
+                            <ul>
+                                <li><strong>处理目的</strong>：仅用于高安全等级场景下的身份核验，确保操作人员与认证主体一致，防范账号盗用、违规操作等风险。</li>
+                                <li><strong>处理方式</strong>：人脸图像数据仅用于实时比对，不会用于任何其他商业用途或训练模型。</li>
+                                <li><strong>单独同意</strong>：您需要通过独立的确认动作（如单独勾选、弹窗确认）明示同意我们处理您的人脸信息，该同意包含了基础实名认证同意。</li>
+                                <li><strong>撤回同意</strong>：您可随时通过本协议第十条约定的渠道撤回对人脸信息处理的同意，撤回后我们将停止采集并删除已存储的人脸数据。</li>
+                            </ul>
+                        </div>
+
+                        <h2>五、个人信息的使用目的</h2>
+                        <p>我们仅在实现服务目的所必需的最小范围内使用您的个人信息，具体包括：</p>
+                        <ol>
+                            <li>完成入职商家的雇员身份真实性核验；</li>
+                            <li>为后续技术服务支持、订单责任溯源、安全审计提供依据；</li>
+                            <li>调查和处理涉嫌违法违规的行为（包括但不限于账号盗用、非法交易、恶意破坏系统安全等），保护入职商家的合法权益；</li>
+                            <li>履行法律法规规定的义务。</li>
+                        </ol>
+                        <p><strong>我们承诺不会将您的个人信息用于上述目的之外的任何场景，也不会进行自动化决策。</strong></p>
+
+                        <h2>六、服务性质与责任划分</h2>
+                        <div style="background: #f9f9f9; border: 1px solid #e8e8e8; border-radius: 6px; padding: 12px 16px; margin: 12px 0;">
+                            <p style="margin: 8px 0; text-align: justify;">1. <strong style="color: #000000;">技术服务定位</strong>：平台仅作为实名认证技术的提供方，为商家内部雇员入职提供身份核验的技术支持与系统工具。我们不对入职商家的经营管理行为、用工合法性、业务合规性等进行实质审查，亦不参与其内部人事管理决策。</p>
+                            <p style="margin: 8px 0; text-align: justify;">2. <strong style="color: #000000;">商家主体责任</strong>：本商家应确保其使用本服务的目的、方式、范围均符合法律法规要求，并已依法取得雇员的充分授权与同意。因商家超出授权范围内使用本服务、未履行告知同意义务、或将本服务用于违法违规活动所产生的一切法律责任与纠纷，均由您入职的商家独立承担。</p>
+                            <p style="margin: 8px 0; text-align: justify;">3. <strong style="color: #000000;">平台免责边界</strong>：在平台已履行法律法规规定的技术安全保障义务、且对商家的违法违规行为不存在明知或应知而未采取必要措施的情形下，平台不因商家的独立行为承担连带责任。</p>
+                            <p style="margin: 8px 0; text-align: justify;">4. <strong style="color: #000000;">违规处置权</strong>：若我们发现或收到举报证实本商家存在滥用本服务、侵犯雇员权益或违反法律法规的行为，我们有权立即暂停或终止向其提供服务，并依法向有关主管部门报告。</p>
+                        </div>
+
+                        <h2>七、信息共享与披露限制</h2>
+                        <p>未经您的明示同意，我们不会将您的实名信息共享给入职商家以外的任何第三方，但以下情形除外：</p>
+                        <ol>
+                            <li><strong>法定披露</strong>：根据适用法律、法规、监管要求或司法/行政机关的强制性命令；</li>
+                            <li><strong>权益保护</strong>：为应对紧急情况下的人身、财产安全威胁，或调查处理严重违规行为以保护入职商家及用户的合法权益；</li>
+                            <li><strong>技术支撑</strong>：向提供身份核验能力的第三方服务商共享必要信息，且我们会通过协议约束其严格保密并限定使用范围。</li>
+                        </ol>
+
+                        <h2>八、信息安全保障措施</h2>
+                        <p>我们采取符合业界标准的安全防护措施保护您的个人信息，包括：</p>
+                        <ul>
+                            <li>数据传输全程加密，人脸信息等敏感数据存储采用加密算法；</li>
+                            <li>实行严格的访问权限控制与操作审计，仅限授权人员按需访问；</li>
+                            <li>定期开展安全评估与漏洞修复，建立应急响应机制。</li>
+                        </ul>
+                        <p><strong>若发生个人信息安全事件，我们将按照法律法规要求及时向您告知事件基本情况、可能影响、已采取措施及补救建议。</strong>尽管我们已尽合理努力，但互联网环境并非绝对安全，敬请理解。</p>
+
+                        <h2>九、信息保存期限与删除规则</h2>
+                        <ol>
+                            <li>我们仅在实现处理目的所必要的最短期限内保留您的个人信息。</li>
+                            <li><strong>人脸图像数据</strong>：保存期限不超过您在职期间及离职后合理追溯期，最长不超过2年；超出期限或您撤回同意后，我们将在30日内自动删除或匿名化处理。</li>
+                            <li><strong>基础身份信息</strong>：保存至您从入职商家离职且相关责任追溯期满后，届时将依法删除或匿名化。</li>
+                            <li>法律法规另有规定保存期限的，从其规定。</li>
+                        </ol>
+
+                        <h2>十、未成年人保护</h2>
+                        <p><strong>本服务不面向未满18周岁的未成年人开放。</strong>我们不会故意收集未成年人的个人信息。若您发现我们误收集了未成年人信息，请通过平台官方任何渠道的客服联系我们提出请求，我们将按现行法律法规处理您的诉求。</p>
+
+                        <h2>十一、您的权利</h2>
+                        <p>您对自己的个人信息享有以下权利，可通过联系入职商家管理员撤销您的行使：</p>
+                        <ol>
+                            <li><strong>查阅、复制权</strong>：查询我们持有的您的个人信息副本；</li>
+                            <li><strong>更正、补充权</strong>：发现信息有误时要求我们更正；</li>
+                            <li><strong>删除权</strong>：符合法定删除情形时要求我们删除信息；</li>
+                            <li><strong>撤回同意权</strong>：撤回对人脸信息等敏感信息的处理同意，撤回不影响此前基于同意已进行的处理效力；</li>
+                            <li><strong>注销账户权</strong>：终止实名认证服务并要求删除相关信息；</li>
+                            <li><strong>投诉举报权</strong>：对我们的信息处理行为提出质疑。</li>
+                        </ol>
+                        <p>我们将在收到请求后15个工作日内响应，因合理原因无法按时响应的，将向您说明情况。</p>
+
+                        <h2>十二、协议更新</h2>
+                        <p>我们可能适时修订本协议，重大变更（如新增敏感信息处理、延长保存期限、缩减用户权利等）将通过系统通知、弹窗等方式提前告知您，并重新获取您的同意。若您不同意更新后的协议，应停止使用本服务。</p>
+
+
+                        <div class="layui-form-item" style="margin-top:30px;text-align:center">
+                            <div class="layui-input-inline">
+                                <div class="layui-btn layui-btn-warm exitCertBtn">我不同意，退出</div>
+                            </div>
+                            <div class="layui-input-inline">
+                                <div class="layui-btn layui-btn-normal nextCertBtn">我同意以上协议，继续</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="certNextDiv" style="display:none; align-items: center;text-align:center">
+                        <div style="margin-top:10px">请打开<span style="color:#1E9FFF">个人微信</span>进行扫码验证</div>
+                        <div class="certQRcodeDiv" style="margin-top:10px"></div>
+                        <div style="margin-top:10px">此二维码有效时间：15分钟</div>
+                        <div style="margin-top:10px">
+                            认证完成请刷新此页面查看结果
+                        </div>
+                        <div style="margin-top:10px">
+                            <div class="layui-btn layui-btn-normal successCertBtn">我已完成认证</div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="company" id="company" value="[[ company ]]" />
+                    <input type="hidden" name="qrCode1" id="qrCode1" value="[[ user.qrCode1 ]]" />
+                    <input type="hidden" name="verType" id="verType" value="0" />
+                </form>
+            </div>
+        </template>
+    </div>
+
+<script src="/JS2019/jquery-3.3.1.min.js"></script>
+<script src="/JS2019/User/myinfo.js?v=2026036" type="text/javascript"></script>
+
+
+</body>
+</html>

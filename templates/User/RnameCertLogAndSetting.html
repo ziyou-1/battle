@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>系统用户实名认证记录与配置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+</style>
+<form class="layui-form" action="">
+    <div class="" style="padding-left: 5px;padding-top:10px">
+
+        <div class="layui-form-pane">
+            <div class="layui-inline">
+                <label class="layui-form-label">实名时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="sDate" id="sDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(31) ]]">
+                </div>
+                <div class="layui-input-inline">-</div>
+                <div class="layui-input-inline">
+                    <input type="text" name="eDate" id="eDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(0) ]]">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">实名结果</label>
+                <div class="layui-input-inline">
+                    <select id="certStatus" name="certStatus" lay-filter="selectGame">
+                        <option value="0" selected="selected">全部</option>
+                        <option value="1">实名失败</option>
+                        <option value="2">实名通过</option>
+                    </select>
+                </div>
+            </div>
+           
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="key1" id="key1" lay-verify="" placeholder="系统用户名称" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="key2" id="key2" lay-verify="" placeholder="姓名" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">身份证号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="key3" id="key3" lay-verify="" placeholder="身份证号搜索" autocomplete="off" class="layui-input layui-input-shadow" maxlength="18" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="width: 80px">搜索</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据">刷新列表</button>
+                <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="settingBtn" type="button" title="配置实名认证相关设置">配置实名认证</button>
+                <button class="layui-btn layui-btn-sm" lay-event="buyBtn" type="button" title="购买用于系统子账号用户人脸识别实名认证的套餐包数量">购买实名认证套餐包(当前余量0次)</button>
+            </div>
+        </script>
+    </div>
+    
+    <div class="settingDiv" style="display:none;padding:10px 10px">
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                1、是否启用系统子账号人脸识别实名认证功能？（默认不启用，只有启用了子账号那边才能发起实名认证）
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="CertSwicth" value="N" title="不启用" [% if (certSetting_settings.CertSwicth if certSetting_settings.CertSwicth is defined else "N")|string == "N" %][% endif %] [% if (certSetting_settings.CertSwicth if certSetting_settings.CertSwicth is defined else "N")|string == "N" %]checked[% endif %]>
+                <input type="radio" name="CertSwicth" value="Y" title="启用"  [% if (certSetting_settings.CertSwicth if certSetting_settings.CertSwicth is defined else "N")|string == "Y" %][% endif %] [% if (certSetting_settings.CertSwicth if certSetting_settings.CertSwicth is defined else "N")|string == "Y" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                2、是否不允许没有通过实名认证的子账号在内部抢单大厅接单？（默认允许）
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="CertPassRecOrder" value="N" title="允许" [% if (certSetting_settings.CertPassRecOrder if certSetting_settings.CertPassRecOrder is defined else "N")|string == "N" %][% endif %] [% if (certSetting_settings.CertPassRecOrder if certSetting_settings.CertPassRecOrder is defined else "N")|string == "N" %]checked[% endif %]>
+                <input type="radio" name="CertPassRecOrder" value="Y" title="不允许"  [% if (certSetting_settings.CertPassRecOrder if certSetting_settings.CertPassRecOrder is defined else "N")|string == "Y" %][% endif %] [% if (certSetting_settings.CertPassRecOrder if certSetting_settings.CertPassRecOrder is defined else "N")|string == "Y" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                3、通过系统给子账号在线结算打款时是否要求该用户必须通过了实名认证？（默认不要求此条件）
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="CertOnineSett" value="N" title="不要求" [% if (certSetting_settings.CertOnineSett if certSetting_settings.CertOnineSett is defined else "N")|string == "N" %][% endif %] [% if (certSetting_settings.CertOnineSett if certSetting_settings.CertOnineSett is defined else "N")|string == "N" %]checked[% endif %]>
+                <input type="radio" name="CertOnineSett" value="Y" title="要求实名"  [% if (certSetting_settings.CertOnineSett if certSetting_settings.CertOnineSett is defined else "N")|string == "Y" %][% endif %] [% if (certSetting_settings.CertOnineSett if certSetting_settings.CertOnineSett is defined else "N")|string == "Y" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                4、只允许指定范围区间的年龄用户通过实名，不符合年龄范围的将会被拒绝通过(为空或填0代表不限制)
+            </div>
+            <div class="layui-inline" style="margin-left:10px;margin-top:8px">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="number" name="CertMinAge" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number" value="[[ certSetting_settings.CertMinAge if certSetting_settings.CertMinAge is defined else '0' ]]">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="number" name="CertMaxAge" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number" value="[[ certSetting_settings.CertMaxAge if certSetting_settings.CertMaxAge is defined else '0' ]]">
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <button type="button" class="layui-btn  layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="saveSettingBtn">保存设置</button>
+        </div>
+    </div>
+    <input type="hidden" id="jdpbuykey" value="[[ sys.jdpId ]]" />
+</form>
+<script src="/JS2019/User/RnameCertLogAndSetting.js?v=20260428" type="text/javascript"></script>
+
+
+</body>
+</html>

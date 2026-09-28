@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>通用游戏报价设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .layui-btn {
+        margin-bottom: 15px;
+        margin-right: 8px;
+    }
+
+    .layui-form-label {
+        float: left;
+        display: block;
+        width: 70px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: right;
+        padding: 9px 0px;
+    }
+    .input_box3 .layui-form-label {
+        width: 50px;
+    }
+    .input_box3 .layui-input-block{
+        margin-left:55px;
+    }
+    .attInput {
+        width: 100px;
+        margin-left: 80px;
+    }
+    .attInput2 {
+        width: 80px;
+        margin-left: 80px;
+    }
+    .layui-tab-title, .fontw, .layui-elem-field legend{
+        font-weight: bold;
+    }
+    .layui-form-label.smlabel {
+        width: 80px;
+    }
+    .layui-textarea{
+        min-height:60px;
+        width:100%;
+    }
+    .remark {       
+        width: 170px;
+    }
+    .remark2 {
+        width: 170px;
+    }
+    .layui-form-radio * {
+        font-size: 12px;
+    }
+    .pselect{
+        width: 120px;
+        box-sizing: border-box;
+        padding-left: 20px;
+    }
+        .pselect .item {
+            margin: 10px 0;
+            color: #4ba3ff;
+            cursor: pointer;
+        }
+    .layui-textarea.dfs_words, .layui-textarea.dw_words, .layui-textarea.dw_wordsmodel, .layui-textarea.dfs_wordsmodel {
+        width: 330px;
+    }
+    .layui-textarea.dfs_words, .layui-textarea.dw_words {
+        height: 350px;
+    }
+
+    .layui-textarea.dfs_wordsmodel, .layui-textarea.dw_wordsmodel {
+        height: 450px;
+    }
+</style>
+
+<form class="layui-form" action="" lay-filter="pro">
+    <div class="layui-tab  layui-tab-brief" lay-filter="wztab">
+        <ul class="noapex layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间">分数区间</li>
+            <li class="single" data-project="段位-单排" style="display:none;">段位-单排</li>
+            <li class="single" data-project="分数区间-单排" style="display:none;">分数区间-单排</li>
+        </ul>
+        <ul class="apex layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="大逃杀段位">大逃杀段位</li>
+            <li data-project="分数区间-大逃杀">分数区间-大逃杀</li>
+            <li data-project="竞技段位">竞技段位</li>
+            <li data-project="分数区间-竞技">分数区间-竞技</li>
+        </ul>
+        <ul class="threes layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-生活技能">分数区间-生活技能</li>
+            <li data-project="分数区间-武器等级">分数区间-武器等级</li>
+        </ul>
+        <ul class="heros layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-大师上分">分数区间-大师上分</li>
+            <li data-project="分数区间-宗师上分">分数区间-宗师上分</li>
+            <li data-project="分数区间-王者上分">分数区间-王者上分</li>
+        </ul>
+        <ul class="herossy layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="段位-峡谷之巅">段位-峡谷之巅</li>
+            <li data-project="分数区间-大师上星">分数区间-大师上星</li>
+            <li data-project="分数区间-传说上分">分数区间-传说上分</li>
+            <li data-project="分数区间-宗师上分">分数区间-宗师上分</li>
+            <li data-project="分数区间-王者上分">分数区间-王者上分</li>
+        </ul>
+        <ul class="xianf layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="分数区间-重装">分数区间-重装</li>
+            <li data-project="分数区间-输出">分数区间-输出</li>
+            <li data-project="分数区间-支援">分数区间-支援</li>
+            <li data-project="分数区间-开放">分数区间-开放</li>
+        </ul>
+        <ul class="cyhx layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="军衔等级段位">军衔等级段位</li>
+            <li data-project="分数区间-荣耀枪王上分">分数区间-荣耀枪王上分</li>
+        </ul>
+        <ul class="huanta layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-元帅上分">分数区间-元帅上分</li>
+            <li data-project="分数区间-星岛地图">分数区间-星岛地图</li>
+            <li data-project="分数区间-班吉斯地图">分数区间-班吉斯地图</li>
+            <li data-project="分数区间-纳维亚地图">分数区间-纳维亚地图</li>
+            <li data-project="分数区间-克罗恩地图">分数区间-克罗恩地图</li>
+            <li data-project="分数区间-沃兰地图">分数区间-沃兰地图</li>
+        </ul>
+        <ul class="yuanshen layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间">分数区间</li>
+            <li data-project="段位-冒险等级">段位-冒险等级</li>
+            <li data-project="分数区间-璃月探索度">分数区间-璃月探索度</li>
+            <li data-project="分数区间-稻妻探索度">分数区间-稻妻探索度</li>
+            <li data-project="分数区间-渊下宫探索度">分数区间-渊下宫探索度</li>
+            <li data-project="分数区间-蒙德探索度">分数区间-蒙德探索度</li>
+        </ul>
+        <ul class="anqutw layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-传说上分">分数区间-传说上分</li>
+            <li data-project="分数区间">分数区间</li>
+            <li data-project="段位-等级">段位-等级</li>
+            <li data-project="段位-通行证等级">段位-通行证等级</li>
+        </ul>
+        <ul class="hepinjy layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-王牌上分">分数区间-王牌上分</li>
+            <li data-project="分数区间">分数区间</li>
+        </ul>
+        <ul class="anhbx layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位-普通等级">段位-普通等级</li>
+            <li data-project="段位-巅峰等级">段位-巅峰等级</li>
+        </ul>
+        <ul class="jincc layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-大师到王者上分">分数区间-大师到王者上分</li>
+        </ul>
+        <ul class="ppkdc layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-车王上星">分数区间-车王上星</li>
+        </ul>
+        <ul class="dwreng layui-tab-title" style="display:none;">
+            <li class="layui-this" data-project="段位">段位</li>
+            <li data-project="分数区间-七阶上星">分数区间-七阶上星</li>
+        </ul>
+        
+        <div class="layui-tab-content">
+            <div class="duanw tabitems">
+                <div class="layui-tab layui-tab-brief" lay-filter="threetab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">基础</li>
+                        
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
+                                    <div class="alldw" style="line-height:25px;padding-left:15px;font-size: 14px;display:none;"></div>
+                                    <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+                                    <script type="text/html" id="toolbarDemo">
+                                        <div class="layui-btn-container">
+                                            <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon layui-refresh2"></i>刷新数据</button>
+                                            <button class="layui-btn layui-btn-xs layui-btn-warm initdata" lay-event="initdata" type="button" title="初始化数据"><i class="layui-icon layui-shanchu"></i>初始化数据</button>
+                                            <button class="layui-btn layui-btn-xs layui-btn-warm delinit" lay-event="delinit" type="button" title="删除以下段位参数"><i class="layui-icon layui-shanchu"></i>删除以下段位参数</button>
+                                            
+                                        </div>
+                                    </script>
+                                    <div class="yingxiong" style="display:none;">
+                                        <div style="font-size: 18px; margin: 20px 0 0 15px;">
+                                            <span class="fontw" style="color:rgba(0,0,0,.85);">晋级赛规则</span>
+                                            <span style="color:#ff0000;font-size:15px;margin-left:10px;">这里可以自行设置首段晋级赛的每种场次价格系数，计算总价时将加上这里的场次乘以系数的价格</span>
+                                        </div>
+                                        <table class="layui-hide" id="tableListsd" lay-filter="tableListsd"></table>
+                                        <script type="text/html" id="toolbarDemosd">
+                                            <div class="layui-btn-container">
+                                                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refreshsd" type="button" title="刷新当前数据"><i class="layui-icon layui-refresh"></i>刷新数据</button>
+                                                <button class="layui-btn layui-btn-xs layui-btn-warm initdatasd" lay-event="initdatasd" type="button" title="初始化数据">初始化数据</button>
+                                                
+                                            </div>
+                                        </script>
+                                        <script type="text/html" id="baroperatingsd">
+                                            
+                                            <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="removeLinesd" title="删除"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                                        </script>
+                                    </div>
+
+                                </div>
+                                <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
+                                    <fieldset class="layui-elem-field">
+                                        <legend>基础设置</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label">设定利润率</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="dw_profit" lay-verify="" autocomplete="off" placeholder="设定利润率数字" maxlength="4" class="layui-input" value="0">
+                                                </div>
+                                                <div class="layui-input-inline" style="line-height:45px">%</div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block" style="margin-left:15px;min-height:12px;">
+                                                    <p style="color:#ff0000;">提示：如果有天猫店或其它网店并且需要扣服务费率，请加到利润率里，计算出来的价格将包括以上设定的比率</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field applearea">
+                                        <legend>苹果区浮动百分比</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label">浮动百分比</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="dw_iosPercent" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                </div>
+                                                <div class="layui-input-inline" style="line-height:45px">%</div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block" style="margin-left:15px;min-height:auto;">
+                                                    <p style="color:#ff0000;">提示：苹果区价格将基于当前计算的价格浮动</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field">
+                                        <legend>套餐名称及浮动百分比(百分比只需填纯数字)</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">基础价套餐</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName" lay-verify="" autocomplete="off" placeholder="请输入平价套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=不上浮</label>
+                                                    <div class="layui-input-block">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName1" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar1" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark1" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType1" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType1" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName2" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar2" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark2" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType2" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType2" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName3" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar3" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark3" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType3" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType3" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName4" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar4" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark4" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType4" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType4" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName5" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar5" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark5" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType5" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType5" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName6" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar6" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark6" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType6" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType6" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dw_packgeName7" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dw_packgePar7" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_pkmark7" autocomplete="off" placeholder="请输入套餐话术" class="layui-input remark">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <input name="dw_ServiceType7" value="10" type="radio" lay-filter="" title="代练" checked>
+                                                    <input name="dw_ServiceType7" value="20" type="radio" lay-filter="" title="陪练">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field">
+                                        <legend>首单特价区域</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label smlabel">计算模式</label>
+                                                    <div class="layui-input-block">
+                                                        <input name="dw_firstOrderModel" value="0" type="radio" lay-filter="firstOrderchange" title="百分比" checked>
+                                                        <input name="dw_firstOrderModel" value="1" type="radio" lay-filter="firstOrderchange" title="固定金额">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline firstamount">
+                                                    <label class="layui-form-label smlabel">计算值</label>
+                                                    <div class="layui-input-block" style="display:flex">
+                                                        <input type="text" name="dw_firstOrderValue" lay-verify="" autocomplete="off" lay-tips="百分比：正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推; 固定金额：固定特价金额" class="layui-input" value="0">
+                                                        <div class="layui-form-mid layui-word-aux" style="margin-left:5px;">%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label" style="width:120px;">是否跟随每个套餐价</label>
+                                                    <div class="layui-input-block" style="margin-left:150px;">
+                                                        <input name="dw_firstOrderAppendModel" value="0" type="radio" title="跟随">
+                                                        <input name="dw_firstOrderAppendModel" value="1" type="radio" title="不跟随" checked>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label smlabel">首单内容</label>
+                                                <div class="layui-input-block">
+                                                    <textarea placeholder="多行输入框，限100个字符" class="layui-textarea" name="dw_firstOrderMark" maxlength="100"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block" style="margin-left:95px">
+                                                    <p style="color:#ff0000;">
+                                                        提示：支持以变量{price}方式设置价格显示位置，
+                                                    </p>
+                                                    <p style="color:#ff0000;">
+                                                        示列：★黄金4-黄金3/1星★首单特价只需{price}元，预计上号后2-3/小时左右完成。
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field stayPackge">
+                                        <legend>挽留折扣设置</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">折扣名称</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dw_stayPackgeName" lay-verify="" autocomplete="off" placeholder="请输入折扣名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">折扣值</label>
+                                                    <div class="layui-input-block" style="display:flex">
+                                                        <input type="text" name="dw_stayPar" lay-verify="" autocomplete="off" lay-tips="填写折扣值（折扣值应大于0,小于10, 0代表无折扣），例如打8.5折，可直接填写8.5" maxlength="4" class="layui-input" value="0">
+                                                        <div class="layui-form-mid layui-word-aux" style="margin-left:5px;">折</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label">折扣话术</label>
+                                                <div class="layui-input-block">
+                                                    <textarea placeholder="请输入折扣话术内容" class="layui-textarea" name="dw_stayWords" maxlength="500"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    
+                                    <fieldset class="layui-elem-field">
+                                        <legend>标准报价</legend>
+                                        <div class="layui-field-box">
+                                            <div class="settings" style="margin-top:10px;display: flex;">
+                                                <div class="myleft">
+                                                    <textarea class="layui-textarea dw_words" name="dw_words" style=""></textarea>
+                                                </div>
+                                                <div class="pselect">
+                                                    <p>标签选择：</p>
+                                                    <div class="item">代练内容</div>
+                                                    <div class="item">套餐价格</div>
+                                                    <div class="item">代练耗时</div>
+                                                    <div class="item">首单内容</div>
+                                                </div>
+                                                <div class="myright">
+                                                    <textarea disabled class="layui-textarea dw_wordsmodel" style="background:#f5f7fa;" name="dw_wordsmodel"></textarea>
+                                                </div>
+                                            </div>
+                                            <div style="padding-top:10px;">报价文本可插入右侧的标签进行点位，生成报价文本时，这些标签将会被替换成相应的内容。</div>
+                                        </div>
+                                    </fieldset>
+
+                                    <div class="layui-form-item" style="margin-top:20px">
+                                        <button type="submit" class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="DW_SaveBtn">保存设置</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="fenshu tabitems" style="display:none;">
+                <div class="layui-tab layui-tab-brief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">基础</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-row layui-col-space20">
+                                <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
+                                    <blockquote class="layui-elem-quote fslabel" style="color:#ff0000;font-size:14px">提示：您可以自行添加分数区间值，每个区间请保持分数从小到大且连贯，可以灵活运用该设置用来计算积分、等级等，例如：1-100、101-200、201-300依此类推，不要有跳跃的情况，也不能从大到小设置</blockquote>
+                                    <table class="layui-hide" id="tableList2" lay-filter="tableList2"></table>
+                                    <script type="text/html" id="toolbarDemo2">
+                                        <div class="layui-btn-container">
+                                            <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon layui-refresh2"></i>刷新数据</button>
+                                            <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addLineBtn" type="button" title="新增区间价行"><i class="layui-icon layui-tianjiazujian"></i>添加</button>
+                                        </div>
+                                    </script>
+                                    <script type="text/html" id="baroperating2">
+                                        <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="removeLine" title="删除"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                                    </script>
+                                </div>
+                                <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
+                                    <fieldset class="layui-elem-field">
+                                        <legend>基础设置</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label">设定利润率</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="dfs_profit" lay-verify="" autocomplete="off" placeholder="设定利润率数字" maxlength="4" class="layui-input" value="0">
+                                                </div>
+                                                <div class="layui-input-inline" style="line-height:45px">
+                                                    %
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block" style="margin-left:15px;min-height:12px;">
+                                                    <p style="color:#ff0000;">提示：如果有天猫店或其它网店并且需要扣服务费率，请加到利润率里，计算出来的价格将包括以上设定的比率</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field applearea">
+                                        <legend>苹果区浮动百分比</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label">浮动百分比</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="dfs_iosPercent" lay-verify="" lay-tips="正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                </div>
+                                                <div class="layui-input-inline" style="line-height:45px">%</div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block" style="margin-left:15px;min-height:auto;">
+                                                    <p style="color:#ff0000;">提示：苹果区价格将基于当前计算的价格浮动</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field">
+                                        <legend>套餐名称及浮动百分比(百分比只需填纯数字)</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">基础价套餐</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName" lay-verify="" autocomplete="off" placeholder="请输入平价套餐名称" maxlength="20" class="layui-input ">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=不上浮</label>
+                                                    <div class="layui-input-block">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName1" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar1" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark1" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName2" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar2" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark2" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName3" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar3" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark3" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName4" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar4" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark4" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName5" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar5" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark5" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName6" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar6" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark6" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">套餐名称</label>
+                                                    <div class="layui-input-block attInput">
+                                                        <input type="text" name="dfs_packgeName7" lay-verify="" autocomplete="off" placeholder="请输入套餐名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">=上浮百分比</label>
+                                                    <div class="layui-input-block attInput2">
+                                                        <input type="text" name="dfs_packgePar7" lay-verify="" autocomplete="off" placeholder="例如0，代表不上浮" maxlength="4" class="layui-input" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline input_box3">
+                                                    <label class="layui-form-label">套餐话术</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_pkmark7" lay-verify="" placeholder="请输入套餐话术" class="layui-input remark2">
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field">
+                                        <legend>首单特价区域</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label smlabel">计算模式</label>
+                                                    <div class="layui-input-block">
+                                                        <input name="dfs_firstOrderModel" value="0" type="radio" lay-filter="firstOrderchange" title="百分比" checked>
+                                                        <input name="dfs_firstOrderModel" value="1" type="radio" lay-filter="firstOrderchange" title="固定金额">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline firstamount">
+                                                    <label class="layui-form-label smlabel">计算值</label>
+                                                    <div class="layui-input-block" style="display:flex">
+                                                        <input type="text" name="dfs_firstOrderValue" lay-verify="" autocomplete="off" lay-tips="百分比：正数代表上浮百分比，负数代表折扣，例如-10代表打9折，-20代表打8折，以此类推; 固定金额：固定特价金额" maxlength="4" class="layui-input" value="0">
+                                                        <div class="layui-form-mid layui-word-aux" style="margin-left:5px;">%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label" style="width:120px;">是否跟随每个套餐价</label>
+                                                    <div class="layui-input-block" style="margin-left:150px;">
+                                                        <input name="dfs_firstOrderAppendModel" value="0" type="radio" title="跟随">
+                                                        <input name="dfs_firstOrderAppendModel" value="1" type="radio" title="不跟随" checked>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label smlabel">首单内容</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="dfs_firstOrderMark" lay-verify="" placeholder="多行输入框，限100个字符" maxlength="100" class="layui-input remark2">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <div class="layui-input-block" style="margin-left:95px">
+                                                    <p style="color:#ff0000;">
+                                                        提示：支持以变量{price}方式设置价格显示位置，
+                                                    </p>
+                                                    <p style="color:#ff0000;">
+                                                        示列：★黄金4-黄金3/1星★首单特价只需{price}元，预计上号后2-3/小时左右完成。
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="layui-elem-field">
+                                        <legend>挽留折扣设置</legend>
+                                        <div class="layui-field-box">
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">折扣名称</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" name="dfs_stayPackgeName" lay-verify="" autocomplete="off" placeholder="请输入折扣名称" maxlength="20" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">折扣值</label>
+                                                    <div class="layui-input-block" style="display:flex">
+                                                        <input type="text" name="dfs_stayPar" lay-verify="" autocomplete="off" lay-tips="填写折扣值（折扣值应大于0,小于10, 0代表无折扣），例如打8.5折，可直接填写8.5" maxlength="4" class="layui-input" value="0">
+                                                        <div class="layui-form-mid layui-word-aux" style="margin-left:5px;">折</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" style="margin-top:10px">
+                                                <label class="layui-form-label">折扣话术</label>
+                                                <div class="layui-input-block">
+                                                    <textarea placeholder="请输入折扣话术内容" class="layui-textarea" name="dfs_stayWords" maxlength="500"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    
+                                    <fieldset class="layui-elem-field">
+                                        <legend>标准报价</legend>
+                                        <div class="layui-field-box">
+                                            <div class="settings" style="margin-top:10px;display: flex;">
+                                                <div class="myleft">
+                                                    <textarea class="layui-textarea dfs_words" name="dfs_words" style=""></textarea>
+                                                </div>
+                                                <div class="pselect">
+                                                    <p>标签选择：</p>
+                                                    <div class="item">代练内容</div>
+                                                    <div class="item">套餐价格</div>
+                                                    <div class="item">代练耗时</div>
+                                                    <div class="item">首单内容</div>
+                                                </div>
+                                                <div class="myright">
+                                                    <textarea disabled class="layui-textarea dfs_wordsmodel" style="background:#f5f7fa;" name="dfs_wordsmodel"></textarea>
+                                                </div>
+                                            </div>
+                                            <div style="padding-top:10px;">报价文本可插入右侧的标签进行点位，生成报价文本时，这些标签将会被替换成相应的内容。</div>
+                                        </div>
+                                    </fieldset>
+
+                                    <div class="layui-form-item" style="margin-top:20px">
+                                        <button type="submit" class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit="" lay-filter="DW_SaveBtn">保存设置</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<input type="hidden" id="gameName" name="gameName" value="[[ request.args.get("gameName") or "英雄联盟手游" ]]" />
+</form>
+<script src="/JS2019/Game/commonpricesetting.js?v=202210294" type="text/javascript"></script>
+
+</body>
+</html>

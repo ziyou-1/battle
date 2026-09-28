@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>导出订单</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+</style>
+<form class="layui-form layui-form-pane" action="" style="padding-top:10px;margin-left:10px;margin-right:10px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择导出数据：</label>
+        <div class="layui-input-block">
+                    <input type="radio" name="datatype" value="10" checked title="当前勾选的数据">
+
+            <input type="radio" name="datatype" value="20"  title="当前查询的数据">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择导出格式：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="importConten" value="10" checked title="导出订单数据到execl" lay-filter="importConten">
+            <input type="radio" name="importConten" value="50" title="导出以减号分隔的TXT" lay-filter="importConten">
+            <input type="radio" name="importConten" value="60" title="导出以空格分隔的TXT" lay-filter="importConten">
+            <input type="radio" name="importConten" value="20" title="只导出订单内容部分到TXT" lay-filter="importConten">
+            <input type="radio" name="importConten" value="30" title="只导出订单号" lay-filter="importConten">
+            <input type="radio" name="importConten" value="40" title="只导出手机号" lay-filter="importConten">
+            <input type="radio" name="importConten" value="61" title="导出账号-密码-大区-代练内容-订单号的TXT" lay-filter="importConten">
+            <input type="radio" name="importConten" value="62" title="导出账号-密码-大区-代练内容-订单号-旺旺的TXT" lay-filter="importConten">
+        </div>
+    </div>
+    <div class="layui-form-item selectColDiv">
+        <label class="layui-form-label">选择导出列：</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c1"  title="订单号" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c2"  title="系统内置单号" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c3"  title="来源" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c30"  title="游戏区服分开" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c4"  title="游戏区服组合" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c5"  title="角色名" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c36"  title="订单标签" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c6"  title="游戏账号" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c7"  title="游戏密码" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c8"  title="子副账号" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c9"  title="职业" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c10"  title="阵营/平台" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c11"  title="角色信息" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c32"  title="项目分类" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c12"  title="代练陪玩项目" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c13"  title="格式化订单内容" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c14"  title="格式化订单内容横排" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c15"  title="订单状态" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c16"  title="接单价" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c37"  title="实收款" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c17"  title="退款" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c35"  title="退款时间" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c18"  title="总计发单价" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c19"  title="当前接手人" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c20"  title="接单客服" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c21"  title="电话" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c22"  title="旺旺" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c23"  title="QQ/微信" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c25"  title="重要备注" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c34"  title="自定义标记" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c26"  title="机位" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c29"  title="录单人" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c24"  title="录单时间" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c27"  title="时间要求" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c28"  title="发单时间" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c31"  title="接手时间" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c38"  title="完成时间" lay-filter="importcol">
+            <input type="checkbox" name="importcol" lay-skin="primary" value="c33"  title="发单人" lay-filter="importcol">
+        </div>
+        <div class="layui-input-block" style="margin-top:10px;color:#ff6a00">
+            <i class="layui-icon layui-icon-about"></i>小窍门：勾选导出列的前后顺序会影响最终导出到文件的数据项排列顺序
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请输入登录密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="pwd" id="pwd" lay-verify="" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-input-block">
+        <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="exportBtn"><i class="layui-icon">&#x1005;</i>点击导出</button>
+    </div>
+    <input type="hidden" id="orderID" name="orderID" value="[[ o.orderId if o else "" ]]" />
+    <input type="hidden" id="seachText" name="seachText" value="" />
+    <input type="hidden" id="importCol" name="importCol" value="" />
+</form>
+
+<script src="/JS2019/Order/ExportOrder.js?v=2020020816" type="text/javascript"></script>
+
+</body>
+</html>

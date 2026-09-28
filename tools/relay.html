@@ -1,0 +1,33 @@
+<!doctype html><meta charset="utf-8"><title>relay</title>
+<pre id="log">relay ready</pre>
+<script>
+const log = (s) => { document.getElementById('log').textContent += '\n' + s; };
+function b64urlToBytes(s) {
+  s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '=';
+  const bin = atob(s); const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+async function main() {
+  const h = location.hash.slice(1);
+  if (!h) return;
+  history.replaceState(null, '', '/relay.html');
+  let items;
+  try {
+    const bytes = b64urlToBytes(h);
+    const text = await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    items = JSON.parse(text);
+  } catch (e) { log('DECODE ERR ' + e.message); document.title = 'relay decode error'; return; }
+  let ok = 0, fail = 0;
+  for (const it of items) {
+    try {
+      const r = await fetch('/save', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(it) });
+      const j = await r.json();
+      if (j.ok) { ok++; log('saved ' + j.file + ' ' + j.size); } else { fail++; log('FAIL ' + it.url + ' ' + j.err); }
+    } catch (e) { fail++; log('ERR ' + it.url + ' ' + e.message); }
+  }
+  log('DONE ok=' + ok + ' fail=' + fail);
+  document.title = 'relay done ok=' + ok + ' fail=' + fail;
+}
+main();
+</script>

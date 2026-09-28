@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新增或编辑会员信息</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    body {
+        background-color: #fff;
+    }
+
+    .layui-form-item .layui-input-inline {
+        float: left;
+        width: 210px;
+        margin-right: 10px;
+    }
+
+    .layui-form-label {
+        position: relative;
+        float: left;
+        display: block;
+        padding: 9px 15px;
+        width: 113px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: right;
+    }
+
+    .AddCustomerForm {
+        display: flex
+    }
+
+    .layui-layer-content {
+        white-space: pre-line;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form " action="" lay-filter="component-form-group">
+                <div class="AddCustomerForm">
+                    <div class=" ">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="layui-font-red">*</span>会员号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="customerNo" lay-tips="您可以自定义一个会员号，也可以空着让系统帮你随机生成，或者点右边的按钮随机生成。会员号和会员名称必须有一个" lay-verify="" autocomplete="off" placeholder="可自定义可自动生成" class="layui-input" maxlength="18">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <span class="layui-btn layui-btn-normal layui-btn-sm randBuilderNo">随机生成</span>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="layui-font-red">*</span>会员名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="bossName" lay-tips="请给该会员自定义一个会员名称。会员名称和会员号必须有一个" lay-verify="" autocomplete="off" placeholder="请输入会员名称" class="layui-input" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">手机号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="phone" autocomplete="off" placeholder="" class="layui-input" maxlength="11" lay-verify="phone">
+                            </div>
+                        </div>
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">微信号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="wxNo" lay-verify="" autocomplete="off" placeholder="请输入微信号" class="layui-input" maxlength="100">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">客户端密码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="clientPwd" lay-verify="" autocomplete="off" placeholder="留空不改；填写=重置客户端登录密码" class="layui-input" maxlength="20">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">客户用手机号 + 此密码登录 /app 客户端</div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="layui-font-red">*</span>专属折扣</label>
+                            <div class="layui-input-inline">
+                                <select name="buyDiscount" lay-verify="required" lay-search="">
+                                    <option value="0">无折扣</option>
+                                            <option value="0.99">9.90折</option>
+                                            <option value="0.98">9.80折</option>
+                                            <option value="0.97">9.70折</option>
+                                            <option value="0.96">9.60折</option>
+                                            <option value="0.95">9.50折</option>
+                                            <option value="0.94">9.40折</option>
+                                            <option value="0.93">9.30折</option>
+                                            <option value="0.92">9.20折</option>
+                                            <option value="0.91">9.10折</option>
+                                            <option value="0.90">9.00折</option>
+                                            <option value="0.89">8.90折</option>
+                                            <option value="0.88">8.80折</option>
+                                            <option value="0.87">8.70折</option>
+                                            <option value="0.86">8.60折</option>
+                                            <option value="0.85">8.50折</option>
+                                            <option value="0.84">8.40折</option>
+                                            <option value="0.83">8.30折</option>
+                                            <option value="0.82">8.20折</option>
+                                            <option value="0.81">8.10折</option>
+                                            <option value="0.80">8.00折</option>
+                                            <option value="0.79">7.90折</option>
+                                            <option value="0.78">7.80折</option>
+                                            <option value="0.77">7.70折</option>
+                                            <option value="0.76">7.60折</option>
+                                            <option value="0.75">7.50折</option>
+                                            <option value="0.74">7.40折</option>
+                                            <option value="0.73">7.30折</option>
+                                            <option value="0.72">7.20折</option>
+                                            <option value="0.71">7.10折</option>
+                                            <option value="0.70">7.00折</option>
+                                            <option value="0.69">6.90折</option>
+                                            <option value="0.68">6.80折</option>
+                                            <option value="0.67">6.70折</option>
+                                            <option value="0.66">6.60折</option>
+                                            <option value="0.65">6.50折</option>
+                                            <option value="0.64">6.40折</option>
+                                            <option value="0.63">6.30折</option>
+                                            <option value="0.62">6.20折</option>
+                                            <option value="0.61">6.10折</option>
+                                            <option value="0.60">6.00折</option>
+                                            <option value="0.59">5.90折</option>
+                                            <option value="0.58">5.80折</option>
+                                            <option value="0.57">5.70折</option>
+                                            <option value="0.56">5.60折</option>
+                                            <option value="0.55">5.50折</option>
+                                            <option value="0.54">5.40折</option>
+                                            <option value="0.53">5.30折</option>
+                                            <option value="0.52">5.20折</option>
+                                            <option value="0.51">5.10折</option>
+
+                                </select>
+                            </div>
+                            <div class="layui-form">
+                                <input type="checkbox" name="discountLevelInfluence" title="">
+                                <div lay-checkbox>
+                                    <span lay-tips="默认情况下会员折扣可以根据自定义的会员等级自动变化，如果你需要此会员为固定折扣，不需要跟着会员等级走，请勾选此项">固定折扣</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">哪个平台老板</label>
+                            <div class="layui-input-inline">
+                                <select name="platName" lay-verify="" lay-search="">
+                                    <option value="">哪个平台老板</option>
+                                    <option value="KOOK">KOOK</option>
+                                    <option value="YY">YY</option>
+                                    <option value="比心">比心</option>
+                                    <option value="淘宝">淘宝</option>
+                                    <option value="微信">微信</option>
+                                    <option value="抖音">抖音</option>
+                                    <option value="快手">快手</option>
+                                    <option value="私域">私域</option>
+                                    <option value="其它">其它</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">专属服务客服</label>
+                            <div class="layui-input-inline">
+                                <select id="servicePersonUserId" name="servicePersonUserId" lay-verify="" lay-search="">
+                                    <option value="0">不指定</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item initSaveFeeItem">
+                            <label class="layui-form-label">初始预存实充</label>
+                            <div class="layui-input-inline">
+                                <input type="text" title="您可以在新建会员时，同时给这个会员预存多少(此处为实充)，默认0" name="initAmount" id="initSaveFee" placeholder="请输入" autocomplete="off" class="layui-input" value="0" lay-verify="required||initSaveFee">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux layui-font-red">
+                                本次总余额=初始预存额+赠送额
+                            </div>
+                        </div>
+
+                        <div style="display:none" class="initPayVisbleDiv">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">预存赠送额</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="giftAmount" title="本次预存有赠送时请输入" id="giftAmount" placeholder="默认0" autocomplete="off" class="layui-input" value="0" lay-verify="giftAmount">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">
+                                    元
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-font-red">
+                                <label class="layui-form-label">预存总额：</label><span style="line-height:38px;"><b class="totalPrice layui-font-22">0.00</b> (初始预存额+赠送额)</span>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">充值渠道</label>
+                                <div class="layui-input-inline">
+                                    <select name="payMode" lay-verify="" lay-search="">
+                                        <option value="0">微信</option>
+                                        <option value="1">支付宝</option>
+                                        <option value="2">银行转账</option>
+                                        <option value="3">平台</option>
+                                        <option value="4">内部</option>
+                                        <option value="5">其它</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">支付流水号</label>
+                                <div class="layui-input-inline">
+                                    <textarea name="orderNo" id="initPayOrderNo" placeholder="有多支付流水号请换行，一行一笔单号" class="layui-textarea" maxlength="500" autocomplete="off"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="">历史消费总额</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="totalConsAmount" title="如果此老板之前就有过消费，可以在这里记录他之前的消费总额。在此之后老板有消费时系统会自动累计" id="totalConsumeFee" lay-verify="historyTotalConsume||number" placeholder="自行登记" autocomplete="off" class="layui-input" value="0">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                有新的消费将自动在此基础上累计
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">历史实际充值总额</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="historRecharge" id="totalHistorRecharge" title="如果此老板之前有充值，可以在这里记录他之前的实际充值总额，不算赠送部分。在此之后给此老板充值，系统将会自动累计" lay-verify="historTotalPay||number" placeholder="自行登记" autocomplete="off" class="layui-input" value="0">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                在本系统充值将自动在此基础上累计(实际充值)
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">会员生日</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="brithDay" id="birthday" placeholder="请选择会员生日">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">附加信息1</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="tips" lay-verify="" autocomplete="off" placeholder="请输入附加信息1" class="layui-input" maxlength="100">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-inline">
+                                <input style="width:260px" type="text" name="remark" placeholder="备注说明" class="layui-input" maxlength="200" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block" style="margin-top:10px">
+                        <button class="layui-btn layui-btn-lg layui-btn-normal" lay-submit="" lay-filter="saveBtn">提交保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/JS2019/Customer/customeredit.js?v=2110121213"></script>
+</body>
+</html>

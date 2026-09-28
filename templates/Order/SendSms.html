@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>发送短信</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+
+<form class="layui-form layui-form-pane" action="" style="padding-top:10px;margin-left:10px;margin-right:10px">
+    <blockquote class="layui-elem-quote" style="color:#ff6a00;padding:8px">
+        可自定义多种不同内容的短信模板，方便在此处调用。
+        <a lay-href="/System/smssetting" lay-text="短信设置" lay-tips="短信设置" style="color:#ff6a00">
+            <cite>点击这里进行短信设置</cite>
+        </a>
+    </blockquote>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:110px;padding:8px 10px">常用短信模板</label>
+        <div class="layui-input-block">
+                        <input type="radio" name="SmsType" value="15" title="录单时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="16" title="改代练中时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="17" title="代练接手时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="18" title="改代验收时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="19" title="改已完成时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="20" title="改问题单时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="21" title="改已暂停时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="22" title="改异常中时" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="23" title="指派后通知打手" lay-filter="SmsType">
+                        <input type="radio" name="SmsType" value="24" title="改已暂停通知打手" lay-filter="SmsType">
+                    <input type="radio" name="SmsType" value="100009" title="团1开打时短信" lay-filter="SmsType">
+                    <input type="radio" name="SmsType" value="100010" title="团2开打时短信" lay-filter="SmsType">
+
+            <input type="radio" name="SmsType" value="100013" title="自定义发送内容" lay-filter="SmsType">
+
+        </div>
+    </div>
+    <div class="layui-form-item zdy" style="display:none">
+        <label class="layui-form-label">自定义内容：</label>
+        <div class="layui-input-block">
+            <input type="text" name="customize" id="customize" lay-verify="" autocomplete="off" placeholder="可在此输入本次要发送的短信内容，请勿发送营销类短信，不能含有微信、加Q、加群、公众号、网址等内容" class="layui-input layui-input-shadow boxshadow-success" maxlength="300">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <p style="color:#ff0000">请点击相应常用短信模板进行发送。若需要发送自编的短信，请点击“自定义发送内容”后在上面输入要发送的短信内容。短信内容不能包含任何营销、推广、网址、加Q、加微信、加群、好评、返现、红包、公众号等字眼，否则发送失败。</p>
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="margin-top:20px">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="savebtn"><i class="layui-icon">&#x1005;</i>开始发送</button>
+        </div>
+    </div>
+    <input type="hidden" id="orderID" name="orderID" value="[[ o.orderId ]]" />
+    <input type="hidden" id="type" name="type" value="0" />
+    <input type="hidden" id="gameName" name="gameName" value="崩坏：星穹铁道" />
+</form>
+
+<script src="/JS2019/Order/sendsms.js?v=202110178" type="text/javascript"></script>
+
+</body>
+</html>

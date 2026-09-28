@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>[[ o.orderIdView ]]订单详情</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    body, html {
+        height: 100%;
+        background: #fff;
+    }
+
+    .itemTitle {
+        float: left;
+        width: 75px;
+        text-align: right;
+    }
+
+    .linespan {
+        color: #808080
+    }
+
+    .layui-form-item span {
+        line-height: 18px
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        box-sizing: border-box;
+        font-size: 12px
+    }
+
+    .layui-form-item {
+        margin-bottom: 12px;
+        clear: both;
+        *zoom: 1;
+    }
+
+    .layui-tab-item {
+        height: 100%;
+        background: #fff;
+    }
+
+    .platfromOrderImgList li {
+        height: 255px;
+        float: left;
+        display: inline-block;
+        margin-left: 10px;
+        padding: 2px 2px;
+        margin-top: 20px;
+        border-color: #e2dede;
+        border-width: 1px;
+        border-style: solid
+    }
+
+        .platfromOrderImgList li img {
+            width: 220px;
+            height: 200px
+        }
+
+        .platfromOrderImgList li div {
+            text-align: center;
+            margin-top: 2px;
+            width: 220px;
+            height: auto;
+        }
+
+    .myscale {
+        transform: scale(0.2)
+    }
+
+    .chatPop {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%,-50%) !important
+    }
+</style>
+
+<form class="layui-form" action="" style="height: 100%">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab1" style="height:100%;">
+        <ul class="layui-tab-title">
+            <li class="layui-this" data-fid="0" lay-id="0">本系统订单</li>
+        </ul>
+        <div class="layui-tab-content" style="height:calc(100% - 51px);box-sizing:border-box;">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-row">
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md7 layui-col-lg7">
+                        <fieldset class="layui-elem-field">
+                            <legend>订单详情</legend>
+                            <div class="layui-field-box">
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">订单号：</label>
+                                            <span class="left" style="font-size:14px;color:#ff6a00;">[[ o.orderIdView ]]</span>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">游戏区服：</label>
+                                            <span class="left" style="color:#ff0000;">[[ o.gameName ]]</span>
+                                            <span class="left" style="color:#666">/[[ o.gameArea ]]</span>
+                                            <span class="left" style="color:#666">/[[ o.gameServer ]]</span>
+                                            <span class="left" style="color:#666">/[[ o.gameJob ]]</span>
+                                            <span class="left" style="color:#666">/[[ o.gameGroup ]]</span>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">角色信息：</label>
+                                            <span class="left" style="color:#5BB75B;">[[ o.roleName ]]</span>
+                                            <span class="left" style="color:#666">【[[ o.levelMark ]]】</span>
+                                            <span class="left" style="color:#666">[[ o.gameInfo ]]</span>
+                                            <span class="left" style="color:#666">[[ o.itemRemark ]]</span>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">游戏账号：</label>
+                                            <span class="left" style="color:#ff0000; line-height:18px">[[ o.gameAcc ]]</span>
+                                            <a class="layui-btn layui-btn-xs layui-btn-primary copyacc" style="margin-left:10px" href="#" data-clipboard-text='[[ o.gameAcc ]]'>复制</a>
+                                            <a class="layui-btn layui-btn-xs layui-btn-primary copysmurl" lay-tips="获取一个专用的链接用于玩家扫码授权方便代练通过平台APP一键上号，获取的链接有效时间30分钟" style="margin-left:10px" href="#" data-orderid="[[ o.orderId ]]">取扫码链接</a>
+                                            <div class="copyurl" style="display:none"></div>
+                                        </div>
+                                            <div class="layui-form-item">
+                                                <label class="itemTitle">子账号：</label>
+                                                <span class="left" style="color:#666;">[[ o.zgameAcc ]]</span>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="itemTitle">登录密码：</label>
+                                                <span class="left pwd" style="color:#ff0000;">[[ "******" if o.gamePwd else "" ]]</span>
+                                                <a class="layui-btn layui-btn-xs layui-btn-primary revealpwd" style="margin-left:10px" href="#" data-orderid="[[ o.orderId ]]">查看密码</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-primary copypwd" style="margin-left:10px;display:none" href="#" data-clipboard-text="">复制</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-primary setpwd" style="margin-left:10px" href="#">更改密码</a>
+                                            </div>
+                                        <div class="layui-form-item layui-hide">
+                                            <label class="itemTitle">暗号/口令：</label>
+                                            <span class="left" style="color:#5BB75B;">[[ '******' if o.loginKey else '' ]]</span>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">项目分类：</label>
+                                            <span class="left" style="color: #31BDEC; ">[[ o.projectTypeName ]]</span>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">代练项目：</label>
+                                            <span class="left" style="color:#666;font-weight:600">[[ o.project ]]</span>
+                                                    <span class="layui-badge layui-bg-green">[[ "陪玩" if o.bussType == 2 else "代练" ]]</span>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="itemTitle">订单状态：</label>
+                                                <span class="left" style="color:[[ staColor ]];">[[ o.orderSta ]]</span>
+                                                <a class="layui-btn layui-btn-xs layui-btn-primary setdlsta" style="margin-left:10px" href="#">更改订单状态</a>
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">订单计时：</label>
+                                            <span class="left" style="color:#5BB75B;">[[ o.days ]]天[[ o.hours ]]小时0分钟</span>
+                                            <span class="left" style="color:#666;margin-left:10px">还剩<span style="color: #289f16">[[ remain ]]</span></span>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">当前接手：</label>
+                                            <a class="" href="javascript:void(0)" style="">[[ o.recManName ]] </a>
+                                            <a class="layui-btn layui-btn-xs layui-btn-primary jsr " style="margin-left: 10px" href="#">指派代练员</a>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle">联系电话：</label>
+                                            <span class="left" style="color:#666;">[[ o.moblie ]]</span>
+                                                    <a class="layui-btn layui-btn-normal layui-btn-xs getphone" style="" href="#">提取虚拟电话</a>
+
+                                            <a class="layui-btn layui-btn-primary layui-btn-xs unbindPrphone" style="" href="javascript::">解绑虚拟号</a>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="itemTitle" style="font-weight:600;color:#ff0000">指定电话：</label>
+                                            <span class="" style="">[[ o.sphone ]]</span>
+                                            <a class="layui-btn layui-btn-primary layui-btn-xs setSphone" style="" href="javascript::">修改</a>
+                                        </div>
+                                        <div class="layui-form-item layui-hide">
+                                            <a class="layui-btn layui-btn-primary layui-btn-sm layui-btn-xs sendCustomerSH" href="javascript:void(0)">开始上号通知</a>
+                                            <a class="layui-btn layui-btn-primary layui-btn-sm layui-btn-xs sendCustomerXH" href="javascript:void(0)">已下号通知</a>
+                                        </div>
+                                        <div class="layui-form-pane">
+                                            <div class="layui-form-item layui-form-text" style="margin-bottom:5px">
+                                                <label class="layui-form-label" style="width:auto">订单内容</label>
+                                                <div class="layui-input-block">
+                                                    <textarea placeholder="" style="height:155px" class="layui-textarea" readonly="readonly" name="desc" id="desc">[[ o.orderContent ]]</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item" style="margin-bottom:0px">
+                                            <a class="layui-btn layui-bg-orange layui-btn-xs" style="" href="javascript:location.reload(true);">刷新本界面</a>
+                                            <a class="layui-btn layui-btn-xs copybtn" id="copybtn" style="" href="javascript:void(0)" data-id="[[ o.orderId ]]" data-clipboard-text='[[ o.orderContent ]]'>复制订单内容</a>
+
+                                            <a class="layui-btn layui-btn-xs layui-btn-normal layui-bg-purple spliteorder " style="" href="javascript:void(0)" lay-tips="将这笔订单继续拆分">继续拆分订单</a>
+                                            <a class="layui-btn layui-btn-warm layui-btn-sm layui-btn-xs upGameVerImg layui-hide" id="upverimg" style="float:right;" href="javascript:void(0)">上传登号验证二维码</a>
+                                            <a class="layui-btn layui-btn-danger layui-btn-sm layui-btn-xs sendCustomerLoginVerCode" style="float:right;" data-id="[[ o.orderId ]]" href="javascript:void(0)">通知玩家提供上号验证码</a>
+                                            
+                                        <a class="layui-btn layui-btn-sm layui-btn-normal layui-btn-xs  " style="float: right; " id="groupCode" data-id="[[ o.orderId ]]" lay-tips="获取打手进入客户群聊的沟通码" href="javascript:void(0)"><i class="layui-icon layui-icon-dialogue"></i>打手进客户群聊码</a>
+                                            
+                                            <a class="layui-btn layui-btn-sm layui-btn-normal layui-btn-xs  " style="float: right; background-color: #FF5722" id="groupChat" data-id="[[ o.orderId ]]" lay-tips="点击后可以创建或取重新获取与老板的临时群聊入口" href="javascript:void(0)"><i class="layui-icon layui-icon-dialogue"></i>客户群聊</a>
+                                        </div>
+
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md5 layui-col-lg5">
+                        <fieldset class="layui-elem-field">
+                            <legend>订单日志</legend>
+                            <div class="layui-field-box" style="padding:5px 10px">
+                                <div class="">
+                                    <input type="text" name="remark" id="remark" lay-verify="remark" autocomplete="off" placeholder="你可以在这里输入订单日志内容" class="layui-input layui-input-shadow" maxlength="50">
+                                </div>
+                                <button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-top:3px;" lay-submit="" lay-filter="addpbtn">添加</button>
+                                <div class="layui-tab" lay-filter="logFilter">
+                                    <ul class="layui-tab-title">
+                                        <li class="layui-this" lay-id="100">订单日志</li>
+                                        <li lay-id="101">操作日志</li>
+                                    </ul>
+                                    <div class="layui-tab-content">
+                                        <div class="layui-tab-item layui-show">
+                                            <fieldset class="layui-elem-field" style="">
+                                                <legend>详细记录</legend>
+                                                <div class="layui-field-box logdiv" style="padding: 7px 0px; overflow: hidden; overflow-y: auto; max-height:280px" id="logdiv">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            <table class="layui-hide" id="tableList_actionlog" lay-filter="tableList_actionlog"></table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                                <div class="layui-tab interfaceDiv">
+                                    <ul class="layui-tab-title">
+                                        <li class="layui-this">平台单接手预览</li>
+                                        <li>发单操作记录</li>
+                                    </ul>
+                                    <div class="layui-tab-content">
+                                        <div class="layui-tab-item layui-show">
+                                            <table class="layui-hide" id="tableList3" lay-filter="tableList3"></table>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            <table class="layui-hide" id="tableList4" lay-filter="tableList4"></table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-layer layui-layer-tips mytips myscale" id="mytips" type="tips" times="14" showtime="0" contype="object" style="z-index: 19891028; position: absolute; left: 119.5px; top: 48px;display:none;transition:all 0.5s;">
+        <div id="" class="layui-layer-content" style="background-color: rgb(95, 184, 120);">
+            这里可以查看或操作交易平台的订单
+            <i class="layui-layer-TipsG layui-layer-TipsB" style="border-right-color: rgb(95, 184, 120);"></i>
+        </div>
+        <span class="layui-layer-setwin"></span>
+    </div>
+
+    <div class="upVerImgDiv" style="display:none;">
+        <blockquote class="layui-elem-quote">
+            请点击下面的按钮上传
+        </blockquote>
+        <div class="layui-form-item" style="margin-top:20px;margin-left:20px">
+            <div class="layui-upload">
+                <a class="layui-btn layui-btn-normal upverimg" id="upverimg">点击上传要验证的二维码图片</a>
+            </div>
+            <div class="layui-progress" lay-filter="uppercent">
+                <div class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="orderId" name="orderId" value="[[ o.orderId ]]" />
+    <input type="hidden" id="viewType" name="viewType" value="[[ viewType ]]" />
+    <input type="hidden" id="tid" name="tid" />
+</form>
+
+<script src="/JS2019/Order/orderview.js?v=27787708828" type="text/javascript"></script>
+
+</body>
+</html>

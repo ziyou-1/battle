@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>短信业务设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+
+<style>
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .layui-elem-quote {
+        margin-bottom: 10px;
+        padding: 0px;
+        line-height: 22px;
+        border-left: 5px solid #009688;
+        border-radius: 0 2px 2px 0;
+        background-color: #f2f2f2;
+    }
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 3px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .tagMspan {
+        color: #009688;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+    .tagLspan {
+        color: #ff6a00;
+        font-weight: 600;
+    }
+    .tagRspan {
+        margin-left: 10px;
+        color: #999;
+        font-size: 14px;
+    }
+</style>
+
+<div style="margin:12px 5px;padding:12px 16px;border:1px solid #f0b45b;background:#fff8e8;color:#754719;font-size:14px">本地版尚未接入短信通道。模板和记录可以管理，但验证码、自动短信与群发短信不会送达。请先接入短信服务后再启用。</div>
+<form class="layui-form" action="" lay-filter="pro">
+
+    <fieldset class="layui-elem-field" style="margin-top:10px;margin-left:5px;margin-right:5px">
+        <legend>短信账户信息</legend>
+        <div class="layui-field-box" style="font-size:14px">
+            <div class="layui-form-pane" style="margin-left:10px">
+                <div class="layui-form-item" style="margin-bottom: 0px;">
+                    <div class="layui-inline">
+                        当前平台账户余额：
+                    </div>
+                    <div class="layui-inline" style="color:#ff6a00">
+                        截至[[ now_cn ]]您的平台个人账户([[ sys.ownerAccount ]])可用余额为：[[ sys.balance ]]元，短信余量：[[ sys.smsLeft ]]条，虚拟电话套餐剩余：[[ sys.phoneMinutes ]]分钟，实名认证套餐包：0次
+                    </div>
+                    <div class="layui-inline" style="margin-top:10px">
+                        <button type="button" class="layui-btn  layui-btn-danger layui-btn-sm" lay-submit="" lay-filter="payBtn" disabled title="短信通道未接入">购买短信包请点击这里</button>
+                    </div>
+
+                </div>
+                <div class="layui-form-item" style="margin-bottom: 0px;">
+                    <div class="layui-inline">
+                        当前短信前缀：
+                    </div>
+                    <div class="layui-inline" style="color:#ff6a00">
+                        目前您正在使用共享短信签名前缀【JIDANPU】，若需要启用独立短信前缀，可以点击下面的按钮申请开通，申请开通独立签名前缀费用：300元
+                        <span style="color:#666;margin-left:20px">提示：如果需要定制你家专用短信前缀，请联系平台客服</span>
+                    </div>
+                    <div class="layui-inline layui-hide" style="margin-top:10px">
+                        <button type="button" class="layui-btn  layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="signatureBtn">开通独立短信前缀</button>
+                        <button type="button" class="layui-btn  layui-btn-normal layui-btn-sm " lay-submit="" lay-filter="payczBtn" disabled title="短信通道未接入">给平台余额充值</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+     
+    <div style="margin:10px 10px">
+        <div class="" style="padding-top:10px">
+            <div class="layui-form-pane">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width: 80px">选择游戏</label>
+                    <div class="layui-input-inline">
+                        <select id="gameName" name="gameName" lay-filter="selectGame">
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+                                        <option value="伊莫">伊莫</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据">刷新列表</button>
+            </div>
+        </script>
+        <script type="text/html" id="baroperating">
+            <a class="layui-btn layui-btn-xs" style="" lay-event="submitEdit" lay-tips="编辑短信内容">修改</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal" style="" lay-event="submitApplyAll" lay-tips="将这条短信内容应用给其它所有游戏">应用所有游戏</a>
+        </script>
+        <script type="text/html" id="switchTpl1">
+            <input type="checkbox" name="doNotSendSms" value="{{d.SmsSetting_Id}}" lay-skin="switch" lay-text="开|关" lay-filter="smsSwitch" {{ d.SmsSwicth==1 ? 'checked' : '' }}>
+        </script>
+    </div>
+
+    <div class="change" style="display:none">
+        <div class="orderStaChangeSmsDiv" style="margin:10px 10px">
+            <p style=" margin-bottom: 10px; font-size: 14px">
+                提示：通知短信内容中可放置以下变量，变量可以在实际发送中自动替换成订单对应内容(黄色部分)：
+            </p>
+            <p style="color: #ff0000; margin-bottom: 10px; display: none" class="notPlayerLoginDiv">
+                作用：在订单详情里可以点击“通知玩家需要上号验证码”按钮时，将会发送对应短信到订单登记的玩家手机上
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{project}</span><span class="tagRspan">代表替换成代练项目</span>
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{name}</span><span class="tagRspan">代表替换成订单角色名</span>
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{soure}</span><span class="tagRspan">代表替换成订单来源/店铺名称</span>
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{acc}</span><span class="tagRspan">代表替换成游戏账号</span>
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{game1}</span><span class="tagRspan">代表替换成大区</span>
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{game2}</span><span class="tagRspan">代表替换成服务器</span>
+            </p>
+            <p class="tagMspan">
+                <span class="tagLspan">{reman}</span><span class="tagRspan">代表替换成当前打手名称</span>
+            </p>
+            <p class="tagMspan layui-hide">
+                <span class="tagLspan">{url}</span><span class="tagRspan">代表生成玩家扫码授权上号用的链接，只限订单状态为待上号、代练中有效，注意：这个变量不要放在短信内容最后，可以放在中间</span>
+            </p>
+        </div>
+        <div class="gameAccKuDiv" style="display:none">
+            <div class="layui-field-box" style="font-size:12px">
+                <p style="margin-bottom:10px">
+                    作用：用于内部号库的相关短信
+                </p>
+                <p style="margin-bottom:10px">
+                    此短信变量有：
+                </p>
+                <p class="tagMspan">
+                    <span class="tagLspan">{game1}</span><span class="tagRspan">会替换成大区</span>
+                </p>
+                <p class="tagMspan">
+                    <span class="tagLspan">{game2}</span><span class="tagRspan">会替换成服务器</span>
+                </p>
+                <p class="tagMspan">
+                    <span class="tagLspan">{acc}</span><span class="tagRspan">会替换成游戏账号</span>
+                </p>
+                <p class="tagMspan">
+                    <span class="tagLspan">{password}</span><span class="tagRspan">会替换成游戏密码</span>
+                </p>
+            </div>
+        </div>
+        <div class="layui-form-pane" style="margin-top:30px;margin-left:10px;margin-right:10px;margin-bottom:20px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">短信内容</label>
+                <div class="layui-input-block">
+                    <textarea name="smsContent" id="smsContent" lay-verify="" autocomplete="off" placeholder="短信内容" maxlength="300" class="layui-textarea" value="" style="height:80px;font-size:14px;font-weight:600"></textarea>
+                </div>
+                <span class="zs" style="margin-left:110px;color:#999">共0个字</span>
+            </div>
+            <div class="layui-form-item orderEndTbDiv" style="display:none">
+                <label class="layui-form-label" lay-tips="勾选同步淘宝发货才发送">勾同步淘宝才发</label>
+                <div class="layui-input-block">
+                    <input lay-filter="selectTbSend" type="radio" name="selectTbSend" value="0" title="否">
+                    <input lay-filter="selectTbSend" type="radio" name="selectTbSend" value="1" title="是">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div style="margin-left:110px;color:#ff0000">注意：请不要在短信内容里放任何形式的联系方式，比如手机号、微信号或QQ号以及群号和网址，因为电信运营商是会屏蔽带这些内容的短信，导致发送成功但实际收不到的情况。禁止出现加群、微信、VX、羊君、QQ、活动、福利、购买、好评、评价、红包等词语，若需要附带营销类词语，请在末尾追加“拒收请回复R”关键词</div>
+        </div>
+        <div style="text-align:center;align-items:center">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="saveSmsBtn" lay-submit="" type="button" lay-filter="saveSmsBtn" style="">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+        <legend>自定义常用短信设置</legend>
+        <div class="layui-field-box" style="font-size:12px">
+            <p style="color:#ff0000;margin-bottom:10px">
+                提示：可以在这里自定义6个常用的短信内容，方便在订单管理列表发送短信时使用
+            </p>
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义1短信名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy1Title" id="ReadInputSMSZdy1Title" lay-verify="" autocomplete="off" placeholder="写一个在订单管理列表发送短信时看到的短信名称" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy1Title if sms_settings.ReadInputSMSZdy1Title is defined else '团1开打时短信' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义1短信内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy1" id="ReadInputSMSZdy1" lay-verify="" autocomplete="off" placeholder="自定义1短信的内容" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy1 if sms_settings.ReadInputSMSZdy1 is defined else '尊敬的客户您好，您的订单已开始代练，若需线上查看时时进度，可以进入斗鱼房间号123456进行查看，如有问题请及时与我们联系' ]]">
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义2短信名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy2Title" id="ReadInputSMSZdy2Title" lay-verify="" autocomplete="off" placeholder="写一个在订单管理列表发送短信时看到的短信名称" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy2Title if sms_settings.ReadInputSMSZdy2Title is defined else '团2开打时短信' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义2短信内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy2" id="ReadInputSMSZdy2" lay-verify="" autocomplete="off" placeholder="自定义2短信的内容" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy2 if sms_settings.ReadInputSMSZdy2 is defined else '尊敬的客户您好，您的订单已开始代练，若需线上查看时时进度，可以进入斗鱼房间号987645进行查看，如有问题请及时与我们联系' ]]">
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义3短信名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy3Title" id="ReadInputSMSZdy3Title" lay-verify="" autocomplete="off" placeholder="写一个在订单管理列表发送短信时看到的短信名称" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy3Title if sms_settings.ReadInputSMSZdy3Title is defined else '' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义3短信内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy3" id="ReadInputSMSZdy3" lay-verify="" autocomplete="off" placeholder="自定义3短信的内容" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy3 if sms_settings.ReadInputSMSZdy3 is defined else '' ]]">
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义4短信名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy5Title" id="ReadInputSMSZdy5Title" lay-verify="" autocomplete="off" placeholder="写一个自定义名称" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy5Title if sms_settings.ReadInputSMSZdy5Title is defined else '' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义4短信内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy5" id="ReadInputSMSZdy5" lay-verify="" autocomplete="off" placeholder="自定义短信的内容" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy5 if sms_settings.ReadInputSMSZdy5 is defined else '' ]]">
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义5短信名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy6Title" id="ReadInputSMSZdy6Title" lay-verify="" autocomplete="off" placeholder="写一个自定义名称" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy6Title if sms_settings.ReadInputSMSZdy6Title is defined else '' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义5短信内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy6" id="ReadInputSMSZdy6" lay-verify="" autocomplete="off" placeholder="自定义短信的内容" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy6 if sms_settings.ReadInputSMSZdy6 is defined else '' ]]">
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义6短信名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy7Title" id="ReadInputSMSZdy7Title" lay-verify="" autocomplete="off" placeholder="写一个自定义名称" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy7Title if sms_settings.ReadInputSMSZdy7Title is defined else '' ]]">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="">
+                        <label class="layui-form-label">自定义6短信内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ReadInputSMSZdy7" id="ReadInputSMSZdy7" lay-verify="" autocomplete="off" placeholder="自定义短信的内容" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="[[ sms_settings.ReadInputSMSZdy7 if sms_settings.ReadInputSMSZdy7 is defined else '' ]]">
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+
+        </div>
+    </fieldset>
+
+    <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+        <legend>其它短信设置</legend>
+        <div class="layui-field-box" style="font-size:12px">
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            1、是否关闭此系统所有子账号登录时的短信验证码?(当登录环境变化时，会要求二次短信验证，默认情况下该功能开启，强烈建议不要关闭，该功能可以大大提高系统安全性)
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK16" value="N" title="不关"  [% if (sms_settings.CK16 if sms_settings.CK16 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK16 if sms_settings.CK16 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK16" value="Y" title="关闭" [% if (sms_settings.CK16 if sms_settings.CK16 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK16 if sms_settings.CK16 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top: 10px; margin-left: 10px">
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                        2、订单详情界面，要不要显示“通知玩家提供上号验证码”的按钮(默认不显示)
+                    </div>
+                    <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                        <input type="radio" name="SK35" value="N" title="不显示"  [% if (sms_settings.SK35 if sms_settings.SK35 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.SK35 if sms_settings.SK35 is defined else "N")|string == "N" %]checked[% endif %]>
+                        <input type="radio" name="SK35" value="Y" title="要显示" [% if (sms_settings.SK35 if sms_settings.SK35 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.SK35 if sms_settings.SK35 is defined else "N")|string == "Y" %]checked[% endif %]>
+                    </div>
+                </div>
+                <div class="layui-form-pane layui-hide" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            3、在线支付成功后给订单所填电话推送支付结果短信（默认开启）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK22" value="N" title="关闭"  [% if (sms_settings.CK22 if sms_settings.CK22 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK22 if sms_settings.CK22 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK22" value="Y" title="打开" [% if (sms_settings.CK22 if sms_settings.CK22 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK22 if sms_settings.CK22 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            4、订单客户回复的短信内容转发到当前订单打手手机上（默认开启）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK23" value="N" title="关闭"  [% if (sms_settings.CK23 if sms_settings.CK23 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK23 if sms_settings.CK23 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK23" value="Y" title="打开" [% if (sms_settings.CK23 if sms_settings.CK23 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK23 if sms_settings.CK23 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            4.1、订单客户回复的短信内容转发到当前订单销售客服手机上（默认关闭）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK35" value="N" title="关闭" [% if (sms_settings.CK35 if sms_settings.CK35 is defined else "N")|string == "N" %][% endif %] [% if (sms_settings.CK35 if sms_settings.CK35 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK35" value="Y" title="打开"  [% if (sms_settings.CK35 if sms_settings.CK35 is defined else "N")|string == "Y" %][% endif %] [% if (sms_settings.CK35 if sms_settings.CK35 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            5、是否关闭管理订单列表页面的导出订单预警短信（默认会通知管理组成员）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK24" value="N" title="不关" [% if (sms_settings.CK24 if sms_settings.CK24 is defined else "N")|string == "N" %][% endif %] [% if (sms_settings.CK24 if sms_settings.CK24 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK24" value="Y" title="关闭"  [% if (sms_settings.CK24 if sms_settings.CK24 is defined else "N")|string == "Y" %][% endif %] [% if (sms_settings.CK24 if sms_settings.CK24 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            6、老板通过自助修改密码后是否短信通知录单客服和当前打手（默认开启通知）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK28" value="N" title="关闭"  [% if (sms_settings.CK28 if sms_settings.CK28 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK28 if sms_settings.CK28 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK28" value="Y" title="打开" [% if (sms_settings.CK28 if sms_settings.CK28 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK28 if sms_settings.CK28 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            7、上家系统同步过来的订单发生异常时是否短信通知本系统管理员（默认当上家系统同步过来的订单有异常时会短信通知本系统管理者，关闭此项后则不会发短信通知）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK29" value="N" title="不通知"  [% if (sms_settings.CK29 if sms_settings.CK29 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK29 if sms_settings.CK29 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK29" value="Y" title="通知" [% if (sms_settings.CK29 if sms_settings.CK29 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK29 if sms_settings.CK29 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            8、当上家系统有新订单同步过来时是否需要短信通知本系统管理员（默认不通知，关闭此项后则不会发短信通知）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK30" value="N" title="不通知"  [% if (sms_settings.CK30 if sms_settings.CK30 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK30 if sms_settings.CK30 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK30" value="Y" title="通知" [% if (sms_settings.CK30 if sms_settings.CK30 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK30 if sms_settings.CK30 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            9、通过系统给代练员结算打款成功后是否需要发送结算通知（默认不通知）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK32" value="N" title="不通知"  [% if (sms_settings.CK32 if sms_settings.CK32 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK32 if sms_settings.CK32 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK32" value="Y" title="通知" [% if (sms_settings.CK32 if sms_settings.CK32 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK32 if sms_settings.CK32 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            10、玩家通过查进度那里催更代练员上传最新截图时，是否同时给打手发送催更短信通知（默认通知）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK34" value="N" title="不通知"  [% if (sms_settings.CK34 if sms_settings.CK34 is defined else "Y")|string == "N" %][% endif %] [% if (sms_settings.CK34 if sms_settings.CK34 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK34" value="Y" title="通知" [% if (sms_settings.CK34 if sms_settings.CK34 is defined else "Y")|string == "Y" %][% endif %] [% if (sms_settings.CK34 if sms_settings.CK34 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                    <div class="layui-form-item" style="">
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                            11、是否开启系统会员预存余额发生变动时自动发短信（默认不通知）
+                        </div>
+                        <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                            <input type="radio" name="CK36" value="N" title="不开" [% if (sms_settings.CK36 if sms_settings.CK36 is defined else "N")|string == "N" %][% endif %] [% if (sms_settings.CK36 if sms_settings.CK36 is defined else "N")|string == "N" %]checked[% endif %]>
+                            <input type="radio" name="CK36" value="Y" title="开启"  [% if (sms_settings.CK36 if sms_settings.CK36 is defined else "N")|string == "Y" %][% endif %] [% if (sms_settings.CK36 if sms_settings.CK36 is defined else "N")|string == "Y" %]checked[% endif %]>
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+        </div>
+    </fieldset>
+
+    <div style="text-align:center;align-items:center;margin-bottom:20px">
+        <button type="button" class="layui-btn   layui-btn-normal w-lg" lay-submit="" lay-filter="savebtn">保存以上设置</button>
+    </div>
+
+    <input type="hidden" name="jdp" id="jdp" value="[[ sys.jdpId ]]" />
+    <input type="hidden" name="CompanyName" id="CompanyName" value="[[ company ]]" />
+</form>
+
+<script src="/JS2019/Sms/smssetting.js?v=1011213" type="text/javascript"></script>
+
+</body>
+</html>

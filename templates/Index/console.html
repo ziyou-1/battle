@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>主界面</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+
+<style>
+    body {
+        background-color: #f2f2f2;
+    }
+
+    .layui-table-info td {
+        color: #696969;
+        font-size: 12px;
+        line-height: 28px;
+    }
+
+    .qrcode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .layui-col-xs3 .layui-col-md1 .active {
+        border: 1px solid #4bb2ff;
+        color: #4bb2ff;
+    }
+
+    .reportPanTitle {
+        font-weight: 600;
+        font-size: 16px;
+        margin-left: 3px
+    }
+
+    .rep-title-rigth {
+        display: flex;
+        float: right;
+    }
+
+    .myMessage {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 92px;
+        color: #1E9FFF
+    }
+
+    .rep-title-rigth li {
+        margin: 0px 3px;
+    }
+</style>
+<div id="root">
+    <template id="template">
+        {{ const i18n = layui.i18n; }}
+        <div id="LAY_app">
+            <div class="layui-fluid">
+                <div class="layui-card">
+                    <div class="layui-card-header">{{= i18n.$t('page.headerText') }}</div>
+                    <div class="layui-card-body">
+
+                        <div class="layadmin-shortcut">
+                            <div>
+                                <ul class="layui-row layui-col-space10">
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2">
+                                                <a lay-href="/Order/addorder" lay-text="{{= i18n.$t('page.addorder') }}" lay-tips="{{= i18n.$t('page.addorderTips') }}">
+                                                    <i class="layui-icon layui-icon-add-1" style="color: #F86738
+"></i>
+                                                    <cite>{{= i18n.$t('page.addorder') }}</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2">
+                                                <a lay-href="/Order/orderlist" lay-tips="{{= i18n.$t('page.orderlist') }}" lay-text="{{= i18n.$t('page.orderlistText') }}">
+                                                    <i class="layui-icon layui-icon-form" style="color:#23d4d4"></i>
+                                                    <cite>{{= i18n.$t('page.orderlistTips') }}</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2">
+                                                <a href="/app/#/calc" target="_blank" lay-tips="{{= i18n.$t('page.calculatorTips') }}">
+                                                    <i class="layui-icon layui-icon-dollar" style="color:#C71585"></i>
+                                                    <cite>{{= i18n.$t('page.calculator') }}</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2 layui-hide">
+                                                <a lay-href="/Group/grouplist2020" lay-tips="{{= i18n.$t('page.grouplist2020Tips') }}" lay-text="{{= i18n.$t('page.grouplist2020') }}">
+                                                    <i class="layui-icon layui-icon-date" style="color:#73D08D"></i>
+                                                    <cite>{{= i18n.$t('page.grouplist2020') }}</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2">
+                                                <a lay-href="/Emp/emplist" lay-text="{{= i18n.$t('page.emplist') }}" lay-tips="{{= i18n.$t('page.emplistTips') }}">
+                                                    <i class="layui-icon layui-icon-rmb" style="color:#CB5DEF"></i>
+                                                    <cite>{{= i18n.$t('page.emplist') }}</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2">
+                                                <a lay-href="/User/userlist" lay-text="{{= i18n.$t('page.userlistText') }}" lay-tips="{{= i18n.$t('page.userlistTips') }}">
+                                                    <i class="layui-icon layui-icon-group" style="color:#FFB800"></i>
+                                                    <cite>{{= i18n.$t('page.userlist') }}</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6 layui-col-sm4 layui-col-md2 layui-col-lg2">
+                                                <a href="javascript:void(0)" class="rankList">
+                                                    <i class="layui-icon layui-icon-align-left" style="color:#FF5722"></i>
+                                                    {{= i18n.$t('page.rankList') }}
+                                                </a>
+                                            </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row layui-col-space10" style="margin-left:10px;margin-right:10px">
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6 layui-col-lg6">
+                    <div class="layui-card">
+                        <div class="layui-card-header" style="font-weight:600;position:relative">
+                            {{= i18n.$t('page.myMessage') }}
+                            <div class="myMessage">
+                                <i class="layui-icon layui-icon-dialogue"></i>{{= i18n.$t('page.myMessageText') }}
+                            </div>
+                        </div>
+                        <div class="layui-card-body">
+                            <table class="layui-table layui-table-info">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:110px;"><span class="tit">{{= i18n.$t('page.myinfoTxt') }}</span></td>
+                                        <td>
+                                            <span class="info ft14">[[ user.account ]]</span>
+                                            <span class="layui-btn layui-btn-xs layui-btn-radius layui-btn-warm" style="padding:0px 10px;display:none">
+                                                <a style="color:#fff" lay-href="/User/myinfo#userInfo=1" lay-text="{{= i18n.$t('page.userInfoText') }}" lay-tips="{{= i18n.$t('page.userInfoTips') }}">
+                                                    <cite>{{= i18n.$t('page.userInfo') }}</cite>
+                                                </a>
+                                            </span>
+                                            <span class="layui-btn layui-btn-sm layui-btn-warm layui-hide" style="padding:0px 10px;">
+                                                <a style="color:#fff" lay-href="/User/myinfo" lay-text="{{= i18n.$t('page.usermyinfoText') }}" lay-tips="{{= i18n.$t('page.usermyinfoTips') }}">
+                                                    <cite>{{= i18n.$t('page.usermyinfo') }}</cite>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="tit">{{= i18n.$t('page.userJob') }}</span></td>
+                                        <td>
+                                            <span class='' style="margin-top:10px">[[ user.jobName ]]</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="tit">{{= i18n.$t('page.orderCount') }}</span></td>
+                                        <td><span class="info ft14 cheng orderCount">0{{= i18n.$t('page.orderCountText1') }}</span> / <span class="cheng orderFee">0.00{{= i18n.$t('page.orderCountText2') }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="tit">{{= i18n.$t('page.UserGroupGame') }}</span></td>
+                                        <td>[[ user.games ]]</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="tit">{{= i18n.$t('page.HasData') }}</span></td>
+                                        <td>
+                                                                                        <span class="info ft14">{{= i18n.$t('page.logTime') }}：[[ user.lastLoginTime ]] {{= i18n.$t('page.LoginIP') }}：[[ user.lastLoginIp ]] {{= i18n.$t('page.LoginCity') }}：[[ user.lastLoginCity ]]</span>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="tit">{{= i18n.$t('page.loginTimes') }}</span></td>
+                                        <td>
+                                                                                        <span class="info ft14">{{= i18n.$t('page.logTime') }}：[[ user.prevLoginTime ]] {{= i18n.$t('page.LoginIP') }}：[[ user.prevLoginIp ]] {{= i18n.$t('page.LoginCity') }}：[[ user.prevLoginCity ]]</span>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-hide-xs layui-col-sm6 layui-col-md6 layui-col-lg6">
+                    <div class="layui-card">
+                        <div class="layui-card-header" style="font-weight:600">【[[ company ]]】{{= i18n.$t('page.CompanyNameText') }}
+                            [% if can('/System/systemnotice') %]<a lay-href="/System/systemnotice" lay-text="内部公告管理" style="float:right;font-weight:400">管理公告</a>[% endif %]
+                        </div>
+                        <div class="layui-card-body">
+                            <ul class="systemNoticeUl" style="font-size:14px"></ul>
+                        </div>
+                        <div class="layui-card-header">客户端入口</div>
+                        <div class="layui-card-body">
+                            <a href="/app/" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">打开 APP / PC 前台</a>
+                            [% if can('/System/wechatappmange') %]<a lay-href="/System/wechatappmange" lay-text="客户端内容管理" class="layui-btn layui-btn-xs">客户端内容管理</a>[% endif %]
+                            [% if can('/System/clientsetting') %]<a lay-href="/System/clientsetting" lay-text="客户端设置" class="layui-btn layui-btn-xs">客户端设置</a>[% endif %]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-fluid">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <text>{{= i18n.$t('page.data') }}</text>
+                        <ul class="rep-title-rigth">
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips') }}" class="layui-btn layui-btn-sm layui-btn-primary layui-border-blue yesterday">{{= i18n.$t('page.datayesterday') }}</a></li>
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips') }}" class="layui-btn layui-btn-sm layui-btn-primary today">{{= i18n.$t('page.datatoday') }}</a></li>
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips') }}" class="layui-btn layui-btn-sm layui-btn-primary last7days">{{= i18n.$t('page.datalast7days') }}</a></li>
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips') }}" class="layui-btn layui-btn-sm layui-btn-primary last30days">{{= i18n.$t('page.datalast30days') }}</a></li>
+                            <li>
+                                <input type="text" autocomplete="off" id="ID-laydate-start-date-1" class="layui-input" placeholder="" style="height: 35px;margin-top: 5px;" value="[[ dago(1) ]] ~ [[ dago(1) ]]">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space10" style="margin:0px 0px;font-size:14px">
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle1') }}</span><br />
+                                        <span class="reportPanTitle pan1">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle2') }}</span><br />
+                                        <span class="reportPanTitle pan2">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle3') }}</span><br />
+                                        <span class="reportPanTitle pan3">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;" title="{{= i18n.$t('page.reportPanTitle4Tit') }}">
+                                        <span>{{= i18n.$t('page.reportPanTitle4') }}</span><br />
+                                        <span class="reportPanTitle pan4">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;" title="{{= i18n.$t('page.reportPanTitle4Tit') }}">
+                                        <span>{{= i18n.$t('page.reportPanTitle5') }}</span><br />
+                                        <span class="reportPanTitle pan5">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle6') }}</span><br />
+                                        <span class="reportPanTitle pan6">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle7') }}</span><br />
+                                        <span class="reportPanTitle pan7">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle8') }}</span><br />
+                                        <span class="reportPanTitle pan8">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle9') }}</span><br />
+                                        <span class="reportPanTitle pan9">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle10') }}</span><br />
+                                        <span class="reportPanTitle pan10">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle11') }}</span><br />
+                                        <span class="reportPanTitle pan12">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.reportPanTitle12') }}</span><br />
+                                        <span class="reportPanTitle pan13">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <text>{{= i18n.$t('page.setdata') }}</text>
+                        <ul class="rep-title-rigth">
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips2') }}" class="layui-btn layui-btn-sm layui-btn-primary layui-border-blue yesterday2">{{= i18n.$t('page.datayesterday') }}</a></li>
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips2') }}" class="layui-btn layui-btn-sm layui-btn-primary today2">{{= i18n.$t('page.datatoday') }}</a></li>
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips2') }}" class="layui-btn layui-btn-sm layui-btn-primary last7days2">{{= i18n.$t('page.datalast7days') }}</a></li>
+                            <li><a href="javascript:void(0)" title="{{= i18n.$t('page.dataTips2') }}" class="layui-btn layui-btn-sm layui-btn-primary last30days2">{{= i18n.$t('page.datalast30days') }}</a></li>
+                            <li>
+                                <input type="text" autocomplete="off" id="ID-laydate-start-date-2" class="layui-input" placeholder="" style="height: 35px;margin-top: 5px;" value="[[ dago(1) ]] ~ [[ dago(1) ]]">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-row layui-col-space20 pushorderdatadiv" style="margin:0px 0px;font-size:14px">
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.pushOrderAllSpan') }}</span><br />
+                                        <span class="reportPanTitle pushOrderAllSpan">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-md1 layui-col-sm3">
+                                <div class="layui-panel">
+                                    <div style="padding:15px;">
+                                        <span>{{= i18n.$t('page.pushOrderInternalSpan') }}</span><br />
+                                        <span class="reportPanTitle pushOrderInternalSpan">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">{{= i18n.$t('page.shouqiankefu') }}</div>
+                    <div class="layui-card-body">
+                        <div id="Operation" style="width: 100%;height:300px;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+</div>
+
+
+
+<input type="hidden" id="isAdmin" name="isAdmin" value="[[ flags.isAdmin ]]" />
+<input type="hidden" id="myAlipayAcc" name="myAlipayAcc" value="" />
+<input type="hidden" id="myAlipayName" name="myAlipayName" value="" />
+<input type="hidden" id="isRnameCert" name="isRnameCert" value="N" />
+<input type="hidden" id="certSwicth" name="certSwicth" />
+
+<script src="/JS2019/echarts.min.js" type="text/javascript"></script>
+<script src="/JS2019/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    var i18n = layui.i18n;
+    var laytpl = layui.laytpl;
+    var i18nVersion = localStorage.getItem('i18nVersion')
+    var i18nData = {
+        locale: localStorage.getItem('layui-i18n-local-test') || 'zh-CN', // 当前语言环境
+        messages: {
+            'en': {
+                page: {
+                    headerText: 'Shortcuts',
+                    addorder: 'Enter Ord',
+                    addorderTips: 'Enter ords into sys',
+                    orderlist: 'All Order Mngt',
+                    orderlistText: 'Mngt Orders',
+                    orderlistTips: 'Mngt all system orders',
+                    calculator: 'Game Pricing Tool',
+                    calculatorTips: 'Open client quote calculator',
+                    grouplist2020: 'WoW Grouping',
+                    grouplist2020Tips: 'Mngt all group',
+                    emplist: 'Settl Mngt',
+                    emplistTips: 'Mngt settl records of all boosters',
+                    userlist: 'Subaccount Mngt',
+                    userlistText: 'User Mngt',
+                    userlistTips: 'Manage all system sub-accounts',
+                    rankList: 'Order Ranking',
+
+                    myorderlist: 'My Orders',
+                    myorderlistTips: 'Assigned Orders',
+                    myemp: 'My Income',
+                    myempTips: 'View Your Order Income',
+                    insiderecorderlist: 'Internal Order',
+                    insiderecorderlistText: 'Grab internal orders here',
+                    myinfo: 'My Profile',
+                    myMessage: 'Messages',
+                    myMessageText: 'Internal Chat',
+                    myinfoTxt: 'Sys Login Account',
+                    userInfo: 'Bind Account for More Services',
+                    userInfoText: 'Bind JDP Account',
+                    userInfoTips: 'Bind your JDP account for More Services',
+                    usermyinfo: 'Start Real-name AuthN',
+                    usermyinfoText: 'Real-name AuthN',
+                    usermyinfoTips: 'Complete AuthN',
+                    userJob: 'Position',
+                    orderCount: 'My Task Ords',
+                    orderCountText1: '.',
+                    orderCountText2: '¥',
+                    UserGroupGame: 'Game Access',
+                    HasData: 'Currentv login Info',
+                    logTime: 'Login Tm',
+                    LoginIP: 'IP ',
+                    LoginCity: 'Location',
+                    loginTimes: 'Last Login Info',
+                    CompanyNameText: 'Notices',
+                    data: 'Overview',
+                    dataTips: 'Based on entry time',
+                    dataTips2: 'Based on exit time',
+                    datayesterday: 'Yesterday',
+                    datatoday: 'Today',
+                    datalast7days: 'Last 7 Days',
+                    datalast30days: 'Last 30 Days',
+                    reportPanTitle1: 'Ord Count',
+                    reportPanTitle2: 'Total Order Amount',
+                    reportPanTitle3: 'Total Dispatch Amount',
+                    reportPanTitle4: 'Est. Profit',
+                    reportPanTitle4Tit: 'Excl. refunded orders (status: Canceled)',
+                    reportPanTitle5: 'Profit Margin',
+                    reportPanTitle6: 'Acc',
+                    reportPanTitle7: 'Acc Rate',
+                    reportPanTitle8: 'Canc',
+                    reportPanTitle9: 'CancRate',
+                    reportPanTitle10: 'Refd',
+                    reportPanTitle11: 'Comp',
+                    reportPanTitle12: 'Comp Rate',
+                    setdata: 'Dispatch Overview',
+                    pushOrderAllSpan: 'Total Dispatched Orders',
+                    pushOrderInternalSpan: 'Internal Ords',
+                    shouqiankefu: 'Today\'s Order Time-Series Overview',
+                },
+                js: {
+                    RnameCertLayercontent: 'You have not completed real-name verification. Would you like to proceed now?',
+                    RnameCertLayerBtn1: 'Go',
+                    RnameCertLayerBtn2: 'NO',
+                    MyInfo: 'My Profile',
+                    yuan: '¥',
+                    bi: '.',
+                    orderCount: 'Comp',
+                    orderFee1: 'Unsettled',
+                    orderFee2: 'Incomplete Ords',
+                    orderFee3: 'Est.',
+                    viewNotice: 'Internal Notice',
+                    staTitle1: 'Today\'s Order Trend Preview',
+                    staTitle2: 'Last Month\'s Order Trend',
+                    orderFeeTitle1: 'Order Value',
+                    orderFeeTitle2: 'Commission',
+                    getTodayStatisname: 'Ord Count',
+                    rankList: 'Order Ranking',
+                    pushOrderAllSpan: 'Total Dispatched Orders',
+                    pushOrderInternalSpan: 'Internal Ords',
+                },
+                code: {
+                    copy: 'Copy Code',
+                    copied: 'Copied',
+                    copyError: 'Copy Failed',
+                    maximize: 'Maximize',
+                    restore: 'Restore',
+                    preview: 'Open Preview in New Window'
+                },
+                colorpicker: {
+                    clear: 'Clear',
+                    confirm: 'OK'
+                },
+                dropdown: {
+                    noData: 'No Data'
+                },
+                flow: {
+                    loadMore: 'Load More',
+                    noMore: 'No More Data'
+                },
+                form: {
+                    select: {
+                        noData: 'No Data',
+                        noMatch: 'No Matching Data',
+                        placeholder: 'Please Select'
+                    },
+                    validateMessages: {
+                        required: 'This field is required',
+                        phone: 'Invalid phone number format',
+                        email: 'Invalid email format',
+                        url: 'Invalid URL format',
+                        number: 'Numbers only',
+                        date: 'Invalid date format',
+                        identity: 'Invalid ID number format'
+                    },
+                    verifyErrorPromptTitle: 'Notice'
+                },
+                laydate: {
+                    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    time: ['Hour', 'Minute', 'Second'],
+                    literal: {
+                        year: ''
+                    },
+                    selectDate: 'Select Date',
+                    selectTime: 'Select Time',
+                    startTime: 'Start Time',
+                    endTime: 'End Time',
+                    tools: {
+                        confirm: 'Confirm',
+                        clear: 'Clear',
+                        now: 'Now',
+                        reset: 'Reset'
+                    },
+                    rangeOrderPrompt: 'End time cannot be less than start Time\nPlease re-select',
+                    invalidDatePrompt: 'Invalid date\n',
+                    formatErrorPrompt: 'Date format is invalid\nMust follow the format:\n{format}\n',
+                    autoResetPrompt: 'It has been reset',
+                    preview: 'The selected result'
+                },
+                layer: {
+                    confirm: 'OK',
+                    cancel: 'Cancel',
+                    defaultTitle: 'Info',
+                    prompt: {
+                        inputLengthPrompt: 'Maximum {length} characters'
+                    },
+                    photos: {
+                        noData: 'No Image',
+                        tools: {
+                            rotate: 'Rotate',
+                            scaleX: 'Flip Horizontally',
+                            zoomIn: 'Zoom In',
+                            zoomOut: 'Zoom Out',
+                            reset: 'Reset',
+                            close: 'Close'
+                        },
+                        viewPicture: 'View Picture',
+                        urlError: {
+                            prompt: 'Image URL is invalid, \nContinue to next one?',
+                            confirm: 'Next',
+                            cancel: 'Cancel'
+                        }
+                    }
+                },
+                laypage: {
+                    prev: 'Prev',
+                    next: 'Next',
+                    first: 'First',
+                    last: 'Last',
+                    total: 'Total {total} items',
+                    pagesize: '/page',
+                    goto: 'Go to',
+                    page: 'page',
+                    confirm: 'Confirm'
+                },
+                table: {
+                    sort: {
+                        asc: 'Ascending',
+                        desc: 'Descending'
+                    },
+                    noData: 'No Data',
+                    tools: {
+                        filter: {
+                            title: 'Filter Columns'
+                        },
+                        export: {
+                            title: 'Export',
+                            noDataPrompt: 'No data in the table',
+                            compatPrompt: 'Export is not supported in IE. Please use Chrome or another modern browser.',
+                            csvText: 'Export CSV File'
+                        },
+                        print: {
+                            title: 'Print',
+                            noDataPrompt: 'No data in the table'
+                        }
+                    },
+                    dataFormatError: 'Returned data is invalid. The correct success status code should be: "{statusName}": {statusCode}',
+                    xhrError: 'Request Error: {msg}'
+                },
+                transfer: {
+                    noData: 'No Data',
+                    noMatch: 'No Match',
+                    title: ['List 1', 'List 2'],
+                    searchPlaceholder: 'Search by Keyword'
+                },
+                tree: {
+                    defaultNodeName: 'Unnamed',
+                    noData: 'No Data',
+                    deleteNodePrompt: 'Are you sure you want to delete the node "{name}"?'
+                },
+                upload: {
+                    fileType: {
+                        file: 'File',
+                        image: 'Image',
+                        video: 'Video',
+                        audio: 'Audio'
+                    },
+                    validateMessages: {
+                        fileExtensionError: 'Unsupported format in selected {fileType}',
+                        filesOverLengthLimit: 'Maximum {length} files allowed at once',
+                        currentFilesLength: 'You have selected {length} files',
+                        fileOverSizeLimit: 'File size must not exceed {size}'
+                    },
+                    chooseText: '{length} files'
+                },
+                util: {
+                    timeAgo: {
+                        days: '{days} days ago',
+                        hours: '{hours} hours ago',
+                        minutes: '{minutes} minutes ago',
+                        future: 'In the future',
+                        justNow: 'Just now'
+                    },
+                    toDateString: {
+                        meridiem: function (hours, minutes) {
+                            return hours < 12 ? 'AM' : 'PM';
+                        }
+                    }
+                }
+            },
+            'zh-CN': {
+                page: {
+                    headerText: '快捷操作',
+                    addorder: '录入订单',
+                    addorderTips: '将订单录入系统',
+                    orderlist: '管理所有订单',
+                    orderlistText: '管理订单',
+                    orderlistTips: '管理系统内所有订单',
+                    calculator: '万能游戏报价算价器',
+                    calculatorTips: '打开客户端自助报价',
+                    grouplist2020: '魔兽排团',
+                    grouplist2020Tips: '管理所有排团',
+                    emplist: '给打手或客服算账',
+                    emplistTips: '管理系统所有的代练打手的结算情况',
+                    userlist: '管理系统子账户',
+                    userlistText: '用户管理',
+                    userlistTips: '管理系统内所有的系统子账户',
+                    rankList: '接单排行榜',
+                    myorderlist: '我的订单',
+                    myorderlistTips: '在这里看指派给我的订单',
+                    myemp: '我的收入',
+                    myempTips: '在这里可以看我的订单收入',
+                    insiderecorderlist: '内部接单',
+                    insiderecorderlistText: '在这里可以抢接内部的订单',
+                    myinfo: '我的资料',
+                    myMessage: '我的信息',
+                    myMessageText: '内部沟通',
+                    myinfoTxt: '本系统登录账号',
+                    userInfo: '绑定平台账号获取更多服务',
+                    userInfoText: '绑定平台账号',
+                    userInfoTips: '绑定平台账号可以获取更多服务',
+                    usermyinfo: '开始进行实名认证',
+                    usermyinfoText: '实名认证',
+                    usermyinfoTips: '进行实名认证',
+                    userJob: '我的职位',
+                    orderCount: '我接手的订单',
+                    orderCountText1: '笔',
+                    orderCountText2: '元',
+                    UserGroupGame: '游戏权限',
+                    HasData: '本次登录信息',
+                    logTime: '登录时间',
+                    LoginIP: '登录IP',
+                    LoginCity: '登录地点',
+                    loginTimes: '上次登录信息',
+                    CompanyNameText: '通知和公告',
+                    data: '数据概览',
+                    dataTips: '以录单时间为准',
+                    dataTips2: '以发单时间为准',
+                    datayesterday: '昨天',
+                    datatoday: '今天',
+                    datalast7days: '最近7天',
+                    datalast30days: '最近30天',
+                    reportPanTitle1: '录单笔数',
+                    reportPanTitle2: '订单总额',
+                    reportPanTitle3: '发单总额',
+                    reportPanTitle4: '预计利润',
+                    reportPanTitle4Tit: '该数值已排除已退单的(状态为已退单)',
+                    reportPanTitle5: '利润率',
+                    reportPanTitle6: '接手数量',
+                    reportPanTitle7: '接手率',
+                    reportPanTitle8: '撤销数量',
+                    reportPanTitle9: '撤销率',
+                    reportPanTitle10: '退单数量',
+                    reportPanTitle11: '完成数量',
+                    reportPanTitle12: '完成率',
+                    setdata: '发单概览',
+                    pushOrderAllSpan: '全部发单量',
+                    pushOrderInternalSpan: '内部接单',
+                    shouqiankefu: '今日订单分时数据概览',
+                },
+                js: {
+                    RnameCertLayercontent: '您还没有进行实名认证，是否需要去实名认证？',
+                    RnameCertLayerBtn1: '去认证',
+                    RnameCertLayerBtn2: '暂时不认证',
+                    MyInfo: '我的基本信息',
+                    yuan: '元',
+                    bi: '笔',
+                    orderCount: '已完成',
+                    orderFee1: '其中未清算',
+                    orderFee2: '另外未完成订单',
+                    orderFee3: '预计',
+                    viewNotice: '内部公告',
+                    staTitle1: '今日订单业务趋势预览',
+                    staTitle2: '过去1个月里我接的订单趋势预览',
+                    orderFeeTitle1: '订单金额',
+                    orderFeeTitle2: '绩效提成',
+                    getTodayStatisname: '订单数',
+                    rankList: '接单排行榜',
+                    pushOrderAllSpan: '全部发单量',
+                    pushOrderInternalSpan: '内部发单',
+                },
+                code: {
+                    copy: '复制代码',
+                    copied: '已复制',
+                    copyError: '复制失败',
+                    maximize: '最大化显示',
+                    restore: '还原显示',
+                    preview: '在新窗口预览'
+                },
+                colorpicker: {
+                    clear: '清除',
+                    confirm: '确定'
+                },
+                dropdown: {
+                    noData: '暂无数据'
+                },
+                flow: {
+                    loadMore: '加载更多',
+                    noMore: '没有更多了'
+                },
+                form: {
+                    select: {
+                        noData: '暂无数据',
+                        noMatch: '无匹配数据',
+                        placeholder: '请选择'
+                    },
+                    validateMessages: {
+                        required: '必填项不能为空',
+                        phone: '手机号格式不正确',
+                        email: '邮箱格式不正确',
+                        url: '链接格式不正确',
+                        number: '只能填写数字',
+                        date: '日期格式不正确',
+                        identity: '身份证号格式不正确'
+                    },
+                    verifyErrorPromptTitle: '提示'
+                },
+                laydate: {
+                    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    weeks: ['日', '一', '二', '三', '四', '五', '六'],
+                    time: ['时', '分', '秒'],
+                    literal: {
+                        year: '年'
+                    },
+                    selectDate: '选择日期',
+                    selectTime: '选择时间',
+                    startTime: '开始时间',
+                    endTime: '结束时间',
+                    tools: {
+                        confirm: '确定',
+                        clear: '清空',
+                        now: '现在',
+                        reset: '重置'
+                    },
+                    rangeOrderPrompt: '结束时间不能早于开始时间\n请重新选择',
+                    invalidDatePrompt: '不在有效日期或时间范围内\n',
+                    formatErrorPrompt: '日期格式不合法\n必须遵循：\n{format}\n',
+                    autoResetPrompt: '已自动重置',
+                    preview: '当前选中的结果'
+                },
+                layer: {
+                    confirm: '确定',
+                    cancel: '取消',
+                    defaultTitle: '信息',
+                    prompt: {
+                        inputLengthPrompt: '最多输入 {length} 个字符'
+                    },
+                    photos: {
+                        noData: '没有图片',
+                        tools: {
+                            rotate: '旋转',
+                            scaleX: '水平变换',
+                            zoomIn: '放大',
+                            zoomOut: '缩小',
+                            reset: '还原',
+                            close: '关闭'
+                        },
+                        viewPicture: '查看原图',
+                        urlError: {
+                            prompt: '当前图片地址异常，\n是否继续查看下一张？',
+                            confirm: '下一张',
+                            cancel: '不看了'
+                        }
+                    }
+                },
+                laypage: {
+                    prev: '上一页',
+                    next: '下一页',
+                    first: '首页',
+                    last: '尾页',
+                    total: '共 {total} 条',
+                    pagesize: '条/页',
+                    goto: '到第',
+                    page: '页',
+                    confirm: '确定'
+                },
+                table: {
+                    sort: {
+                        asc: '升序',
+                        desc: '降序'
+                    },
+                    noData: '暂无数据',
+                    tools: {
+                        filter: {
+                            title: '筛选列'
+                        },
+                        export: {
+                            title: '导出',
+                            noDataPrompt: '当前表格无数据',
+                            compatPrompt: '导出功能不支持 IE，请用 Chrome 等高级浏览器导出',
+                            csvText: '导出 CSV 文件'
+                        },
+                        print: {
+                            title: '打印',
+                            noDataPrompt: '当前表格无数据'
+                        }
+                    },
+                    dataFormatError: '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
+                    xhrError: '请求异常，错误提示：{msg}'
+                },
+                transfer: {
+                    noData: '暂无数据',
+                    noMatch: '无匹配数据',
+                    title: ['列表一', '列表二'],
+                    searchPlaceholder: '关键词搜索'
+                },
+                tree: {
+                    defaultNodeName: '未命名',
+                    noData: '暂无数据',
+                    deleteNodePrompt: '确认删除"{name}"节点吗？'
+                },
+                upload: {
+                    fileType: {
+                        file: '文件',
+                        image: '图片',
+                        video: '视频',
+                        audio: '音频'
+                    },
+                    validateMessages: {
+                        fileExtensionError: '选择的{fileType}中包含不支持的格式',
+                        filesOverLengthLimit: '同时最多只能上传: {length} 个文件',
+                        currentFilesLength: '当前已经选择了: {length} 个文件',
+                        fileOverSizeLimit: '文件大小不能超过 {size}'
+                    },
+                    chooseText: '{length} 个文件'
+                },
+                util: {
+                    timeAgo: {
+                        days: '{days} 天前',
+                        hours: '{hours} 小时前',
+                        minutes: '{minutes} 分钟前',
+                        future: '未来',
+                        justNow: '刚刚'
+                    },
+                    toDateString: {
+                        // https://www.unicode.org/cldr/charts/47/supplemental/day_periods.html
+                        meridiem: function (hours, minutes) {
+                            var hm = hours * 100 + minutes;
+                            if (hm < 500) {
+                                return '凌晨';
+                            } else if (hm < 800) {
+                                return '早上';
+                            } else if (hm < 1200) {
+                                return '上午';
+                            } else if (hm < 1300) {
+                                return '中午';
+                            } else if (hm < 1900) {
+                                return '下午';
+                            }
+                            return '晚上';
+                        }
+                    }
+                }
+            },
+        }
+    }
+
+    var i18nDataList = i18nData.messages[localStorage.getItem('layui-i18n-local-test') || 'zh-CN'].js
+
+    i18n.set(i18nData);
+
+
+    const template = $('#template').html();
+    const templatehtml = laytpl(template, { tagStyle: 'modern' }).render();
+    $('#root').html(templatehtml);
+
+
+
+
+    layui.config({
+        base: '../layuiadmin/'
+    }).extend({
+        index: 'lib/index'
+    }).use(['index', 'form'], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            laydate2 = layui.laydate,
+            form = layui.form;
+        var devices = layui.device();
+        var carInst;
+        var isPc = true;
+        if (devices.android === true || devices.ios === true) {
+            isPc = false;
+        }
+        if (isPc) {
+            $('.myMessage').hide()
+        }
+        var selectDay = 1;
+        var selectDayStr;
+        var selectDay2 = 1;
+        var selectDay2Str;
+        var re = true;
+        var indexLoad;
+        var isAdmin = $("#isAdmin").val();
+        var cashAmount = 0;
+        laydate.render({
+            elem: '#ID-laydate-start-date-1',
+            range: '~',
+            rangeLinked: true,
+            min:'2026-03-19',
+            max: '[[ dago(0) ]]',
+            done: function (value, date, endDate) {
+                selectDay = 4;
+                selectDayStr = value;
+                gettoday2();
+                $('#ID-laydate-start-date-1').removeClass('layui-border-blue').addClass('layui-border-blue');
+                $('.today').removeClass('layui-border-blue');
+                $('.yesterday').removeClass('layui-border-blue');
+                $('.last7days').removeClass('layui-border-blue');
+                $('.last30days').removeClass('layui-border-blue');
+            }
+        });
+        laydate2.render({
+            elem: '#ID-laydate-start-date-2',
+            range: '~',
+            rangeLinked: true,
+            min:'2026-03-19',
+            max: '[[ dago(0) ]]',
+            done: function (value, date, endDate) {
+                selectDay2 = 4;
+                selectDay2Str = value;
+                gettoday3();
+                $('#ID-laydate-start-date-2').removeClass('layui-border-blue').addClass('layui-border-blue');
+                $('.today2').removeClass('layui-border-blue');
+                $('.yesterday2').removeClass('layui-border-blue');
+                $('.last7days2').removeClass('layui-border-blue');
+                $('.last30days2').removeClass('layui-border-blue');
+            }
+        });
+        getMySystemBalance();
+        setCurData();
+        getSystemNotice();
+        getHomeMyOrderData();
+        RnameCertLayer();
+        function RnameCertLayer() {
+            let isRnameCert = $("#isRnameCert").val();
+            let certSwicth = $("#certSwicth").val();
+            if (certSwicth == "Y" && isRnameCert == "N" && isAdmin == 10) {
+                let tipsCertData = layui.sessionData('temp');
+                if (tipsCertData != null) {
+                    if (tipsCertData.noTipsCert == '1') {
+                        return false;
+                    }
+                }
+                layer.open({
+                    content: i18nDataList.RnameCertLayercontent ,
+                    btn: [i18nDataList.RnameCertLayerBtn1, i18nDataList.RnameCertLayerBtn2],
+                    btn1: function (index, layero, that) {
+                        layer.close(index);
+                        top.layui.index.openTabsPage('/User/MyInfo', i18nDataList.MyInfo);
+                    },
+                    btn2: function (index, layero, that) {
+                        layui.sessionData('temp', {
+                            key: 'noTipsCert',
+                            value: '1'
+                        });
+                    }
+                });
+
+            }
+        }
+        $.ajax({
+            type: "get",
+            url: "/api/UserApi/GetUserInfo",
+            dataType: 'json',
+            cache: false,
+            timeout: 60000,
+            error: function (xhr) { re = true; layer.msg(xhr.responseJSON.msg, { time: 2000 }, function (res) { }); },
+            beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1); },
+            success: function (data) {
+                re = true;
+                if (data.code > 0) {
+                    var bindEmail =  localStorage.getItem('bindEmail')
+                    if (!data.data.Email && bindEmail != 1 && data.data.IsSuper) {
+                        showBindEmailModal()
+                    }
+                }
+            },
+            complete: function (XMLHttpRequest) {
+                layer.close(indexLoad);
+            }
+        });
+        function showBindEmailModal() {
+            layer.open({
+                type: 1,
+                title: false, // 禁用默认标题，自定义头部样式
+                closeBtn: 1,
+                area: [isPc ? '520px' : '90%', 'auto'],
+                shadeClose: false,
+                content: `
+                    <div style="padding: 25px 30px;">
+                        <h3 style="font-size: 18px; color: #666; font-weight: bold; margin-bottom: 15px;">绑定邮箱</h3>
+                        <hr style="margin-bottom: 20px; border-top: 1px solid #eee;">
+
+                        <p style="color: #888; font-size: 13px; margin-bottom: 20px;">
+                            绑定邮箱后，可通过邮箱找回本系统登录密码和导出专用密码，建议立即绑定
+                        </p>
+
+                        <form class="layui-form" id="bind-email-form">
+                            <!-- 绑定邮箱输入行 -->
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 90px; height: 38px; line-height: 38px; background: #f2f2f2; border: 1px solid #e6e6e6; border-right: none; text-align: center; color: #555; font-size: 13px; shrink: 0;">
+                                    绑定邮箱
+                                </div>
+                                <input type="text" id="bind_email_prefix" placeholder="" autocomplete="off" class="layui-input" style="border-radius: 0; flex: 1;">
+                                <div style="width: 110px; margin-left: 10px;">
+                                    <select id="bind_email_suffix" lay-filter="emailSuffix">
+                                        <option value="@qq.com">@qq.com</option>
+                                        <option value="@163.com">@163.com</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 验证码输入行 -->
+                            <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                                <div style="width: 90px; height: 38px; line-height: 38px; background: #f2f2f2; border: 1px solid #e6e6e6; border-right: none; text-align: center; color: #555; font-size: 13px; shrink: 0;">
+                                    验证码
+                                </div>
+                                <input type="text" id="bind_email_code" placeholder="" autocomplete="off" class="layui-input" style="border-radius: 0; flex: 1;">
+                                <button type="button" class="layui-btn layui-btn-normal" id="send-bind-code-btn" style="margin-left: 10px; width: 110px; background-color: #1E9FFF;">
+                                    获取验证码
+                                </button>
+                            </div>
+
+                            <!-- 底部按钮操作栏 -->
+                            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;">
+                                <button type="button" class="layui-btn layui-btn-primary" id="cancel-bind-btn" style="width: 100px; border-color: #ccc; color: #666;">
+                                    暂不绑定
+                                </button>
+                                <button type="button" class="layui-btn layui-btn-normal" id="submit-bind-btn" style="width: 100px; background-color: #1E9FFF;">
+                                    完成绑定
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `,
+                success: function (layero, index) {
+                    // 重新渲染 select 下拉框
+                    layui.form.render('select');
+
+                    var timer = null;
+                    var countdown = 60;
+
+
+
+                    $('#send-bind-code-btn').on('click', function () {
+                        var prefix = $.trim($('#bind_email_prefix').val());
+                        var suffix = $('#bind_email_suffix').val();
+                        var fullEmail = prefix + suffix;
+
+                        if (!prefix) {
+                            layer.msg('请输入邮箱前缀', { icon: 5 });
+                            return;
+                        }
+
+                        var $btn = $(this);
+                        $btn.attr('disabled', true).addClass('layui-btn-disabled');
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/api/UserApi/SendEmailCode",
+                            contentType: "application/json",
+                            data: JSON.stringify({ "Email": fullEmail }),
+                            dataType: 'json',
+                            beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1); },
+                            success: function (res) {
+                                if (res.code>0) {
+                                    layer.msg('验证码已发送至邮箱，请查收');
+
+                                    var curTime = countdown;
+                                    $btn.text(curTime + 's后重发');
+                                    timer = setInterval(function () {
+                                        curTime--;
+                                        if (curTime <= 0) {
+                                            clearInterval(timer);
+                                            $btn.removeAttr('disabled').removeClass('layui-btn-disabled').text('获取验证码');
+                                        } else {
+                                            $btn.text(curTime + 's后重发');
+                                        }
+                                    }, 1000);
+                                } else {
+                                    layer.msg(res.msg || '发送失败，请重试');
+                                    $btn.removeAttr('disabled').removeClass('layui-btn-disabled').text('获取验证码');
+                                }
+                            },
+                            error: function () {
+                                layer.msg('网络请求异常');
+                                $btn.removeAttr('disabled').removeClass('layui-btn-disabled').text('获取验证码');
+                                layer.close(indexLoad);
+                            },
+                            complete: function (XMLHttpRequest) {
+                                layer.close(indexLoad);
+                            }
+                        });
+                    });
+
+                    $('#submit-bind-btn').on('click', function () {
+                        var prefix = $.trim($('#bind_email_prefix').val());
+                        var suffix = $('#bind_email_suffix').val();
+                        var fullEmail = prefix + suffix;
+                        var code = $.trim($('#bind_email_code').val());
+                        if (!code) {
+                            layer.msg('请输入验证码', { icon: 5 });
+                            return;
+                        }
+                        let model = {
+                            Email: fullEmail,
+                            Code: code,
+                        }
+                        $.ajax({
+                            type: "Post",
+                            url: "/api/UserApi/BindEmail",
+                            data: JSON.stringify(model),
+                            contentType: "application/json",
+                            dataType: 'json',
+                            cache: false,
+                            timeout: 60000,
+                            error: function (xhr) { re = true; layer.msg(xhr.responseJSON.msg, { time: 2000 }, function (res) { }); },
+                            beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1); },
+                            success: function (data) {
+                                re = true;
+                                if (data.code > 0) {
+                                    layer.msg('邮箱绑定成功！', { icon: 1, time: 1500 }, function () {
+                                        layer.close(index);
+                                    });
+                                } else {
+                                    layer.msg(res.msg || '验证码错误');
+                                }
+                            },
+                            complete: function (XMLHttpRequest) {
+                                layer.close(indexLoad);
+                            }
+                        });
+
+                    });
+
+                    $('#cancel-bind-btn').on('click', function () {
+                        layer.close(index);
+                    });
+                },
+
+                end: function () {
+                    localStorage.setItem('bindEmail',1)
+                }
+            });
+        }
+
+
+        function getMySystemBalance() {
+            $.ajax({
+                type: "POST",
+                url: "/UserAjax/GetMySystemAccBalance",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.code > 0) {
+                        $(".balance").html(data.msg + i18nDataList.yuan );
+                        $(".cashAmount").html(data.data + i18nDataList.yuan );
+                        cashAmount = data.data;
+                    }
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+        function setCurData() {
+            var curData = { "tabCache": true, "tabRefresh": false, "topMenuSet": false, "fullScreen": false, "pageAnim": true, "footSet": "on" };
+            layui.data('larryms', {
+                key: 'systemSet',
+                value: curData
+            });
+        }
+        function getSystemNotice() {
+            $.ajax({
+                type: "GET",
+                url: "/SystemAjax/GetSystemNoticeList",
+                data: { limit: 3 },
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.count > 0) {
+                        let list = data.data;
+                        let msgHtml = '';
+                        for (let i = 0; i < list.length; i++) {
+                            let item = list[i];
+                            msgHtml += '<li><a href="javascript:void(0)" class="viewNotice" data-id="' + item.id + '" data-content="' + item.content + '" data-title="' + item.title + '" title="' + item.title.substring(0, 50) + '">' + item.title.substring(0, 50) + '...</a></li>';
+                        }
+                        $(".systemNoticeUl").html(msgHtml);
+                    } else {
+                        $(".systemNoticeUl").html('<li style="color:#999">暂无公告</li>');
+                    }
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+        function getHomeMyOrderData() {
+            $.ajax({
+                type: "POST",
+                url: "/UserAjax/GetHomePageMyRecOrderTotalData",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.code > 0) {
+                        $('.orderCount').html(i18nDataList.orderCount + data.msg.orderCount + i18nDataList.bi );
+                        $('.orderFee').html(data.msg.orderFee + i18nDataList.yuan + '【 ' + i18nDataList.orderFee1 + data.msg.noSettCount + i18nDataList.bi +'/ ' + data.msg.noSettAmount  + i18nDataList.bi + ',' + i18nDataList.orderFee2 + data.msg.noComplateCount + i18nDataList.bi + '/' + i18nDataList.orderFee3 + data.msg.noComplateAmount + i18nDataList.yuan +'】');
+                    }
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+        $(document).on('click', '.refreshBabance', function () {
+            getMySystemBalance();
+        });
+        $(document).on('click', '.myMessage', function () {
+            window.parent.gameGroupFun()
+        });
+        $(document).on('click', '.viewNotice', function () {
+            var ids = $(this).attr('data-id');
+            var title = $(this).attr('data-title');
+            var content = $(this).attr('data-content');
+            layer.open({
+                title: i18nDataList.viewNotice+'：' + title.substring(0, 30) + '...',
+                type: 1,
+                skin: 'layui-layer-rim',
+                area: ['50%', '60%'],
+                content: '<div style="margin:10px 10px 10px 10px;font-size: 16px;padding: 10px 10px;color: #666;line-height: 30px;">' + content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, ' ') + '</div>'
+            });
+        });
+        $(document).on('click', '.getMyRecCode', function () {
+            $.ajax({
+                type: "POST",
+                url: "/UserAjax/GetMyRecommendCode",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    $(".myRecCode").html(data.msg);
+                    if (data.code > 0) {
+                        $(".getMyRecCode").hide();
+                    }
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+            return false;
+        });
+
+        var echartsApp = [];
+        var options;
+        var myChart
+        if (document.getElementById('Operation')) {
+            myChart = echarts.init(document.getElementById('Operation'));
+        }
+        var orderCountData = [];
+        var orderAmountData = [];
+        var daysData = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+        var staTitle = i18nDataList.staTitle1;
+        var orderFeeTitle = i18nDataList.orderFeeTitle1;
+        gettoday();
+        gettoday2();
+        gettoday3();
+        function gettoday() {
+            $.ajax({
+                type: "GET",
+                url: "/EmpAjax/GetHomeToDayOrderDataStatistics",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.code == 10) {
+                        daysData = data.remark;
+                        staTitle = i18nDataList.staTitle2;
+                        orderFeeTitle = i18nDataList.orderFeeTitle2;
+                    }
+                    orderCountData = data.msg;
+                    orderAmountData = data.data;
+                    getTodayStatis();
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+            return false;
+        }
+        function getTodayStatis() {
+            // 数据统计
+            options = {
+                title: {
+                    text: staTitle,
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 14
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['', '']
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    data: daysData
+                }],
+                yAxis: [{
+                    type: 'value'
+                }],
+                series: [{
+                    name: i18nDataList.getTodayStatisname,
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        normal: {
+                            areaStyle: {
+                                type: 'default'
+                            }
+                        }
+                    },
+                    data: orderCountData
+                }, {
+                    name: orderFeeTitle,
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        normal: {
+                            areaStyle: {
+                                type: 'default'
+                            }
+                        }
+                    },
+                    data: orderAmountData
+                }]
+            };
+            if (myChart) {
+                myChart.setOption(options);
+                window.onresize = function () {
+                    myChart.resize();
+                };
+            }
+        }
+        $(document).on('click', '.rankList', function () {
+            full = layer.open({
+                title: i18nDataList.rankList,
+                shade: [0.3, '#333'],
+                shadeClose: isPc ? true : false,
+                type: 2,
+                skin: 'layui-layer-lan',
+                anim: 8,
+                closeBtn: isPc ? 0 : 1,
+                maxmin: isPc ? false : true,
+                area: [isPc ? '38%' : '95%', isPc ? '90%' : '95%'],
+                content: '/Emp/recorderranking'
+            });
+            if (!isPc) {
+                layer.full(full);
+            }
+
+            return false;
+        });
+        function gettoday2() {
+            if (selectDayStr == 'undefined') {
+                selectDayStr = '';
+            }
+            if (isAdmin != 20) {
+                return false;
+            }
+            $.ajax({
+                type: "GET",
+                url: "/EmpAjax/GetMyDayOperationData?day=" + selectDay + '&stime=' + selectDayStr,
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 15000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    $('.pan1').html(data.data.addCount);
+                    $('.pan2').html(data.data.orderPrice.toFixed(1));
+                    $('.pan3').html(data.data.payPrice.toFixed(1));
+                    $('.pan4').html(data.data.profitAmount.toFixed(1));
+                    $('.pan5').html(data.data.profitRate + '%');
+                    $('.pan6').html(data.data.recOrderCount);
+                    $('.pan7').html(data.data.recOrderRate + '%');
+                    $('.pan8').html(data.data.cancelCount);
+                    $('.pan9').html(data.data.cancelOrderRate + '%');
+                    $('.pan10').html(data.data.refundCount + '(' + data.data.refundOrderRate + '%)');
+                    $('.pan12').html(data.data.finishCount);
+                    $('.pan13').html(data.data.finishOrderRate+'%');
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+            return false;
+        }
+        $(document).on('click', '.today', function () {
+            selectDay = 0;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.yesterday').removeClass('layui-border-blue');
+            $('.last7days').removeClass('layui-border-blue');
+            $('.last30days').removeClass('layui-border-blue');
+            gettoday2();
+        });
+        $(document).on('click', '.yesterday', function () {
+            selectDay = 1;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.today').removeClass('layui-border-blue');
+            $('.last7days').removeClass('layui-border-blue');
+            $('.last30days').removeClass('layui-border-blue');
+            gettoday2();
+        });
+        $(document).on('click', '.last7days', function () {
+            selectDay = 2;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.today').removeClass('layui-border-blue');
+            $('.yesterday').removeClass('layui-border-blue');
+            $('.last30days').removeClass('layui-border-blue');
+            gettoday2();
+        });
+        $(document).on('click', '.last30days', function () {
+            selectDay = 3;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.today').removeClass('layui-border-blue');
+            $('.yesterday').removeClass('layui-border-blue');
+            $('.last7days').removeClass('layui-border-blue');
+            gettoday2();
+        });
+        function gettoday3() {
+            if (selectDay2Str == 'undefined') {
+                selectDay2Str = '';
+            }
+            if (isAdmin != 20) {
+                return false;
+            }
+            $.ajax({
+                type: "GET",
+                url: "/EmpAjax/GetHomePushOrderOperateReport?day=" + selectDay2 + '&stime=' + selectDay2Str,
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 15000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    let html = '';
+                    $(".pushorderdatadiv").html('');
+                    html += '<div class="layui-col-xs4 layui-col-md1 layui-col-sm3">';
+                    html += '<div class="layui-panel">';
+                    html += '<div style="padding:15px;">';
+                    html += '<span>' + i18nDataList.pushOrderAllSpan +'</span><br />';
+                    html += '<span class="reportPanTitle pushOrderAllSpan">' + data.code + '</span>';
+                    html += '</div></div></div>';
+
+                    html += '<div class="layui-col-xs4 layui-col-md1 layui-col-sm3">';
+                    html += '<div class="layui-panel">';
+                    html += '<div style="padding:15px;">';
+                    html += '<span>' + i18nDataList.pushOrderInternalSpan +'</span><br />';
+                    html += '<span class="reportPanTitle pushOrderInternalSpan">' + data.internalCount + '</span>';
+                    html += '</div></div></div>';
+
+                    $.each(data.data, function (index, item) {
+                        html += '<div class="layui-col-xs4 layui-col-md1 layui-col-sm3">';
+                        html += '<div class="layui-panel">';
+                        html += '<div style="padding:15px;">';
+                        html += '<span>'+item.str2+'</span><br />';
+                        html += '<span class="reportPanTitle pushOrderptSpan">' + item.id + '</span>';
+                        html += '</div></div></div>';
+                    });
+                    html += '';
+                    $(".pushorderdatadiv").html(html);
+                    form.render();
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+            return false;
+        }
+        $(document).on('click', '.today2', function () {
+            selectDay2 = 0;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.yesterday2').removeClass('layui-border-blue');
+            $('.last7days2').removeClass('layui-border-blue');
+            $('.last30days2').removeClass('layui-border-blue');
+            gettoday3();
+        });
+        $(document).on('click', '.yesterday2', function () {
+            selectDay2 = 1;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.today2').removeClass('layui-border-blue');
+            $('.last7days2').removeClass('layui-border-blue');
+            $('.last30days2').removeClass('layui-border-blue');
+            gettoday3();
+        });
+        $(document).on('click', '.last7days2', function () {
+            selectDay2 = 2;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.today2').removeClass('layui-border-blue');
+            $('.yesterday2').removeClass('layui-border-blue');
+            $('.last30days2').removeClass('layui-border-blue');
+            gettoday3();
+        });
+        $(document).on('click', '.last30days2', function () {
+            selectDay2 = 3;
+            $(this).removeClass('layui-border-blue').addClass('layui-border-blue');
+            $('.today2').removeClass('layui-border-blue');
+            $('.yesterday2').removeClass('layui-border-blue');
+            $('.last7days2').removeClass('layui-border-blue');
+            gettoday3();
+        });
+    });
+</script>
+
+</body>
+</html>

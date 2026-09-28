@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>[[ company ]]管理系统</title>
+    <link rel="icon" type="image/svg+xml" href="/brand-mark.svg">
+    <meta name="keywords" content="" />
+    <meta name="description" content="本系统为[[ company ]]内部专用管理系统，不对外开放浏览" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=4" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+<script src="/JS2019/local_msg_poll.js?v=4"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-side-menu .layui-nav .layui-nav-item a {
+        height: 35px;
+        line-height: 35px;
+        padding-left: 45px;
+        padding-right: 30px;
+    }
+
+    .layui-nav-child dd {
+        position: relative;
+        margin-left: 20px;
+    }
+
+    .layadmin-pagetabs .layui-icon-refresh-1 {
+        left: 0;
+        border-left: none;
+        border-right: 1px solid #f6f6f6;
+        color: #ff0000
+    }
+
+    .layadmin-pagetabs .layui-icon-refresh-3 {
+        right: 40px;
+        color: #ff0000
+    }
+
+    .drapbox {
+        display: block;
+        left: 200px;
+    }
+
+    .privateServerXY p {
+        font-size: 12px;
+        line-height: 25px;
+        margin: 10px 10px;
+    }
+
+    .meSystemInsideNotityDiv p {
+        font-size: 12px;
+        line-height: 25px;
+        margin: 10px 10px;
+    }
+
+    #dragBtn {
+        position: fixed;
+        right: 30px;
+        bottom: 30px;
+        width: 40px;
+        height: 40px;
+        background: #409eff;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        z-index: 9999;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .blink1s {
+      animation: blink1 1s infinite;
+    }
+
+    @keyframes blink1 {
+      0%,100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+}
+</style>
+<link rel="stylesheet" href="/layuiadmin/lib/extend/notice.css"/>
+<div id="root">
+    
+
+    <template id="template">
+        {{ const i18n = layui.i18n; }}
+        <div id="LAY_app">
+            <div class="layui-layout layui-layout-admin">
+                <div class="layui-header">
+                    <!-- 头部区域 -->
+                    <ul class="layui-nav layui-layout-left">
+                        <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                            <a href="javascript:;" layadmin-event="flexible" title="收缩左侧菜单">
+                                <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect>
+                            <a href="javascript:;" layadmin-event="refresh" title="刷新当前页面">
+                                <i class="layui-icon layui-icon-refresh-3"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+                        
+                        
+                        <li class="layui-nav-item layui-hide-xs gameGroup" lay-unselect style="display:none">
+                            <a layadmin-event="" lay-text="{{= i18n.$t('topNav.chat') }}" class="">
+                                <i class="layui-icon layui-icon-group"></i>
+                                {{= i18n.$t('topNav.chat') }}
+                            </a>
+                            <span class="layui-badge-dot" style="right:3px;display:none"></span>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                            <a lay-href="/home/blacklistplan" layadmin-event="" title="{{= i18n.$t('topNav.blacklistplanTip') }}" lay-text="{{= i18n.$t('topNav.blacklistplan') }}" class="">
+                                <i class="layui-icon layui-icon-face-surprised"></i>
+                                {{= i18n.$t('topNav.blacklistplan') }}
+                            </a>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs  circle" lay-unselect>
+                            <a href="javascript::" layadmin-event="" title="{{= i18n.$t('topNav.FindHomeTip') }}" target="">
+                                <i class="layui-icon layui-icon-component" style="color:#FF5722"></i>
+                                {{= i18n.$t('topNav.FindHome') }}
+                            </a>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs [% if flags.hideFindWork %] layui-hide[% endif %]" lay-unselect>
+                            <a href="https://www.jidanpu.com/work/" layadmin-event="" title="{{= i18n.$t('topNav.findwork') }}" target="_blank">
+                                <i class="layui-icon layui-icon-link"></i>
+                                {{= i18n.$t('topNav.findwork') }}
+                            </a>
+                        </li>
+                        
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                            <a lay-href="/User/mymessage" layadmin-event="message" title="{{= i18n.$t('topNav.mymessageTip') }}" lay-text="{{= i18n.$t('topNav.mymessageText') }}" class="msg">
+                                <i class="layui-icon layui-icon-notice"></i>{{= i18n.$t('topNav.mymessage') }}
+                            </a>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                            <a href="javascript:;" layadmin-event="theme" title="{{= i18n.$t('topNav.theme') }}">
+                                <i class="layui-icon layui-icon-theme"></i>{{= i18n.$t('topNav.theme') }}
+                            </a>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                            <a href="javascript:;" layadmin-event="note" title="{{= i18n.$t('topNav.note') }}">
+                                <i class="layui-icon layui-icon-note"></i>{{= i18n.$t('topNav.note') }}
+                            </a>
+                        </li>
+                        
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                            <a href="javascript:;">
+                                <cite>{{= i18n.$t('topNav.language') }}</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd style="color:#333;cursor:pointer" class="switchLanguage" data-id="zh-CN">中文</dd>
+                                <dd style="color: #333; cursor: pointer" class="switchLanguage" data-id="en">English</dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect>
+                            <a href="javascript:;">
+                                <cite>[[ user.name ]]([[ user.jobName ]])</cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd><a lay-href="/User/myinfo">{{= i18n.$t('topNav.myinfo') }}</a></dd>
+                                <dd><a class="putKeyword">{{= i18n.$t('topNav.putKeyword') }}</a></dd>
+
+                                <dd style="text-align: center;"><a href="/Login/loginout" lay-tips="{{= i18n.$t('topNav.loginout') }}" class="loginout">{{= i18n.$t('topNav.loginout') }}</a></dd>
+                            </dl>
+                        </li>
+
+                        <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                            <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                        </li>
+                        <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                            <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 侧边菜单 -->
+                <div class="layui-side layui-side-menu">
+                    <div class="layui-side-scroll">
+                        <div class="layui-logo" style="color:#ffffff;font-weight:600">
+                            <img src="/brand-mark.svg" alt="" width="30" height="30" style="vertical-align:middle;margin-right:8px"><span class="btn">[[ company ]]</span>
+                        </div>
+                        <div class="photo" style="text-align:center;margin-top:70px">
+                            <a href="javascript:;" lay-href="/User/myinfo" lay-tips="{{= i18n.$t('topNav.myinfo') }}" lay-text="{{= i18n.$t('topNav.myinfo') }}" lay-direction="2">
+                                <img height="72" class="layui-circle" src="/images/user.jpg" id="user_photo" alt="{{= i18n.$t('topNav.myinfoTip') }}">
+                                <cite class="layui-hide">{{= i18n.$t('topNav.myinfo') }}</cite>
+                            </a>
+                            <p style="margin-top:10px"><span class="userName" style="font-size:14px">[[ user.name ]][[ '[' ~ user.jobName ~ ']' ]]</span></p>
+
+                            
+                        </div>
+                        <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu" style="margin-top:10px">
+                            <li data-name="home" class="layui-nav-item layui-nav-itemed layui-this[% if not can("/Index/console") %] layui-hide[% endif %]">
+                                <a href="javascript:;" lay-href="/Index/console" lay-text="{{= i18n.$t('leftNav.homepage') }}" lay-direction="2">
+                                    <i class="layui-icon layui-icon-home"></i>
+                                    <cite>{{= i18n.$t('leftNav.homepage') }}</cite>
+                                </a>
+                            </li>
+                            <li data-name="myorder" class="layui-nav-item [% if not can("/Order/myorderlist") %] layui-hide[% endif %]">
+                                <a href="javascript:;" lay-href="/Order/myorderlist" lay-text="{{= i18n.$t('leftNav.myorderlist') }}" lay-direction="2">
+                                    <i class="layui-icon layui-icon-list"></i>
+                                    <cite>{{= i18n.$t('leftNav.myorderlist') }}</cite>
+                                </a>
+                            </li>
+                            <li data-name="mytask" class="layui-nav-item[% if not can("/Group/mygroup") %] layui-hide[% endif %]">
+                                <a href="javascript:;" lay-href="/Group/mygroup" lay-text="我参与的排团" lay-direction="2">
+                                    <i class="layui-icon layui-icon-templeate-1"></i>
+                                    <cite>我参与的排团</cite>
+                                </a>
+                            </li>
+                            <li data-name="recorder" class="layui-nav-item [% if not can("/Order/insiderecorderlist") %] layui-hide[% endif %]">
+                                <a href="javascript:;" lay-href="/Order/insiderecorderlist" lay-text="{{= i18n.$t('leftNav.insiderecorderlist') }}" lay-direction="2">
+                                    <i class="layui-icon layui-icon-template"></i>
+                                    <cite>{{= i18n.$t('leftNav.insiderecorderlist') }}</cite>
+                                </a>
+                            </li>
+
+
+
+                            <li data-name="aboutme" class="layui-nav-item[% if not (can("/Emp/myemp") or can("/Emp/mybillsummary") or can("/User/myinfo") or can("/User/mymessage") or can("/Order/exceptionorderlog")) %] layui-hide[% endif %]">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-menu-fill"></i>
+                                    <cite>{{= i18n.$t('leftNav.myabout') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/Emp/myemp") %][% if can("/Emp/myemp") %]<dd>
+                                        <a lay-href="/Emp/myemp" lay-text="{{= i18n.$t('leftNav.myemp') }}" class="">
+                                            <i class="layui-icon layui-icon-rmb"></i>
+                                            <cite>{{= i18n.$t('leftNav.myemp') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/mybillsummary") %][% if can("/Emp/mybillsummary") %]<dd>
+                                        <a lay-href="/Emp/mybillsummary" lay-text="{{= i18n.$t('leftNav.mybillsummary') }}" class="">
+                                            <i class="layui-icon layui-icon-dollar"></i>
+                                            <cite>{{= i18n.$t('leftNav.mybillsummary') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/myinfo") %][% if can("/User/myinfo") %]<dd>
+                                        <a lay-href="/User/myinfo" lay-text="{{= i18n.$t('leftNav.myinfo') }}" class="">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>{{= i18n.$t('leftNav.myinfo') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/mymessage") %][% if can("/User/mymessage") %]<dd>
+                                        <a lay-href="/User/mymessage" lay-text="{{= i18n.$t('leftNav.mymessage') }}">
+                                            <i class="layui-icon layui-icon-speaker"></i>
+                                            <cite>{{= i18n.$t('leftNav.mymessage') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/exceptionorderlog") %][% if can("/Order/exceptionorderlog") %]<dd>
+                                        <a lay-href="/Order/exceptionorderlog" lay-text="{{= i18n.$t('leftNav.exceptionorderlog') }}">
+                                            <i class="layui-icon layui-icon-tips-fill"></i>
+                                            <cite>{{= i18n.$t('leftNav.exceptionorderlog') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="ordermange" class="layui-nav-item layui-nav-itemed ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-form"></i>
+                                    <cite>{{= i18n.$t('leftNav.order') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/Order/addorder") %][% if can("/Order/addorder") %]<dd>
+                                        <a lay-href="/Order/addorder" lay-text="{{= i18n.$t('leftNav.addorder') }}" class="">
+                                            <i class="layui-icon layui-icon-add-1"></i>
+                                            <cite>{{= i18n.$t('leftNav.addorder') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/orderlist") %][% if can("/Order/orderlist") %]<dd>
+                                        <a lay-href="/Order/orderlist" lay-text="{{= i18n.$t('leftNav.orderlist') }}" class="">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>{{= i18n.$t('leftNav.orderlist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+
+
+
+                                    
+                                    [% if can("/Order/CoreOrderCenter") %][% if can("/Order/CoreOrderCenter") %]<dd>
+                                        <a lay-href="/Order/CoreOrderCenter" lay-text="交易平台订单处理" class="">
+                                            <i class="layui-icon layui-icon-spread-left"></i>
+                                            <cite>交易平台订单处理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/JdpShopOrderList") %][% if can("/Order/JdpShopOrderList") %]<dd>
+                                        <a lay-href="/Order/JdpShopOrderList" lay-text="平台商铺订单" class="layui-hide">
+                                            <i class="layui-icon layui-icon-website"></i>
+                                            <cite>平台商铺订单</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/ClientOrderGenerate") %][% if can("/Order/ClientOrderGenerate") %]<dd>
+                                        <a lay-href="/Order/ClientOrderGenerate" lay-text="客户填单生成" class="">
+                                            <i class="layui-icon layui-icon-spread-left"></i>
+                                            <cite>客户填单生成</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/clientreviews") %][% if can("/Order/clientreviews") %]<dd>
+                                        <a lay-href="/Order/clientreviews" lay-text="客户评价" class="">
+                                            <i class="layui-icon layui-icon-rate"></i>
+                                            <cite>客户评价</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/aftersales") %][% if can("/Order/aftersales") %]<dd>
+                                        <a lay-href="/Order/aftersales" lay-text="售后处理" class="">
+                                            <i class="layui-icon layui-icon-survey"></i>
+                                            <cite>售后处理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    
+                                    [% if can("/Order/orderrecycle") %][% if can("/Order/orderrecycle") %]<dd>
+                                        <a lay-href="/Order/orderrecycle" lay-text="{{= i18n.$t('leftNav.orderrecycle') }}" class="">
+                                            <i class="layui-icon layui-icon-delete"></i>
+                                            <cite>{{= i18n.$t('leftNav.orderrecycle') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/TradingOrderActionLogList") %][% if can("/Order/TradingOrderActionLogList") %]<dd>
+                                        <a lay-href="/Order/TradingOrderActionLogList" lay-text="交易订单操作记录" class="">
+                                            <i class="layui-icon layui-icon-template"></i>
+                                            <cite>交易订单操作记录</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Order/tbsendrecordlist") %][% if can("/Order/tbsendrecordlist") %]<dd>
+                                        <a lay-href="/Order/tbsendrecordlist" lay-text="{{= i18n.$t('leftNav.tbsendrecordlist') }}" class="">
+                                            <i class="layui-icon layui-icon-date"></i>
+                                            <cite>{{= i18n.$t('leftNav.tbsendrecordlist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    [% if can("/Order/SoureOrderChangePriceLog") %][% if can("/Order/SoureOrderChangePriceLog") %]<dd>
+                                        <a lay-href="/Order/SoureOrderChangePriceLog" lay-text="{{= i18n.$t('leftNav.SoureOrderChangePriceLog') }}" class="">
+                                            <i class="layui-icon layui-icon-transfer"></i>
+                                            <cite>{{= i18n.$t('leftNav.SoureOrderChangePriceLog') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    [% if can("/Order/RecCustomerChatLog") %][% if can("/Order/RecCustomerChatLog") %]<dd>
+                                        <a lay-href="/Order/RecCustomerChatLog" lay-text="打手玩家对聊管理" class="layui-hide">
+                                            <i class="layui-icon layui-icon-reply-fill"></i>
+                                            <cite>打手玩家对聊管理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    
+                                </dl>
+                            </li>
+                            <li data-name="taskmange" class="layui-nav-item layui-hide">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-template"></i>
+                                    <cite>游戏排团</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/Group/addeditgroup") %][% if can("/Group/addeditgroup") %]<dd>
+                                        <a lay-href="/Group/addeditgroup" lay-text="新建排团" class="">
+                                            <i class="layui-icon layui-icon-add-1"></i>
+                                            <cite>新建排团</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Group/grouplist") %][% if can("/Group/grouplist") %]<dd>
+                                        <a lay-href="/Group/grouplist" lay-text="旧版排团" class="">
+                                            <i class="layui-icon layui-icon-date"></i>
+                                            <cite>旧版排团</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Group/grouplist2020") %][% if can("/Group/grouplist2020") %]<dd>
+                                        <a lay-href="/Group/grouplist2020" lay-text="2021版排团" class="">
+                                            <i class="layui-icon layui-icon-app"></i>
+                                            <cite>2021版排团</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Group/grouplist2025") %][% if can("/Group/grouplist2025") %]<dd>
+                                        <a lay-href="/Group/grouplist2025" lay-text="2025版排团" class="">
+                                            <i class="layui-icon layui-icon-app"></i>
+                                            <cite>2025版排团</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    <dd class="layui-hide">
+                                        <a lay-href="/Group/jdppublictask" lay-text="看公开的排团坑位" class="">
+                                            <i class="layui-icon layui-icon-template"></i>
+                                            <cite>看公开的排团坑位</cite>
+                                        </a>
+                                    </dd>
+                                </dl>
+                            </li>
+                            <li data-name="gameaccmange" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-layer"></i>
+                                    <cite>游戏号库</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/GameAccounts/addeditaccount") %][% if can("/GameAccounts/addeditaccount") %]<dd>
+                                        <a lay-href="/GameAccounts/addeditaccount" lay-text="新增游戏号" class="">
+                                            <i class="layui-icon layui-icon-layer"></i>
+                                            <cite>新增游戏号</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/GameAccounts/importacc") %][% if can("/GameAccounts/importacc") %]<dd>
+                                        <a lay-href="/GameAccounts/importacc" lay-text="导入内部游戏号" class="">
+                                            <i class="layui-icon layui-icon-upload"></i>
+                                            <cite>导入内部游戏号</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/GameAccounts/accountlist") %][% if can("/GameAccounts/accountlist") %]<dd>
+                                        <a lay-href="/GameAccounts/accountlist" lay-text="游戏号管理" class="">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>管理内部账号</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/GameAccounts/sellaccpreview") %][% if can("/GameAccounts/sellaccpreview") %]<dd>
+                                        <a lay-href="/GameAccounts/sellaccpreview" lay-text="售卖账号预览板" class="">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>售卖账号预览板</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/GameAccounts/myaccountlist") %][% if can("/GameAccounts/myaccountlist") %]<dd>
+                                        <a lay-href="/GameAccounts/myaccountlist" lay-text="指定给我的账号" class="">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>指定给我的账号</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="usermange" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-group"></i>
+                                    <cite>{{= i18n.$t('leftNav.User') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/User/adduser") %][% if can("/User/adduser") %]<dd>
+                                        <a lay-href="/User/adduser" lay-text="{{= i18n.$t('leftNav.adduser') }}" class="">
+                                            <i class="layui-icon layui-icon-username"></i>
+                                            <cite>{{= i18n.$t('leftNav.adduser') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/userlist") %][% if can("/User/userlist") %]<dd>
+                                        <a lay-href="/User/userlist" lay-text="{{= i18n.$t('leftNav.userlist') }}" class="">
+                                            <i class="layui-icon layui-icon-group"></i>
+                                            <cite>{{= i18n.$t('leftNav.userlist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/ApplyOnboardingMange") %][% if can("/User/ApplyOnboardingMange") %]<dd>
+                                        <a lay-href="/User/ApplyOnboardingMange" lay-text="{{= i18n.$t('leftNav.ApplyOnboardingMange') }}" class="">
+                                            <i class="layui-icon layui-icon-group"></i>
+                                            <cite>{{= i18n.$t('leftNav.ApplyOnboardingMange') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/checkinlog") %][% if can("/User/checkinlog") %]<dd>
+                                        <a lay-href="/User/checkinlog" lay-text="{{= i18n.$t('leftNav.checkinlog') }}" class="">
+                                            <i class="layui-icon layui-icon-date"></i>
+                                            <cite>{{= i18n.$t('leftNav.checkinlog') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/checkinstatic") %][% if can("/User/checkinstatic") %]<dd>
+                                        <a lay-href="/User/checkinstatic" lay-text="{{= i18n.$t('leftNav.checkinstatic') }}" class="">
+                                            <i class="layui-icon layui-icon-chart-screen"></i>
+                                            <cite>{{= i18n.$t('leftNav.checkinstatic') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/userloginrestrict") %][% if can("/User/userloginrestrict") %]<dd>
+                                        <a lay-href="/User/userloginrestrict" lay-text="{{= i18n.$t('leftNav.userloginrestrict') }}" class="">
+                                            <i class="layui-icon layui-icon-group"></i>
+                                            <cite>{{= i18n.$t('leftNav.userloginrestrict') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/BackUserList") %][% if can("/User/BackUserList") %]<dd>
+                                        <a lay-href="/User/BackUserList" lay-text="{{= i18n.$t('leftNav.BackUserList') }}" class="">
+                                            <i class="layui-icon layui-icon-friends"></i>
+                                            <cite>{{= i18n.$t('leftNav.BackUserList') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/RnameCertLogAndSetting") %][% if can("/User/RnameCertLogAndSetting") %]<dd>
+                                        <a lay-href="/User/RnameCertLogAndSetting" lay-text="人员实名记录与配置" class="">
+                                            <i class="layui-icon layui-icon-auz"></i>
+                                            <cite>人员实名记录与配置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/UserContractSigning") %][% if can("/User/UserContractSigning") %]<dd>
+                                        <a lay-href="/User/UserContractSigning" lay-text="员工电子合同管理" class="">
+                                            <i class="layui-icon layui-icon-auz"></i>
+                                            <cite>员工电子合同管理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="emp" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-rmb"></i>
+                                    <cite>{{= i18n.$t('leftNav.Emp') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/Emp/emplist") %][% if can("/Emp/emplist") %]<dd>
+                                        <a lay-href="/Emp/emplist" lay-text="{{= i18n.$t('leftNav.emplist') }}" class="">
+                                            <i class="layui-icon layui-icon-rmb"></i>
+                                            <cite>{{= i18n.$t('leftNav.emplist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/billsummary") %][% if can("/Emp/billsummary") %]<dd>
+                                        <a lay-href="/Emp/billsummary" lay-text="{{= i18n.$t('leftNav.billsummary') }}" class="">
+                                            <i class="layui-icon layui-icon-dollar"></i>
+                                            <cite>{{= i18n.$t('leftNav.billsummary') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/onlinepaytorecdetail") %][% if can("/Emp/onlinepaytorecdetail") %]<dd>
+                                        <a lay-href="/Emp/onlinepaytorecdetail" lay-text="在线结算明细" class="">
+                                            <i class="layui-icon layui-icon-rmb"></i>
+                                            <cite>在线结算明细</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/salesmanstatistics") %][% if can("/Emp/salesmanstatistics") %]<dd>
+                                        <a lay-href="/Emp/salesmanstatistics" lay-text="客服接发单统计" class="">
+                                            <i class="layui-icon layui-icon-chart-screen"></i>
+                                            <cite>客服接发单统计</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/dayoperation") %][% if can("/Emp/dayoperation") %]<dd>
+                                        <a lay-href="/Emp/dayoperation" lay-text="{{= i18n.$t('leftNav.dayoperation') }}" class="">
+                                            <i class="layui-icon layui-icon-chart-screen"></i>
+                                            <cite>{{= i18n.$t('leftNav.dayoperation') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/booklist") %][% if can("/Emp/booklist") %]<dd>
+                                        <a lay-href="/Emp/booklist" lay-text="{{= i18n.$t('leftNav.booklist') }}" class="">
+                                            <i class="layui-icon layui-icon-read"></i>
+                                            <cite>{{= i18n.$t('leftNav.booklist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/learminformationlist") %][% if can("/Emp/learminformationlist") %]<dd>
+                                        <a lay-href="/Emp/learminformationlist" lay-text="{{= i18n.$t('leftNav.learminformationlist') }}" class="">
+                                            <i class="layui-icon layui-icon-template-1"></i>
+                                            <cite>{{= i18n.$t('leftNav.learminformationlist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/privatephonecalllog") %][% if can("/Emp/privatephonecalllog") %]<dd>
+                                        <a lay-href="/Emp/privatephonecalllog" lay-text="虚拟号码通话记录" class="">
+                                            <i class="layui-icon layui-icon-align-center"></i>
+                                            <cite>虚拟号码通话记录</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/qacenter") %][% if can("/Emp/qacenter") %]<dd>
+                                        <a lay-href="/Emp/qacenter" lay-text="{{= i18n.$t('leftNav.qacenter') }}" class="">
+                                            <i class="layui-icon layui-icon-face-surprised"></i>
+                                            <cite>{{= i18n.$t('leftNav.qacenter') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/funddetailslist") %][% if can("/Emp/funddetailslist") %]<dd>
+                                        <a lay-href="/Emp/funddetailslist" lay-text="平台资金明细与提现" class="">
+                                            <i class="layui-icon layui-icon-rmb"></i>
+                                            <cite>平台资金明细与提现</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="customer" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-group"></i>
+                                    <cite>{{= i18n.$t('leftNav.Customer') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/Customer/customerlist") %][% if can("/Customer/customerlist") %]<dd>
+                                        <a lay-href="/Customer/customerlist" lay-text="{{= i18n.$t('leftNav.customerlist') }}" class="">
+                                            <i class="layui-icon layui-icon-group"></i>
+                                            <cite>{{= i18n.$t('leftNav.customerlist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    [% if can("/Customer/hyfundetailslist") %][% if can("/Customer/hyfundetailslist") %]<dd>
+                                        <a lay-href="/Customer/hyfundetailslist" lay-text="{{= i18n.$t('leftNav.hyfundetailslist') }}" class="">
+                                            <i class="layui-icon layui-icon-friends"></i>
+                                            <cite>{{= i18n.$t('leftNav.hyfundetailslist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    [% if can("/Customer/hylevelsetting") %][% if can("/Customer/hylevelsetting") %]<dd>
+                                        <a lay-href="/Customer/hylevelsetting" lay-text="{{= i18n.$t('leftNav.hylevelsetting') }}" class="">
+                                            <i class="layui-icon layui-icon-friends"></i>
+                                            <cite>{{= i18n.$t('leftNav.hylevelsetting') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    [% if can("/Customer/hyanalysisreport") %][% if can("/Customer/hyanalysisreport") %]<dd>
+                                        <a lay-href="/Customer/hyanalysisreport" lay-text="{{= i18n.$t('leftNav.hyanalysisreport') }}" class="">
+                                            <i class="layui-icon layui-icon-chart-screen"></i>
+                                            <cite>{{= i18n.$t('leftNav.hyanalysisreport') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                    [% if can("/Customer/backlist") %][% if can("/Customer/backlist") %]<dd>
+                                        <a lay-href="/Customer/backlist" lay-text="{{= i18n.$t('leftNav.backlist') }}" class="">
+                                            <i class="layui-icon layui-icon-friends"></i>
+                                            <cite>{{= i18n.$t('leftNav.backlist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+
+                                </dl>
+                            </li>
+                            <li data-name="gamemange" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-engine"></i>
+                                    <cite>{{= i18n.$t('leftNav.Game') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/Game/gameserver") %][% if can("/Game/gameserver") %]<dd>
+                                        <a lay-href="/Game/gameserver" lay-text="{{= i18n.$t('leftNav.gameserver') }}" class="">
+                                            <i class="layui-icon layui-icon-engine"></i>
+                                            <cite>{{= i18n.$t('leftNav.gameserver') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Game/OrderTypsSetting") %][% if can("/Game/OrderTypsSetting") %]<dd>
+                                        <a lay-href="/Game/OrderTypsSetting" lay-text="{{= i18n.$t('leftNav.OrderTypsSetting') }}" class="">
+                                            <i class="layui-icon layui-icon-align-right"></i>
+                                            <cite>{{= i18n.$t('leftNav.OrderTypsSetting') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Game/projectsetting") %][% if can("/Game/projectsetting") %]<dd>
+                                        <a lay-href="/Game/projectsetting" lay-text="{{= i18n.$t('leftNav.projectsetting') }}" class="">
+                                            <i class="layui-icon layui-icon-templeate-1"></i>
+                                            <cite>{{= i18n.$t('leftNav.projectsetting') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    <dd style="layui-hide" class="">
+                                        <a lay-href="/Game/gameitemlist" lay-text="游戏物品">
+                                            <i class="layui-icon layui-icon-align-left"></i>
+                                            <cite>游戏物品管理</cite>
+                                        </a>
+                                    </dd>
+                                    <dd style="">
+                                        <a lay-href="/Game/pricecalculator" lay-text="游戏报价计算器" class="">
+                                            <i class="layui-icon layui-icon-app"></i>
+                                            <cite>游戏报价计算器</cite>
+                                        </a>
+                                    </dd>
+                                </dl>
+                            </li>
+
+                            <li data-name="sms" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-cellphone"></i>
+                                    <cite>短信业务</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/SMS/smslogslist") %][% if can("/SMS/smslogslist") %]<dd>
+                                        <a lay-href="/SMS/smslogslist" lay-text="短信发送记录" class="">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>短信发送记录</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Sms/smstemplatelist") %][% if can("/Sms/smstemplatelist") %]<dd>
+                                        <a lay-href="/Sms/smstemplatelist" lay-text="群发短信模板" class="">
+                                            <i class="layui-icon layui-icon-templeate-1"></i>
+                                            <cite>群发短信模板</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Sms/smsbulkhair") %][% if can("/Sms/smsbulkhair") %]<dd>
+                                        <a lay-href="/Sms/smsbulkhair" lay-text="我要群发短信" class="">
+                                            <i class="layui-icon layui-icon-release"></i>
+                                            <cite>我要群发短信</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/smssetting") %][% if can("/System/smssetting") %]<dd>
+                                        <a lay-href="/System/smssetting" lay-text="短信业务设置" class="">
+                                            <i class="layui-icon layui-icon-set-fill"></i>
+                                            <cite>短信业务设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="taskmange" class="layui-nav-item layui-hide">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-service"></i>
+                                    <cite>平台商铺</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/jdpshop/shopindex") %][% if can("/jdpshop/shopindex") %]<dd>
+                                        <a lay-href="/jdpshop/shopindex" lay-text="店铺管理" class="layui-hide">
+                                            <i class="layui-icon layui-icon-gift"></i>
+                                            <cite>店铺管理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/jdpshop/shoptype") %][% if can("/jdpshop/shoptype") %]<dd>
+                                        <a lay-href="/jdpshop/shoptype" lay-text="商品分类" class="layui-hide">
+                                            <i class="layui-icon layui-icon-templeate-1"></i>
+                                            <cite>商品分类</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/jdpshop/addshopitem") %][% if can("/jdpshop/addshopitem") %]<dd>
+                                        <a lay-href="/jdpshop/addshopitem" lay-text="新增商品" class="layui-hide">
+                                            <i class="layui-icon layui-icon-add-1"></i>
+                                            <cite>新增商品</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/jdpshop/shopmange") %][% if can("/jdpshop/shopmange") %]<dd>
+                                        <a lay-href="/jdpshop/shopmange" lay-text="商品管理" class="layui-hide">
+                                            <i class="layui-icon layui-icon-form"></i>
+                                            <cite>商品管理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="platSetting" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-cols"></i>
+                                    <cite>发平台设置</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/System/tripartiteplatformsetting") %][% if can("/System/tripartiteplatformsetting") %]<dd>
+                                        <a lay-href="/System/tripartiteplatformsetting" lay-text="交易平台对接设置" class="">
+                                            <i class="layui-icon layui-icon-component"></i>
+                                            <cite>交易平台对接设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/PlatformPushOrderConfig") %][% if can("/System/PlatformPushOrderConfig") %]<dd>
+                                        <a lay-href="/System/PlatformPushOrderConfig" lay-text="交易平台发单设置" class="">
+                                            <i class="layui-icon layui-icon-spread-left"></i>
+                                            <cite>平台快速发单设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/PlatformAutoReply") %][% if can("/System/PlatformAutoReply") %]<dd>
+                                        <a lay-href="/System/PlatformAutoReply" lay-text="交易平台自动回复打手" class="">
+                                            <i class="layui-icon layui-icon-reply-fill"></i>
+                                            <cite>交易平台自动回复</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/AutomaticAdJustPriceSet") %][% if can("/System/AutomaticAdJustPriceSet") %]<dd>
+                                        <a lay-href="/System/AutomaticAdJustPriceSet" lay-text="交易单自动调价配置" class="">
+                                            <i class="layui-icon layui-icon-slider"></i>
+                                            <cite>交易单自动调价配置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/OrderPushGroupMsgSet") %][% if can("/System/OrderPushGroupMsgSet") %]<dd>
+                                        <a lay-href="/System/OrderPushGroupMsgSet" lay-text="{{= i18n.$t('leftNav.OrderPushGroupMsgSet') }}" class="">
+                                            <i class="layui-icon layui-icon-release"></i>
+                                            <cite>{{= i18n.$t('leftNav.OrderPushGroupMsgSet') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                </dl>
+                            </li>
+                            <li data-name="setting" class="layui-nav-item ">
+                                <a href="javascript:;" lay-direction="2">
+                                    <i class="layui-icon layui-icon-set-fill"></i>
+                                    <cite>{{= i18n.$t('leftNav.System') }}</cite>
+                                </a>
+                                <dl class="layui-nav-child">
+                                    [% if can("/System/roleauthority") %][% if can("/System/roleauthority") %]<dd>
+                                        <a lay-href="/System/roleauthority" lay-text="{{= i18n.$t('leftNav.roleauthority') }}" class="">
+                                            <i class="layui-icon layui-icon-set-sm"></i>
+                                            <cite>{{= i18n.$t('leftNav.roleauthority') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/User/usergroup") %][% if can("/User/usergroup") %]<dd>
+                                        <a lay-href="/User/usergroup" lay-text="{{= i18n.$t('leftNav.usergroup') }}" class="">
+                                            <i class="layui-icon layui-icon-group"></i>
+                                            <cite>{{= i18n.$t('leftNav.usergroup') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/autodiscernset") %][% if can("/System/autodiscernset") %]<dd>
+                                        <a lay-href="/System/autodiscernset" lay-text="{{= i18n.$t('leftNav.autodiscernset') }}" class="">
+                                            <i class="layui-icon layui-icon-util"></i>
+                                            <cite>{{= i18n.$t('leftNav.autodiscernset') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/verifiaddorderkey") %][% if can("/System/verifiaddorderkey") %]<dd>
+                                        <a lay-href="/System/verifiaddorderkey" lay-text="{{= i18n.$t('leftNav.verifiaddorderkey') }}" class="">
+                                            <i class="layui-icon layui-icon-transfer"></i>
+                                            <cite>{{= i18n.$t('leftNav.verifiaddorderkey') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/OrderLabelList") %][% if can("/System/OrderLabelList") %]<dd>
+                                        <a lay-href="/System/OrderLabelList" lay-text="{{= i18n.$t('leftNav.OrderLabelList') }}" class="">
+                                            <i class="layui-icon layui-icon-note"></i>
+                                            <cite>{{= i18n.$t('leftNav.OrderLabelList') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/sourelist") %][% if can("/System/sourelist") %]<dd>
+                                        <a lay-href="/System/sourelist" lay-text="{{= i18n.$t('leftNav.sourelist') }}" class="">
+                                            <i class="layui-icon layui-icon-set-fill"></i>
+                                            <cite>{{= i18n.$t('leftNav.sourelist') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/homesystemsetting") %][% if can("/System/homesystemsetting") %]<dd>
+                                        <a lay-href="/System/homesystemsetting" lay-text="绑定上家系统设置" class="">
+                                            <i class="layui-icon layui-icon-service"></i>
+                                            <cite>绑定上家系统设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/Emp/bindalipaysettauth") %][% if can("/Emp/bindalipaysettauth") %]<dd>
+                                        <a lay-href="/Emp/bindalipaysettauth" lay-text="在线结算支付宝授权" class="">
+                                            <i class="layui-icon layui-icon-auz"></i>
+                                            <cite>在线结算支付宝授权</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/wechartsetting") %][% if can("/System/wechartsetting") %]<dd>
+                                        <a lay-href="/System/wechartsetting" lay-text="微信公众号设置" class="">
+                                            <i class="layui-icon layui-icon-login-wechat"></i>
+                                            <cite>微信公众号设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/taobaoshipsetting") %][% if can("/System/taobaoshipsetting") %]<dd>
+                                        <a lay-href="/System/taobaoshipsetting" lay-text="{{= i18n.$t('leftNav.taobaoshipsetting') }}" class="">
+                                            <i class="layui-icon layui-icon-spread-left"></i>
+                                            <cite>{{= i18n.$t('leftNav.taobaoshipsetting') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/pddshipsetting") %][% if can("/System/pddshipsetting") %]<dd>
+                                        <a lay-href="/System/pddshipsetting" lay-text="{{= i18n.$t('leftNav.pddshipsetting') }}" class="">
+                                            <i class="layui-icon layui-icon-heart"></i>
+                                            <cite>{{= i18n.$t('leftNav.pddshipsetting') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    
+                                    [% if can("/System/systemnotice") %][% if can("/System/systemnotice") %]<dd>
+                                        <a lay-href="/System/systemnotice" lay-text="{{= i18n.$t('leftNav.systemnotice') }}" class="">
+                                            <i class="layui-icon layui-icon-speaker"></i>
+                                            <cite>{{= i18n.$t('leftNav.systemnotice') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/customerphoneprivatesetting") %][% if can("/System/customerphoneprivatesetting") %]<dd>
+                                        <a lay-href="/System/customerphoneprivatesetting" lay-text="订单虚拟号码设置" class="">
+                                            <i class="layui-icon layui-icon-headset"></i>
+                                            <cite>订单虚拟号码设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/wechatappmange") %][% if can("/System/wechatappmange") %]<dd>
+                                        <a lay-href="/System/wechatappmange" lay-text="客户端内容管理" class="">
+                                            <i class="layui-icon layui-icon-app"></i>
+                                            <cite>客户端内容管理</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/clientsetting") %][% if can("/System/clientsetting") %]<dd>
+                                        <a lay-href="/System/clientsetting" lay-text="客户端设置" class="">
+                                            <i class="layui-icon layui-icon-cellphone"></i>
+                                            <cite>客户端设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/systemlog") %][% if can("/System/systemlog") %]<dd>
+                                        <a lay-href="/System/systemlog" lay-text="{{= i18n.$t('leftNav.systemlog') }}" class="">
+                                            <i class="layui-icon layui-icon-list"></i>
+                                            <cite>{{= i18n.$t('leftNav.systemlog') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/OrderPushGroupMsgSet") %][% if can("/System/OrderPushGroupMsgSet") %]<dd>
+                                        <a lay-href="/System/OrderPushGroupMsgSet" lay-text="{{= i18n.$t('leftNav.OrderPushGroupMsgSet') }}" class="">
+                                            <i class="layui-icon layui-icon-release"></i>
+                                            <cite>{{= i18n.$t('leftNav.OrderPushGroupMsgSet') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/OnlineConsultationSet") %][% if can("/System/OnlineConsultationSet") %]<dd>
+                                        <a lay-href="/System/OnlineConsultationSet" lay-text="内部沟通通讯设置" class="">
+                                            <i class="layui-icon layui-icon-reply-fill"></i>
+                                            <cite>内部沟通通讯设置</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+                                    [% if can("/System/systemsetting") %][% if can("/System/systemsetting") %]<dd>
+                                        <a lay-href="/System/systemsetting" lay-text="{{= i18n.$t('leftNav.systemsetting') }}" class="">
+                                            <i class="layui-icon layui-icon-util"></i>
+                                            <cite>{{= i18n.$t('leftNav.systemsetting') }}</cite>
+                                        </a>
+                                    </dd>[% endif %][% endif %]
+
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 页面标签 -->
+                <div class="layadmin-pagetabs" id="LAY_app_tabs">
+                    <div class="layui-icon layadmin-tabs-control layui-icon-refresh-1" layadmin-event="refresh" title="{{= i18n.$t('topNav.refresh') }}"></div>
+                    <div class="layui-icon layadmin-tabs-control layui-icon-refresh-3" layadmin-event="refresh" title="{{= i18n.$t('topNav.refresh') }}"></div>
+                    <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                        <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                            <li class="layui-nav-item" lay-unselect>
+                                <a href="javascript:;"></a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd layadmin-event="closeThisTabs"><a href="javascript:;">{{= i18n.$t('topNav.closeThisTabs') }}</a></dd>
+                                    <dd layadmin-event="closeOtherTabs"><a href="javascript:;">{{= i18n.$t('topNav.closeOtherTabs') }}</a></dd>
+                                    <dd layadmin-event="closeAllTabs"><a href="javascript:;">{{= i18n.$t('topNav.closeAllTabs') }}</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                        <ul class="layui-tab-title" id="LAY_app_tabsheader" style="">
+                            <li lay-id="Index/console" lay-attr="Index/console" lay-text="{{= i18n.$t('leftNav.homepage') }}" class="layui-this"><i class="layui-icon layui-icon-home"></i>{{= i18n.$t('leftNav.homepage') }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- 主体内容 -->
+                <div class="layui-body" id="LAY_app_body">
+                    <div class="layadmin-tabsbody-item layui-show">
+                        <iframe src="Index/console" frameborder="0" class="layadmin-iframe" style="bottom:0;margin-bottom:0px"></iframe>
+                    </div>
+                </div>
+
+                <!-- 辅助元素，一般用于移动设备下遮罩 -->
+                <div class="layadmin-body-shade" layadmin-event="shade"></div>
+
+                
+
+
+
+            </div>
+
+            <div id="dragBtn"> <i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 22px; color: #ffffff;"></i> </div>
+
+            <div class="privateServerXY" style="display:none;margin:10px 10px">
+                <h1 style="text-align:center;margin:0 auto">系统使用声明和免责条款.2024081301(更新)</h1>
+                <p style="margin-top:20px;font-size:14px">欢迎使用平台工作室管理系统（以下简称“系统”）。本系统由武汉吉蛋铺网络技术有限公司开发（以下简称“我司”），授权给商家[[ company ]]（以下简称“商家”）使用。无论您是本系统任何职位人员，为了确保您充分理解和接受系统的使用规则和免责条款，请在首次登录系统后仔细阅读以下内容：</p>
+                <h2>一、系统用途</h2>
+                <p style="font-size: 14px">平台工作室管理系统旨在为[[ company ]]提供游戏电竞领域内部的订单管理、分发、费用结算、统计、订单和雇员查询等一系列综合功能。本系统允许[[ company ]]的内部雇员（包括但不限于线下和线上）通过本系统其及辅助工具协同处理工作所需事项。但请注意，本系统只提供数据集成、交互、展示和存储能力，实际本系统内的订单业务和相关结算、雇员职能和薪酬问题的沟通均由[[ company ]]负责处理。</p>
+                <h2>二、责任和免责声明</h2>
+                <p style="font-size:14px">2.1. 无论您在本系统是管理人员还是线上线下雇员，均需要知道本系统仅为商家提供订单数据集成和相关配套工具，仅用于内部订单和雇员、费用结算、财务管理。我司不对本系统内所有订单业务、交易、结算或合法性承担责任。本系统所有使用者需自行核实订单真实有效性和处理相关后续事宜。</p>
+                <p style="font-size:14px">2.2. 我司不负责本系统内所有订单的交付、交易、流转、售后、费用结算或任何与订单相关的纠纷。商家和其员工需要自行解决订单相关的问题。</p>
+                <p style="font-size:14px">2.3. 使用本系统的所有人员均应遵守中华人民共和国适用法律法规，包括但不限于在订单处理、分发和费用结算等过程中的合法性和税务义务。</p>
+                <p style="font-size:14px">2.4. 我司不对因您使用系统而引发的任何直接或间接损失或损害承担责任，包括但不限于数据丢失、经济损失、信誉损害或其他损害。</p>
+                <p style="font-size:14px">2.5. 本系统拒绝未满18周岁的用户使用，请未满18周岁的用户自觉退出本系统。</p>
+                <p style="font-weight:800;color:red;font-size:14px">2.6. 再次申明：本系统内所有的订单交易、操作以及相关费用结算、人员处理均由[[ company ]]负责，本系统不是交易平台，不提供任何担保和保证服务。您与[[ company ]]发生的一切涉及经济和交易纠纷与我司无关，我司不对在该系统内发生的一切经济往来、交易负责。</p>
+
+
+                <h2>三、同意声明</h2>
+                <p style="font-size:14px">3.1. 使用本系统即表示您同意遵守系统的使用规则和免责条款。如果您不同意这些规则和条款，请立即退出本系统。</p>
+                <p style="font-size:14px">3.2. 您认可并理解在使用系统时，需自行负有对订单和其相关一切后果的责任，包括但不限于核实订单、保管订单资料、处理投诉、解决纠纷、雇员费用结算等。</p>
+                <p style="font-size:14px">3.3. 我司有权根据需要适时修改系统的使用规则和免责条款，并将在系统内进行通知。您应定期查看规则和条款的更新，以保持了解并遵守最新规则。</p>
+            </div>
+
+            <div class="meSystemInsideNotityDiv" style="display:none;margin:10px 10px">
+                <div class="notityContent">
+
+                </div>
+                <div class="layui-form-item" style="margin-top:30px;text-align:center">
+                    <div class="layui-input-inline">
+                        <div class="layui-btn layui-btn-normal notityConfimBtn">确认收到</div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="msgTag" value="[[ msg_tag ]]" />
+            <input type="hidden" id="myMsgSoundSoure" value="[[ user.myMsgSoundSoure or 0 ]]" />
+            <input type="hidden" id="isPlayMsgSound" value="[[ user.isPlayMsgSound or "Y" ]]" />
+            <input type="hidden" id="userId" value="[[ user.id ]]" />
+
+        </div>
+
+    </template>
+</div>
+<audio id="chatAudio">
+    <source src="[[ "/media/msg2.wav" if (user.myMsgSoundSoure|string) == "2" else "/media/msg.wav" ]]" type="audio/mpeg" muted="true">
+</audio>
+<script src="/JS2019/howler.js"></script>
+<script src="/JS2019/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(document).on('click', '.switchLanguage', function () {
+        localStorage.setItem('layui-i18n-local-test', $(this).attr('data-id'));
+        window.location.reload();
+    })
+
+
+
+    window.addEventListener('message', function (event) {
+        //console.log(event, 'eventeventevent')
+        if (event.data.type === 'messageFromIframe') {
+            sendNotification(event.data.data)
+        }
+    });
+    let flashInterval;
+    function advancedTitleFlash(flashText, options = {}) {
+        if (flashInterval) return false
+        const {
+            interval = 800,
+            prefix = '',
+            suffix = '',
+            timeout = 0,
+            restoreOnStop = true
+        } = options;
+
+        const originalTitle = document.title;
+        let isFlashing = true;
+
+        const updateTitle = () => {
+            document.title = document.title === originalTitle
+                ? `${prefix}${flashText}${suffix}`
+                : originalTitle;
+        };
+
+        const startFlashing = () => {
+            flashInterval = setInterval(() => {
+                if (isFlashing) updateTitle();
+            }, interval);
+        };
+
+        const stopFlashing = () => {
+            isFlashing = false;
+            clearInterval(flashInterval);
+            flashInterval = null
+            if (restoreOnStop) document.title = originalTitle;
+            removeEventListeners();
+        };
+
+        const removeEventListeners = () => {
+            document.removeEventListener('click', stopFlashing);
+            document.removeEventListener('keydown', stopFlashing);
+            document.removeEventListener('scroll', stopFlashing);
+            document.removeEventListener('mousemove', stopFlashing);
+            document.removeEventListener('touchstart', stopFlashing);
+        };
+
+        // 初始化闪烁
+        updateTitle();
+        startFlashing();
+
+        // 添加多种交互事件监听
+        document.addEventListener('click', stopFlashing);
+        document.addEventListener('keydown', stopFlashing);
+        document.addEventListener('scroll', stopFlashing);
+        document.addEventListener('mousemove', stopFlashing);
+        document.addEventListener('touchstart', stopFlashing);
+
+        // 设置自动停止
+        if (timeout > 0) {
+            setTimeout(stopFlashing, timeout);
+        }
+
+        return stopFlashing;
+    }
+    const message = ''
+    const sound = new Howl({
+        src: ["/media/appmsg_end.mp3"],
+        volume: 0.5,
+    });
+
+    async function requestPermission() {
+        if (!("Notification" in window)) {
+            return false;
+        }
+        if (Notification.permission === "granted") return true;
+        if (Notification.permission === "denied") {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === 'granted') {
+                    return true;
+                } else if (permission === 'denied') {
+                    return false;
+                }
+            });
+        }
+    }
+
+    //setInterval(() => {
+    //    if ($('.chatLayer:hidden').length > 0) {
+    //        console.log($('.chatLayer:hidden').length, $('.chatLayer').length)
+    //        $('.gameGroup .layui-icon-group').addClass('blink1s')
+    //        $('.gameGroup .layui-badge-dot').show()
+    //    }
+    //}, 2000)
+    // 发送通知
+    async function sendNotification(data) {
+        const hasPermission = await requestPermission();
+        advancedTitleFlash('新消息提醒', {
+            prefix: '🔔 ',
+            suffix: ' 🔔',
+            interval: 1000,
+            timeout: 10000 // 10秒后自动停止
+        });
+
+        // 播放音效
+        sound.stop();
+        sound.play();
+
+        if ($('.chatLayer:hidden').length > 0) {
+            $('.gameGroup .layui-icon-group').addClass('blink1s')
+            $('.gameGroup .layui-badge-dot').show()
+        }
+
+        // 显示系统通知
+        if (hasPermission) {
+            const notification = new Notification("新消息", {
+                body: data.nick + ':' + data.payload.text,
+                icon: data.avatar,
+            });
+            notification.onclick = () => {
+                window.focus();
+                notification.close();
+            };
+            setTimeout(() => notification.close(), 4000);
+        }
+    }
+    var i18n = layui.i18n;
+    var laytpl = layui.laytpl;
+    var i18nVersion = localStorage.getItem('i18nVersion')
+    var i18nData = {
+        locale: localStorage.getItem('layui-i18n-local-test') || 'zh-CN', // 当前语言环境
+        messages: {
+            'en': {
+                leftNav: {
+                    homepage: 'Home Page',
+                    myorderlist: 'My Order',
+                    //mygroup: 'My Booked',
+                    insiderecorderlist: 'IO-Bidding Hub',
+                    myabout: 'Related to Me',
+                    myemp: 'My Earnings',
+                    mybillsummary: 'MBS',
+                    myinfo: 'My Profile',
+                    mymessage: 'My Messages',
+                    exceptionorderlog: 'EO',
+                    order: 'Order Management',
+                    addorder: 'Order Entry',
+                    orderlist: 'Order Manage',
+                    MyReceiveJdpTransctionOrderList: 'My Trade Order',
+                    //CoreOrderCenter: '交易平台订单处理',
+                    //JdpShopOrderList: '平台商铺订单',
+                    //ClientOrderGenerate: '客户填单生成',
+                    orderrecycle: 'Order Recycle',
+                    //TradingOrderActionLogList: '交易订单操作记录',
+                    tbsendrecordlist: 'Taobao Ship Log',
+                    SoureOrderChangePriceLog: 'Supplier Price Log',
+                    //RecCustomerChatLog: 'Player Chat Hub',
+                    //Group: '游戏排团',
+                    //addeditgroup: '新建排团',
+                    //grouplist: '旧版排团',
+                    //grouplist2020: '2021版排团',
+                    //grouplist2025: '2025版排团',
+                    //jdppublictask: '看公开的排团坑位',
+                    //GameAccounts: '游戏号库',
+                    //addeditaccount: '新增游戏号',
+                    //importacc: '导入内部游戏号',
+                    //accountlist: '管理内部账号',
+                    //sellaccpreview: '售卖账号预览板',
+                    //myaccountlist: '指定给我的账号',
+                    User: 'System Staff',
+                    adduser: 'New SA',
+                    userlist: 'Staff Management',
+                    ApplyOnboardingMange: 'Invite Settings​',
+                    checkinlog: '	Checkin Log',
+                    checkinstatic: 'Checkin Analytics',
+                    userloginrestrict: 'Login Restriction',
+                    BackUserList: 'Ban List',
+                    //RnameCertLogAndSetting: '人员实名记录与配置',
+                    Emp: 'Finance',
+                    emplist: 'Emp. Payroll',
+                    billsummary: 'Settlement Log',
+                    //onlinepaytorecdetail: '在线结算明细',
+                    //salesmanstatistics: '客服接发单统计',
+                    dayoperation: 'Ops Report',
+                    booklist: 'Daily Ledger',
+                    learminformationlist: 'Internal Docs',
+                    //privatephonecalllog: '虚拟号码通话记录',
+                    qacenter: 'Internal QA',
+                    //funddetailslist: '平台资金明细与提现',
+                    //CommissionDetailsEntrustedAgency: '委托代发佣金明细',
+                    Customer: 'Clients',
+                    customerlist: 'Member Mgmt',
+                    hyfundetailslist: 'Member Balance',
+                    hylevelsetting: 'Member Levels',
+                    hyanalysisreport: 'Member Analysis',
+                    backlist: 'Blacklist',
+                    Game: 'Games',
+                    gameserver: 'Game Mgmt',
+                    OrderTypsSetting: 'Order Categories',
+                    projectsetting: 'Project Config',
+                    //gameitemlist: '游戏物品管理',
+                    //pricecalculator: '游戏报价计算器',
+                    //SMS: '短信业务',
+                    //smslogslist: '短信发送记录',
+                    //smstemplatelist: '群发短信模板',
+                    //smsbulkhair: '我要群发短信',
+                    //smssetting: '短信业务设置',
+                    //jdpshop: '平台商铺',
+                    //shopindex: '店铺管理',
+                    //shoptype: '商品分类',
+                    //addshopitem: '新增商品',
+                    //shopmange: '商品管理',
+                    //ptSystem: '发平台设置',
+                    //tripartiteplatformsetting: '交易平台对接设置',
+                    //PlatformPushOrderConfig: '交易平台发单设置',
+                    //PlatformAutoReply: '交易平台自动回复打手',
+                    //AutomaticAdJustPriceSet: '交易单自动调价配置',
+                    OrderPushGroupMsgSet: 'WeChat Auto Push',
+                    System: 'System Maint',
+                    roleauthority: 'R & Auth',
+                    usergroup: 'R & P Group',
+                    autodiscernset: 'Auto Recognition',
+                    verifiaddorderkey: 'Order Modify Setting',
+                    OrderLabelList: 'Order Label Manage',
+                    sourelist: 'Order Source Mgmt',
+                    //homesystemsetting: '绑定上家系统设置',
+                    //bindalipaysettauth: '在线结算支付宝授权',
+                    //wechartsetting: '微信公众号设置',
+                    taobaoshipsetting: 'Taobao Sync',
+                    pddshipsetting: 'Other Plat Sync',
+                    systemnotice: 'Sys Notice Mgmt',
+                    //customerphoneprivatesetting: '订单虚拟号码设置',
+                    //wechatappmange: '客户端内容管理',
+                    systemlog: 'Sys Log Mgmt',
+                    OrderPushGroupMsgSet: 'WeChat Auto Push',
+                    //OnlineConsultationSet: 'Sys Log Mgmt',
+                    systemsetting: 'Sys Settings',
+                },
+                topNav: {
+                    language: 'English',
+                    chat: 'Internal Chat',
+                    blacklistplan: 'Anti-Risk Board',
+                    blacklistplanTip: 'Query Blacklist to Avoid Risks',
+                    FindHome: 'Sys Circle',
+                    FindHomeTip: 'Post Ads in Circle',
+                    findwork: 'Find Partners',
+                    mymessage: 'Messages',
+                    mymessageTip: 'View System Msg',
+                    mymessageText: 'Msg Center',
+                    theme: 'Theme',
+                    note: 'Notes',
+                    myinfo: 'My Profile',
+                    putKeyword: 'Change Pwd',
+                    loginout: 'Logout',
+                    myinfoTip: 'Edit Avatar in Profile',
+                    refresh: 'Refresh Page',
+                    closeThisTabs: 'Close Current Tab',
+                    closeOtherTabs: 'Close Other Tabs',
+                    closeAllTabs: 'Close All Tabs',
+                },
+                js: {
+                    iePopTitle: 'Warning！',
+                    iePopBtn: 'I Know',
+                    iePopText: 'Warning: Browser incompatible. Switch to Speed Mode.',
+                    DontNotice: 'New Msg',
+                    business: 'EggShop Eco',
+                    circle: 'System Board: Post ads for orders. Visible network-wide.',
+                    Notice: 'Messages',
+                    putKeyword: 'Chg Pwd',
+                    toreport: 'Please scan QR code with your phone.',
+                    certAgreemantLayerTitle: 'Read Terms Carefully',
+                    certAgreemantLayerBtn1: 'Agree',
+                    certAgreemantLayerBtn2: 'Disagree',
+                    newExcitingAlerts: 'New Msg!',
+                    getSystemInsideNotityAboutMe: 'System Notice: Please read carefully. (Note: Not an official release.)-- Posted: ',
+                    getSystemInsideNotityAboutMeBtn: 'Confirm',
+                },
+                code: {
+                    copy: 'Copy Code',
+                    copied: 'Copied',
+                    copyError: 'Copy Failed',
+                    maximize: 'Maximize',
+                    restore: 'Restore',
+                    preview: 'Open Preview in New Window'
+                },
+                colorpicker: {
+                    clear: 'Clear',
+                    confirm: 'OK'
+                },
+                dropdown: {
+                    noData: 'No Data'
+                },
+                flow: {
+                    loadMore: 'Load More',
+                    noMore: 'No More Data'
+                },
+                form: {
+                    select: {
+                        noData: 'No Data',
+                        noMatch: 'No Matching Data',
+                        placeholder: 'Please Select'
+                    },
+                    validateMessages: {
+                        required: 'This field is required',
+                        phone: 'Invalid phone number format',
+                        email: 'Invalid email format',
+                        url: 'Invalid URL format',
+                        number: 'Numbers only',
+                        date: 'Invalid date format',
+                        identity: 'Invalid ID number format'
+                    },
+                    verifyErrorPromptTitle: 'Notice'
+                },
+                laydate: {
+                    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    time: ['Hour', 'Minute', 'Second'],
+                    literal: {
+                        year: ''
+                    },
+                    selectDate: 'Select Date',
+                    selectTime: 'Select Time',
+                    startTime: 'Start Time',
+                    endTime: 'End Time',
+                    tools: {
+                        confirm: 'Confirm',
+                        clear: 'Clear',
+                        now: 'Now',
+                        reset: 'Reset'
+                    },
+                    rangeOrderPrompt: 'End time cannot be less than start Time\nPlease re-select',
+                    invalidDatePrompt: 'Invalid date\n',
+                    formatErrorPrompt: 'Date format is invalid\nMust follow the format:\n{format}\n',
+                    autoResetPrompt: 'It has been reset',
+                    preview: 'The selected result'
+                },
+                layer: {
+                    confirm: 'OK',
+                    cancel: 'Cancel',
+                    defaultTitle: 'Info',
+                    prompt: {
+                        inputLengthPrompt: 'Maximum {length} characters'
+                    },
+                    photos: {
+                        noData: 'No Image',
+                        tools: {
+                            rotate: 'Rotate',
+                            scaleX: 'Flip Horizontally',
+                            zoomIn: 'Zoom In',
+                            zoomOut: 'Zoom Out',
+                            reset: 'Reset',
+                            close: 'Close'
+                        },
+                        viewPicture: 'View Picture',
+                        urlError: {
+                            prompt: 'Image URL is invalid, \nContinue to next one?',
+                            confirm: 'Next',
+                            cancel: 'Cancel'
+                        }
+                    }
+                },
+                laypage: {
+                    prev: 'Prev',
+                    next: 'Next',
+                    first: 'First',
+                    last: 'Last',
+                    total: 'Total {total} items',
+                    pagesize: '/page',
+                    goto: 'Go to',
+                    page: 'page',
+                    confirm: 'Confirm'
+                },
+                table: {
+                    sort: {
+                        asc: 'Ascending',
+                        desc: 'Descending'
+                    },
+                    noData: 'No Data',
+                    tools: {
+                        filter: {
+                            title: 'Filter Columns'
+                        },
+                        export: {
+                            title: 'Export',
+                            noDataPrompt: 'No data in the table',
+                            compatPrompt: 'Export is not supported in IE. Please use Chrome or another modern browser.',
+                            csvText: 'Export CSV File'
+                        },
+                        print: {
+                            title: 'Print',
+                            noDataPrompt: 'No data in the table'
+                        }
+                    },
+                    dataFormatError: 'Returned data is invalid. The correct success status code should be: "{statusName}": {statusCode}',
+                    xhrError: 'Request Error: {msg}'
+                },
+                transfer: {
+                    noData: 'No Data',
+                    noMatch: 'No Match',
+                    title: ['List 1', 'List 2'],
+                    searchPlaceholder: 'Search by Keyword'
+                },
+                tree: {
+                    defaultNodeName: 'Unnamed',
+                    noData: 'No Data',
+                    deleteNodePrompt: 'Are you sure you want to delete the node "{name}"?'
+                },
+                upload: {
+                    fileType: {
+                        file: 'File',
+                        image: 'Image',
+                        video: 'Video',
+                        audio: 'Audio'
+                    },
+                    validateMessages: {
+                        fileExtensionError: 'Unsupported format in selected {fileType}',
+                        filesOverLengthLimit: 'Maximum {length} files allowed at once',
+                        currentFilesLength: 'You have selected {length} files',
+                        fileOverSizeLimit: 'File size must not exceed {size}'
+                    },
+                    chooseText: '{length} files'
+                },
+                util: {
+                    timeAgo: {
+                        days: '{days} days ago',
+                        hours: '{hours} hours ago',
+                        minutes: '{minutes} minutes ago',
+                        future: 'In the future',
+                        justNow: 'Just now'
+                    },
+                    toDateString: {
+                        meridiem: function (hours, minutes) {
+                            return hours < 12 ? 'AM' : 'PM';
+                        }
+                    }
+                }
+            },
+            'zh-CN': {
+                leftNav: {
+                    homepage: '后台首页',
+                    myorderlist: '指派给我的订单',
+                    //mygroup: '我参与的排团',
+                    insiderecorderlist: '内部抢单大厅',
+                    myabout: '我的相关',
+                    myemp: '我的订单收入',
+                    mybillsummary: '在线结算记录',
+                    myinfo: '我的资料',
+                    mymessage: '我的消息',
+                    exceptionorderlog: '异常消失订单',
+                    order: '订单管理',
+                    addorder: '录入订单',
+                    orderlist: '管理订单',
+                    MyReceiveJdpTransctionOrderList: '我接的交易订单',
+                    //CoreOrderCenter: '交易平台订单处理',
+                    //JdpShopOrderList: '平台商铺订单',
+                    //ClientOrderGenerate: '客户填单生成',
+                    orderrecycle: '找回删除的订单',
+                    //TradingOrderActionLogList: '交易订单操作记录',
+                    tbsendrecordlist: '淘宝发货记录',
+                    SoureOrderChangePriceLog: '上家订单改价记录',
+                    //RecCustomerChatLog: '打手玩家对聊管理',
+                    //Group: '游戏排团',
+                    //addeditgroup: '新建排团',
+                    //grouplist: '旧版排团',
+                    //grouplist2020: '2021版排团',
+                    //grouplist2025: '2025版排团',
+                    //jdppublictask: '看公开的排团坑位',
+                    //GameAccounts: '游戏号库',
+                    //addeditaccount: '新增游戏号',
+                    //importacc: '导入内部游戏号',
+                    //accountlist: '管理内部账号',
+                    //sellaccpreview: '售卖账号预览板',
+                    //myaccountlist: '指定给我的账号',
+                    User: '系统人员',
+                    adduser: '新开系统账号',
+                    userlist: '人员管理',
+                    ApplyOnboardingMange: '邀请大神注册管理',
+                    checkinlog: '打卡记录',
+                    checkinstatic: '打卡分析',
+                    userloginrestrict: '登录限制设置',
+                    BackUserList: '人员黑名单',
+                    //RnameCertLogAndSetting: '人员实名记录与配置',
+                    Emp: '财务相关',
+                    emplist: '打手与客服报酬',
+                    billsummary: '结算记录',
+                    //onlinepaytorecdetail: '在线结算明细',
+                    //salesmanstatistics: '客服接发单统计',
+                    dayoperation: '经营报表',
+                    booklist: '日常账本',
+                    learminformationlist: '内部学习资料',
+                    //privatephonecalllog: '虚拟号码通话记录',
+                    qacenter: '内部QA问答',
+                    //funddetailslist: '平台资金明细与提现',
+                    //CommissionDetailsEntrustedAgency: '委托代发佣金明细',
+                    Customer: '客户维护',
+                    customerlist: '会员管理',
+                    hyfundetailslist: '会员余额明细',
+                    hylevelsetting: '会员等级设置',
+                    hyanalysisreport: '会员分析报表',
+                    backlist: '黑名单管理',
+                    Game: '游戏维护',
+                    gameserver: '游戏管理',
+                    OrderTypsSetting: '订单项目分类管理',
+                    projectsetting: '常用代练项目管理',
+                    //gameitemlist: '游戏物品管理',
+                    //pricecalculator: '游戏报价计算器',
+                    //SMS: '短信业务',
+                    //smslogslist: '短信发送记录',
+                    //smstemplatelist: '群发短信模板',
+                    //smsbulkhair: '我要群发短信',
+                    //smssetting: '短信业务设置',
+                    //jdpshop: '平台商铺',
+                    //shopindex: '店铺管理',
+                    //shoptype: '商品分类',
+                    //addshopitem: '新增商品',
+                    //shopmange: '商品管理',
+                    //ptSystem: '发平台设置',
+                    //tripartiteplatformsetting: '交易平台对接设置',
+                    //PlatformPushOrderConfig: '交易平台发单设置',
+                    //PlatformAutoReply: '交易平台自动回复打手',
+                    //AutomaticAdJustPriceSet: '交易单自动调价配置',
+                    OrderPushGroupMsgSet: '自动发消息到微信群设置',
+                    System: '系统维护',
+                    roleauthority: '角色职位权限',
+                    usergroup: '角色职位分组',
+                    autodiscernset: '录单识别设置',
+                    verifiaddorderkey: '录单修正设置',
+                    OrderLabelList: '订单标签维护',
+                    sourelist: '订单来源管理',
+                    //homesystemsetting: '绑定上家系统设置',
+                    //bindalipaysettauth: '在线结算支付宝授权',
+                    //wechartsetting: '微信公众号设置',
+                    taobaoshipsetting: '淘宝店对接设置',
+                    pddshipsetting: '其它平台店铺对接',
+                    systemnotice: '系统内部公告管理',
+                    //customerphoneprivatesetting: '订单虚拟号码设置',
+                    //wechatappmange: '客户端内容管理',
+                    systemlog: '系统操作日志管理',
+                    OrderPushGroupMsgSet: '自动发消息到微信群设置',
+                    //OnlineConsultationSet: '内部沟通通讯设置',
+                    systemsetting: '系统各项设置管理',
+                },
+                topNav: {
+                    language: '中文',
+                    chat: '内部沟通',
+                    blacklistplan: '避坑板',
+                    blacklistplanTip: '在这里可以查询黑名单，防止被坑',
+                    FindHome: '系统圈子',
+                    FindHomeTip: '系统圈子发广告',
+                    findwork: '找上下家',
+                    mymessage: '消息',
+                    mymessageTip: '查看系统消息',
+                    mymessageText: '消息中心',
+                    theme: '主题设置',
+                    note: '便签纸',
+                    myinfo: '我的资料',
+                    putKeyword: '修改密码',
+                    loginout: '退出系统',
+                    myinfoTip: '可以到我的资料中修改头像',
+                    refresh: '刷新当前页面',
+                    closeThisTabs: '关闭当前标签页',
+                    closeOtherTabs: '关闭其它标签页',
+                    closeAllTabs: '关闭全部标签页',
+                },
+                js: {
+                    iePopTitle: '警告！',
+                    iePopBtn: '我知道了',
+                    iePopText: '警告：你当前浏览模式不兼容，会导致数据加载不出来或下拉列表没有数据！请换成极速模式',
+                    DontNotice: '新消息',
+                    business: '平台生态服务',
+                    circle: '系统圈子：可以发布接单或抛单广告，全网可看到',
+                    Notice: '消息',
+                    putKeyword: '修改密码',
+                    toreport: '请用手机扫码浏览',
+                    certAgreemantLayerTitle: '请仔细阅读以下协议条款',
+                    certAgreemantLayerBtn1: '我同意',
+                    certAgreemantLayerBtn2: '不同意',
+                    newExcitingAlerts: '有新消息!',
+                    getSystemInsideNotityAboutMe: '系统内部公告通知,请仔细阅读(注意：此内容并非平台官方发布)--发布于',
+                    getSystemInsideNotityAboutMeBtn: '确认阅读',
+                },
+                code: {
+                    copy: '复制代码',
+                    copied: '已复制',
+                    copyError: '复制失败',
+                    maximize: '最大化显示',
+                    restore: '还原显示',
+                    preview: '在新窗口预览'
+                },
+                colorpicker: {
+                    clear: '清除',
+                    confirm: '确定'
+                },
+                dropdown: {
+                    noData: '暂无数据'
+                },
+                flow: {
+                    loadMore: '加载更多',
+                    noMore: '没有更多了'
+                },
+                form: {
+                    select: {
+                        noData: '暂无数据',
+                        noMatch: '无匹配数据',
+                        placeholder: '请选择'
+                    },
+                    validateMessages: {
+                        required: '必填项不能为空',
+                        phone: '手机号格式不正确',
+                        email: '邮箱格式不正确',
+                        url: '链接格式不正确',
+                        number: '只能填写数字',
+                        date: '日期格式不正确',
+                        identity: '身份证号格式不正确'
+                    },
+                    verifyErrorPromptTitle: '提示'
+                },
+                laydate: {
+                    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    weeks: ['日', '一', '二', '三', '四', '五', '六'],
+                    time: ['时', '分', '秒'],
+                    literal: {
+                        year: '年'
+                    },
+                    selectDate: '选择日期',
+                    selectTime: '选择时间',
+                    startTime: '开始时间',
+                    endTime: '结束时间',
+                    tools: {
+                        confirm: '确定',
+                        clear: '清空',
+                        now: '现在',
+                        reset: '重置'
+                    },
+                    rangeOrderPrompt: '结束时间不能早于开始时间\n请重新选择',
+                    invalidDatePrompt: '不在有效日期或时间范围内\n',
+                    formatErrorPrompt: '日期格式不合法\n必须遵循：\n{format}\n',
+                    autoResetPrompt: '已自动重置',
+                    preview: '当前选中的结果'
+                },
+                layer: {
+                    confirm: '确定',
+                    cancel: '取消',
+                    defaultTitle: '信息',
+                    prompt: {
+                        inputLengthPrompt: '最多输入 {length} 个字符'
+                    },
+                    photos: {
+                        noData: '没有图片',
+                        tools: {
+                            rotate: '旋转',
+                            scaleX: '水平变换',
+                            zoomIn: '放大',
+                            zoomOut: '缩小',
+                            reset: '还原',
+                            close: '关闭'
+                        },
+                        viewPicture: '查看原图',
+                        urlError: {
+                            prompt: '当前图片地址异常，\n是否继续查看下一张？',
+                            confirm: '下一张',
+                            cancel: '不看了'
+                        }
+                    }
+                },
+                laypage: {
+                    prev: '上一页',
+                    next: '下一页',
+                    first: '首页',
+                    last: '尾页',
+                    total: '共 {total} 条',
+                    pagesize: '条/页',
+                    goto: '到第',
+                    page: '页',
+                    confirm: '确定'
+                },
+                table: {
+                    sort: {
+                        asc: '升序',
+                        desc: '降序'
+                    },
+                    noData: '暂无数据',
+                    tools: {
+                        filter: {
+                            title: '筛选列'
+                        },
+                        export: {
+                            title: '导出',
+                            noDataPrompt: '当前表格无数据',
+                            compatPrompt: '导出功能不支持 IE，请用 Chrome 等高级浏览器导出',
+                            csvText: '导出 CSV 文件'
+                        },
+                        print: {
+                            title: '打印',
+                            noDataPrompt: '当前表格无数据'
+                        }
+                    },
+                    dataFormatError: '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
+                    xhrError: '请求异常，错误提示：{msg}'
+                },
+                transfer: {
+                    noData: '暂无数据',
+                    noMatch: '无匹配数据',
+                    title: ['列表一', '列表二'],
+                    searchPlaceholder: '关键词搜索'
+                },
+                tree: {
+                    defaultNodeName: '未命名',
+                    noData: '暂无数据',
+                    deleteNodePrompt: '确认删除"{name}"节点吗？'
+                },
+                upload: {
+                    fileType: {
+                        file: '文件',
+                        image: '图片',
+                        video: '视频',
+                        audio: '音频'
+                    },
+                    validateMessages: {
+                        fileExtensionError: '选择的{fileType}中包含不支持的格式',
+                        filesOverLengthLimit: '同时最多只能上传: {length} 个文件',
+                        currentFilesLength: '当前已经选择了: {length} 个文件',
+                        fileOverSizeLimit: '文件大小不能超过 {size}'
+                    },
+                    chooseText: '{length} 个文件'
+                },
+                util: {
+                    timeAgo: {
+                        days: '{days} 天前',
+                        hours: '{hours} 小时前',
+                        minutes: '{minutes} 分钟前',
+                        future: '未来',
+                        justNow: '刚刚'
+                    },
+                    toDateString: {
+                        // https://www.unicode.org/cldr/charts/47/supplemental/day_periods.html
+                        meridiem: function (hours, minutes) {
+                            var hm = hours * 100 + minutes;
+                            if (hm < 500) {
+                                return '凌晨';
+                            } else if (hm < 800) {
+                                return '早上';
+                            } else if (hm < 1200) {
+                                return '上午';
+                            } else if (hm < 1300) {
+                                return '中午';
+                            } else if (hm < 1900) {
+                                return '下午';
+                            }
+                            return '晚上';
+                        }
+                    }
+                }
+            },
+        }
+    }
+
+
+    i18n.set(i18nData);
+
+    const template = $('#template').html();
+    const templatehtml = laytpl(template, { tagStyle: 'modern' }).render();
+    $('#root').html(templatehtml);
+
+    layui.config({
+        base: '../layuiadmin/'
+        , version: '20260501'
+    }).extend({
+        index: 'lib/index'
+        , contextMenu: '../layui/lay/modules/contextMenu'
+    }).use(['index', 'notice', 'util', 'element', 'admin', 'dropdown', 'jquery', 'i18n', 'laytpl', 'layer'], function () {
+        var $ = layui.$;
+        var admin = layui.admin;
+        var notice = layui.notice;
+        var i18n = layui.i18n;
+        var laytpl = layui.laytpl;
+        var layer = layui.layer;
+        var i18nDataList = i18nData.messages[localStorage.getItem('layui-i18n-local-test') || 'zh-CN'].js
+        var util = layui.util;
+        var element = layui.element;
+        var index = layui.index;
+        var devices = layui.device();
+        var isPc = true;
+        let ImAgreement = null
+        if (devices.android === true || devices.ios === true || devices.mobile === true) {
+            isPc = false;
+        }
+        var isPopShow = false
+        var dropdown = layui.dropdown;
+        var myMsgSoundSoure = $("#myMsgSoundSoure").val();
+        var isPlayMsgSound = $("#isPlayMsgSound").val();
+        var ie = devices.ie;
+        var domain = window.location.host;
+        var msgTag = $("#msgTag").val();
+        const audio = $('#chatAudio')[0];
+        audio.currentTime = 0; // 重头开始
+        var insideNotityArry;
+        var certAgreemantLayer;
+        var globalMsgService = null;
+        let opnelayer
+
+
+        element.render('nav');
+
+
+        createWebSocket();
+        startLocalMsgPoll({ $: $, layer: layer, notice: notice, isPlayMsgSound: isPlayMsgSound, domain: domain, getAllDontNotice: getAllDontNotice });
+        getAllDontNotice();
+        getAgreeProt();
+        getSystemInsideNotityAboutMe();
+        if (ie) {
+            layer.open({
+                type: 1
+                , title: i18nDataList.iePopTitle
+                , closeBtn: false
+                , area: ['480px', '320px']
+                , shade: 0.8
+                , id: 'LAY_layuipro'
+                , btn: [i18nDataList.iePopBtn]
+                , btnAlign: 'c'
+                , moveType: 1 //拖拽模式，0或者1
+                , content: '<div style="padding: 10px; line-height: 30px; background-color: #393D49; color: #fff; font-weight: 300;font-size:18px">' + i18nDataList.iePopText + '</div>'
+                , success: function (layero) {
+
+                }
+            });
+        }
+        function getAllDontNotice() {
+            $.ajax({
+                type: "GET",
+                url: "/UserAjax/GetMyMessageList",
+                data: { page: 1, limit: 1, isRead: 'N' },
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.count > 0) {
+                        let msgHtml = '<i class="layui-icon layui-icon-notice"></i>' + i18nDataList.DontNotice + '(' + data.count + ')<span class="layui-badge-dot"></span>';
+                        $(".msg").html(msgHtml);
+                    }
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+        function setNoticeRead(id) {
+            $.ajax({
+                type: "Post",
+                url: "/UserAjax/SetMyMessageRead",
+                data: { msgId: id },
+                dataType: 'json',
+                cache: false,
+                timeout: 60000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+        $(document).on('click', '.aboutme', function () {
+            layer.open({
+                title: "关于本系统",
+                type: 1,
+                shade: false,
+                title: false, //不显示标题
+                area: ['550px', '180px'],
+                content: $('.aboutmediv'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                cancel: function () {
+                }
+            });
+        });
+        $(document).on('click', '.exit', function () {
+            setCookie("id", "", -1);
+            setCookie("name", "", -1);
+        });
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+        $(document).on('click', '.business', function () {
+            layer.open({
+                title: i18nDataList.business,
+                shade: [0.3, '#333'],
+                shadeClose: true,
+                maxmin: true,
+                type: 2,
+                skin: 'layui-layer-lan',
+                anim: 8,
+                area: [isPc ? '85%' : '95%', isPc ? '80%' : '90%'],
+                content: 'https://www.jidanpu.com/Business/RecBusiness'
+            });
+        });
+        $(document).on('click', '.layui-icon-next', function () {
+            admin.events.refresh();
+        });
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        $(document).on('click', '.loginout', function () {
+            if ($(this).data('logging-out')) return; // 防止重复点击
+            $(this).data('logging-out', true);
+            document.cookie = 'isRead=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            if (globalMsgService?.disconnect) {
+                globalMsgService.disconnect();
+                console.log("✅ 消息服务已断开");
+            }
+        })
+
+        const $btn = $('#dragBtn');
+        $btn.on('click', function () {
+            if (isPopShow) {
+                gameGroupFun()
+            }
+        });
+        function openGameGroup(val) {
+            openIframe(val)
+
+            //$.ajax({
+            //    type: "Get",
+            //    url: "/api/IMApi/CheckImAuth",
+            //    dataType: 'json',
+            //    cache: false,
+            //    timeout: 60000,
+            //    error: function () { },
+            //    beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(2, { shade: 0.3, time: 45 * 1000 }); },
+
+            //    success: function (data) {
+            //        if (data.code > 0) {
+            //            openIframe(val)
+            //        } else {
+            //            layer.alert(data.msg)
+            //        }
+            //    },
+
+            //    complete: function (XMLHttpRequest) {
+            //        layer.close(indexLoad);
+            //    }
+            //});
+        }
+        
+
+        function getImGroupAuth() {
+            var confirmPop = layer.open({
+                type: 2,
+                area: [isPc ? '1000px' : '90%', isPc ? '80%' : '90%'],
+                btn: ['同意', '不同意'],
+                title: 'IM功能使用协议确认',
+                content: '//www.jidanpu.com/html/OAIMAgreement.html',
+                btn1: function (index, layero, that) {
+                    layer.close(confirmPop)
+                    //setCookie("isRead", $('#userId').val(), 3);
+                    var model = {}
+                    $.ajax({
+                        type: "post",
+                        url: "/api/ImApi/AcceptAgreement",
+                        data: JSON.stringify(model),
+                        contentType: "application/json",
+                        dataType: 'json',
+                        cache: false,
+                        timeout: 60000,
+                        error: function (xhr) { re = true; layer.msg(xhr.responseJSON.msg, { time: 2000 }, function (res) { }); },
+                        beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1); },
+                        success: function (data) {
+                            re = true;
+                            if (data.code > 0) {
+                                openGameGroup()
+                            } else {
+                                layer.msg(data.msg)
+                            }
+                        },
+                        complete: function (XMLHttpRequest) {
+                            layer.close(indexLoad);
+                        }
+                    });
+                },
+                btn2: function (index, layero, that) {
+                    layer.close(confirmPop)
+                }
+            })
+        }
+        function openIframe(val) {
+            opnelayer = layer.open({
+                type: 2,
+                title: $('.layui-logo span').text() + '-内部沟通',
+                area: [isPc ? '1000px' : '90%', isPc ? '80%' : '90%'],
+                offset: ['16000px', '16000px'],
+                //offset: isPc ? 'r' : 'auto',
+                id: 'GetImGroupAuth',
+                resize: true,
+                maxmin: true,
+                shade: 0,
+                skin: 'chatLayer',
+                content: '/user/imauth',
+                success: function (index, layero) {
+                    isPopShow = true
+                    $('#dragBtn i').removeClass('layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop')
+                    $('#dragBtn i').addClass('layui-icon-service')
+                    $('.gameGroup').show()
+                    $('.chatLayer').hide()
+                },
+                cancel: function (index, layero) {
+                    $('.chatLayer').hide()
+                    //layer.min(opnelayer);
+                    //layer.style(opnelayer, {
+                    //    left: 'auto',
+                    //    right: '0',
+                    //});
+                    return false;
+                },
+                min: function (layero, index, that) {
+                    $('.chatLayer').hide()
+                    layer.style(opnelayer, {
+                        left: '16000px',
+                        right: '16000px',
+                    });
+                    $('#dragBtn').show()
+                    return false;
+                },
+                restore: function (layero, index, that) {
+                    layer.style(opnelayer, {
+                        left: 'auto',
+                        right: '0',
+                        top: '10%',
+                    });
+                    return false;
+                }
+            })
+        }
+
+        window.openGameGroup = openGameGroup
+        window.gameGroupFun = gameGroupFun
+        
+
+        openGameGroup(1)
+
+
+        function gameGroupFun() {
+            $('.gameGroup .layui-icon-group').removeClass('blink1s')
+            $('.gameGroup .layui-badge-dot').hide()
+            $('#dragBtn').hide()
+
+            if ($('.chatLayer').length>0) {
+                $('.chatLayer').show()
+                layer.style(opnelayer, {
+                    left: 'auto',
+                    right: '0',
+                    top: '10%',
+                });
+            } else {
+                openGameGroup()
+            }
+        }
+        $(document).on('click', '.gameGroup', function () {
+            gameGroupFun()
+        });
+
+        $(document).on('click', '.msg', function () {
+            let msgHtml = '<i class="layui-icon layui-icon-notice"></i>消息';
+            $(".msg").html(msgHtml);
+        });
+        $(document).on('click', '.circle', function () {
+            layer.open({
+                type: 2,
+                title: i18nDataList.circle,
+                offset: 'rt',
+                anim: 1,
+                area: ['512px', '99%'],
+                fixed: false, //不固定
+                maxmin: false,
+                shade: 0,
+                content: '/Home/SystemCircle'
+            });
+
+
+            //// 当iframe加载完成后发送消息
+            //iframe.onload = function () {
+            //    iframe.contentWindow.postMessage({
+            //        param1: 'value1',
+            //        param2: 'value2'
+            //    }, '*'); // 第二个参数是目标origin，'*'表示任何origin，生产环境应指定具体origin
+            //};
+
+            //// iframe页面中接收消息
+            //window.addEventListener('message', function (event) {
+            //    // 验证消息来源（重要安全措施）
+            //    // if (event.origin !== "http://expected-origin.com") return;
+
+            //    // 使用接收到的数据
+            //    var param1 = event.data.param1;
+            //    var param2 = event.data.param2;
+            //});
+        });
+
+
+        $(document).on('click', '.putKeyword', function () {
+            layer.open({
+                type: 2,
+                title: i18nDataList.putKeyword,
+                anim: 1,
+                area: ['512px', '500px'],
+                content: '/User/myinfo#userInfo=2',
+                success: function (layero, index) {
+                    var tab = layer.getChildFrame('.layui-tab-title', index);
+                    tab.hide();
+                    setTimeout(function () {
+                        tab.remove();
+                    }, 1000)
+                }
+            });
+        });
+        $(document).on('click', '.toreport', function () {
+            layer.open({
+                type: 1,
+                title: i18nDataList.toreport,
+                anim: 0,
+                area: ['450px', '450px'],
+                fixed: false, //不固定
+                maxmin: false,
+                shade: 0,
+                content: $('.operatereport')
+            });
+        });
+        //刷新后还原选项卡
+        var lastUrl = layui.sessionData('lastUrl');
+        var lastUrlText = layui.sessionData('lastUrlText');
+        if (lastUrl.url != null && lastUrl.url != undefined) {
+            index.openTabsPage(lastUrl.url, lastUrlText.text);
+        }
+        function getAgreeProt() {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetSystemAgreeUseProtocol",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.data == "N") {
+                        certAgreemantLayer = layer.open({
+                            title: i18nDataList.certAgreemantLayerTitle,
+                            shade: [0.3, '#333'],
+                            shadeClose: false,
+                            type: 1,
+                            skin: 'class-layer-demo-custom',
+                            anim: 3,
+                            closeBtn: 0,
+                            area: [isPc ? '900px' : '85%', '90%'],
+                            content: $('.privateServerXY'),
+                            btn: [i18nDataList.certAgreemantLayerBtn1, i18nDataList.certAgreemantLayerBtn2],
+                            btn1: function (index, layero, that) {
+                                layer.close(certAgreemantLayer);
+                                agreenFunc();
+                                return false;
+                            },
+                            btn2: function (index, layero, that) {
+                                layer.close(certAgreemantLayer);
+                                setCookie("id", "", -1);
+                                setCookie("name", "", -1);
+                                location.href = '/Login/loginout';
+                                return false;
+                            }
+                        });
+                    }
+                    return false;
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+            return false;
+        }
+        function agreenFunc() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/AgreeSystemProtocol",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.code > 0) {
+                        layer.close(certAgreemantLayer);
+                    } else {
+                        layer.msg(data.msg, { time: 1500 });
+                    }
+                    return false;
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+            return false;
+        }
+        var lockReconnect = false;
+        var websocket = null;
+        function createWebSocket() {
+            $.get('/Home/GetMsgServiceToken', function (res) {
+                if (res.success) {
+                    const wsToken = res.otp;
+                    if ('WebSocket' in window) {
+                        const encodedToken = encodeURIComponent(wsToken);
+                        websocket = new WebSocket(`wss://msg.jidanpu.com:57456/?token=${encodedToken}`);
+                        InitEventHandle();
+                    } else {
+                        alert("您的浏览器不支持 WebSocket");
+                    }
+
+                } else {
+                    console.log("获取消息服务认证失败：" + (res.message || "未知错误"));
+                }
+            });
+        }
+        //function createWebSocket() {
+        //    if ('WebSocket' in window) {
+        //        websocket = new WebSocket("wss://msg.jidanpu.com:57457/?soure=system&user=" + msgTag);
+        //    } else {
+        //        alert("您的浏览器不支持websocket");
+        //    }
+        //    InitEventHandle();
+        //}
+        function InitEventHandle() {
+            websocket.onerror = function () {
+                console.log('WebSocket连接发生错误');
+            }
+            websocket.onopen = function () {
+                console.log('webSocket connection success');
+                //心跳检测重置
+                heartCheck.reset().start();
+            }
+            websocket.onmessage = function (event) {
+                heartCheck.reset().start();
+                if (event.data == "pong") {
+                    return;
+                }
+                if (typeof event.data !== 'string') {
+                    console.warn("Received non-string data:", event.data);
+                    return;
+                }
+                let msgData;
+
+
+                if (event.data != null && event.data != "" && event.data != undefined) {
+                    let msgData;
+                    try {
+                        msgData = JSON.parse(event.data);
+                    } catch (e) {
+                        console.error("Invalid JSON:", event.data);
+                        return;
+                    }
+                    if (msgData === null || typeof msgData !== 'object' || Array.isArray(msgData)) {
+                        console.warn("Expected JSON object, got:", msgData);
+                        return;
+                    }
+                    if (msgData.msgList) {
+                        let item = msgData.msgList;
+                        if (item.length > 0) {
+                            setNoticeRead(item[0].msgId);
+                            if (item[0].title == "平台新留言") {
+                                try {
+                                    var iframe = $(".layadmin-tabsbody-item.layui-show iframe")[0];
+                                    if (iframe.contentWindow.reloadnews) {
+                                        iframe.contentWindow.reloadnews();
+                                    }
+                                    execJs.execGetNewPlatfromMsgList();
+                                } catch (ex) {
+                                }
+                                return;
+                            }
+                            if (item[0].title == "newOrderNotity") {
+                                //execChildPageMethod('/Order/insiderecorderlist', 'newOrderNotity', ['param1', 'param2']);
+                                return;
+                            }
+                            let options = {
+                                closeButton: true,
+                                debug: false,
+                                positionClass: "toast-top-right",
+                                showDuration: "300",
+                                hideDuration: "1000",//消失的时间
+                                timeOut: "15000",//停留的时间,0则不自动关闭
+                                extendedTimeOut: "1000",//控制时间
+                                showEasing: "swing",//显示时的动画缓冲方式
+                                hideEasing: "linear",//消失时的动画缓冲方式
+                                iconClass: 'layui-icon layui-icon-speaker',
+                                onclick: function (e) {
+                                    if (item[0].exStr2 != null && item[0].exStr2 != "" && item[0].exStr3 == "5") {
+                                        layer.open({
+                                            title: item[0].exStr2 + "订单详情",
+                                            shade: [0.3, '#333'],
+                                            shadeClose: true,
+                                            maxmin: false,
+                                            type: 2,
+                                            skin: 'layui-layer-lan',
+                                            anim: 8,
+                                            area: ['1280px', '980px'],
+                                            content: '/Order/OrderView?orderId=' + item[0].exStr2 + '&viewType=10'
+                                        });
+                                    }
+                                }, // 点击关闭回调
+                                url: '/User/MyMessage'
+                                //audioUrl: msgData.isAutoPaySound === "Y"?myMsgSoundSoure == 2 ? '/media/msg2.wav' : '/media/msg.wav':''
+                            }
+                            var notificationSound = document.getElementById("chatAudio");
+                            notificationSound.muted = false;
+                            if (isPlayMsgSound != 'N') {
+                                notificationSound.play();
+                            }
+
+                            notice.success(item[0].content, item[0].title, options);
+                            if (msgData.isAutoPaySound === "Y") {
+                                //$('#chatAudio')[0].load(); //重载一次 否则只会播一次声音
+                                audio.play().catch(e => {
+                                    console.warn('Audio play failed:', e);
+                                });
+                                var isjdpcore = window.navigator.userAgent.indexOf('jdpcore') > -1 ? true : false;
+                                if (!isjdpcore) {
+                                    if (isPlayMsgSound != 'N') {
+                                        $('#chatAudio')[0].play();
+                                    }
+                                }
+                            }
+                            if (item[0].exStr10 == 10) {
+                                var indexPop  = layer.open({
+                                    type: 1
+                                    , title: item[0].title
+                                    , closeBtn: false
+                                    , area: ['480px', '320px']
+                                    , shade: 0.8
+                                    , id: 'LAY_layuipro'
+                                    , btn: ['我知道了','去充值']
+                                    , btnAlign: 'c'
+                                    , moveType: 1
+                                    , content: '<div style="padding: 20px; line-height: 30px; background-color: #393D49; color: #fff; font-weight: 300;font-size:18px">' + item[0].content + '</div>'
+                                    , success: function (layero) {
+                                    }, 
+                                    btn2: function (index, layero, that) {
+                                        window.open('//pt.shangdailian.com/pages/index.html?url=/pages/user/userRecharge.html', '_blank');
+                                    },
+                                });
+                            }
+                            try {
+                                if (msgData.isAutoPaySound === "Y") {
+                                    newExcitingAlerts();
+                                }
+                                execJs.showNotiyMessage(item[0].title, item[0].content, item[0].sendUserName, domain + '/User/mymessage');
+                            } catch (ex) {
+                            }
+                        }
+                    }
+                    else if (msgData.type) {
+                        // 新格式：带 type 的指令
+                        //handleMessageByType(msgData);
+                    }
+                    else {
+                        // 通用处理
+                        let options = {
+                            closeButton: true,
+                            debug: false,
+                            positionClass: "toast-top-right",
+                            showDuration: "300",
+                            hideDuration: "1000",//消失的时间
+                            timeOut: "15000",//停留的时间,0则不自动关闭
+                            extendedTimeOut: "1000",//控制时间
+                            showEasing: "swing",//显示时的动画缓冲方式
+                            hideEasing: "linear",//消失时的动画缓冲方式
+                            iconClass: 'layui-icon layui-icon-speaker',
+                            onclick: function (e) {
+                            },
+                        }
+                        var notificationSound = document.getElementById("chatAudio");
+                        notificationSound.muted = false;
+                        if (isPlayMsgSound != 'N') {
+                            notificationSound.play();
+                        }
+                        notice.success(msgData, "消息", options);
+                    }
+
+                }
+            }
+            websocket.onclose = function () {
+                reconnect(); //重连
+            }
+        }
+
+        window.onbeforeunload = function () {
+            //try {
+            //    if (typeof globalMsgService !== 'undefined' &&
+            //        globalMsgService &&
+            //        typeof globalMsgService.disconnect === 'function') {
+
+            //        globalMsgService.disconnect();
+            //        console.log("消息服务已断开");
+            //    }
+            //} catch (e) {
+            //    console.warn("断开消息服务时出错:", e);
+            //}
+            clos();
+        };
+        function clos() {
+            try {
+                websocket.close(3000, '强制关闭');
+            }
+            catch (ex) {
+            }
+        }
+        function reconnect() {
+            if (lockReconnect) return;
+            lockReconnect = true;
+            //setTimeout(function () {
+            //    //没连接上会一直重连，设置延迟避免请求过多
+            //    createWebSocket();
+            //    lockReconnect = false;
+            //}, 5000);
+        }
+        var heartCheck = {
+            timeout: 1000 * 60 * 5,//5分钟发一次心跳
+            timeoutObj: null,
+            serverTimeoutObj: null,
+            reset: function () {
+                clearTimeout(this.timeoutObj);
+                clearTimeout(this.serverTimeoutObj);
+                return this;
+            },
+            start: function () {
+                var self = this;
+                this.timeoutObj = setTimeout(function () {
+                    try {
+                        websocket.send("ping");
+                    }
+                    catch (ex) {
+                    }
+                    self.serverTimeoutObj = setTimeout(function () {
+                        try {
+                            websocket.close();
+                        }
+                        catch (ex) {
+                        }
+                    }, self.timeout)
+                }, this.timeout)
+            }
+        }
+        var newExcitingAlerts = (function () {
+            var oldTitle = document.title;
+            var msg = i18nDataList.newExcitingAlerts;
+            var timeoutId;
+            var blink = function () { document.title = document.title == msg ? oldTitle : msg; };
+            var clear = function () {
+                clearInterval(timeoutId);
+                document.title = oldTitle;
+                window.onmousemove = null;
+                timeoutId = null;
+            };
+            return function () {
+                if (!timeoutId) {
+                    timeoutId = setInterval(blink, 800);
+                    window.onmousemove = clear;
+                }
+            };
+        }());
+        function getSystemInsideNotityAboutMe() {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetSystemInsideNotity",
+                data: {},
+                dataType: 'json',
+                cache: false,
+                timeout: 1000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                    if (data.code > 0) {
+                        insideNotityArry = data.data;
+                        $.each(insideNotityArry, function (index, item) {
+                            let html = '';
+                            html += '<div style="padding: 32px;font-size:16px;line-height: 30px;">';
+                            // 旧消息记录可能没有 Remark 字段，避免首页通知弹窗因 undefined.replace 崩溃。
+                            var remark = item.Remark || item.content || item.Content || '';
+                            html += String(remark).replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, ' ');
+                            html += '</div>';
+                            layer.open({
+                                id: item.SystemNoticeID,
+                                title: i18nDataList.getSystemInsideNotityAboutMe + item.createTimeStr,
+                                shade: [0.3, '#333'],
+                                shadeClose: false,
+                                type: 1,
+                                skin: 'layui-layer-lan',
+                                anim: 1,
+                                btnAlign: 'c',
+                                closeBtn: 0,
+                                area: [isPc ? '900px' : '90%', isPc ? '688px' : '95%'],
+                                content: html,
+                                btn: [i18nDataList.getSystemInsideNotityAboutMeBtn],
+                                btn1: function (index, layero, that) {
+                                    setSystemInsideNoticeRead(item.SystemNoticeID);
+                                    layer.closeAll();
+                                },
+                            });
+                        });
+                    }
+
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+        function setSystemInsideNoticeRead(id) {
+            $.ajax({
+                type: "Post",
+                url: "/Home/ReadSystemInsideNotityByMe",
+                data: { id: id },
+                dataType: 'json',
+                cache: false,
+                timeout: 60000,
+                error: function () { },
+                beforeSend: function (XMLHttpRequest) { },
+                success: function (data) {
+                },
+                complete: function (XMLHttpRequest) {
+                }
+            });
+        }
+
+        $(document).on('click', '.btn', function () {
+            execChildPageMethod('/Order/insiderecorderlist', 'test', ['param1', 'param2']);
+            return false;
+        });
+
+        function execChildPageMethod(pageUrl, methodName, args = []) {
+            function getCleanPath(url) {
+                try {
+                    // 如果是相对路径，拼接成绝对路径再解析
+                    const fullUrl = new URL(url, window.location.origin).href;
+                    return new URL(fullUrl).pathname;
+                } catch (e) {
+                    //console.warn('Invalid URL:', url);
+                    return url.split('?')[0].split('#')[0];
+                }
+            }
+
+            const targetPath = getCleanPath(pageUrl);
+            let found = false;
+            let success = false;
+
+            $('iframe').each(function () {
+                const $iframe = $(this);
+                let src = $iframe.attr('src') || '';
+                if (!src) return true;
+                const iframePath = getCleanPath(src);
+                if (iframePath === targetPath) {
+                    found = true;
+                    const iframeWin = this.contentWindow;
+
+                    if (!iframeWin) {
+                        notice.warning('iframe 未加载完成');
+                        return false;
+                    }
+
+                    try {
+                        if (typeof iframeWin[methodName] === 'function') {
+                            iframeWin[methodName].apply(iframeWin, args);
+                            success = true;
+                        } else {
+                            //notice.warning(`子页面中未找到方法：${methodName}`);
+                        }
+                    } catch (e) {
+                        console.error('执行子页面方法出错:', e);
+                        //notice.error('执行失败：' + (e.message || e));
+                    }
+
+                    return false; // 停止遍历
+                }
+            });
+
+            if (!found) {
+                //notice.warning('页面未打开：' + pageUrl);
+            }
+
+            return success;
+        }
+    });
+</script>
+
+
+
+
+</body>
+</html>

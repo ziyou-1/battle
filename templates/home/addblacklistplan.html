@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>我也要举报</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我也要举报</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- <link rel="stylesheet" href="./elementui.css">     -->
+    
+    <link rel="stylesheet" href="/CSS/elementindex.css">
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .searchinput .el-button + .el-button {
+            margin-left: 0px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #app {
+            box-sizing: border-box;
+            padding: 30px;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .head {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 40px;
+            text-align: center;
+            padding-bottom: 30px;
+        }
+        /* .content .el-form-item__content{
+            display: flex;
+            align-items: flex-start;
+        } */
+        .content .el-form-item__content .input.inputb {
+            margin-top: 20px;
+        }
+
+        .content .el-form-item__content .input .el-form-item__content {
+            display: flex;
+            align-items: flex-start;
+            /* flex: 1; */
+        }
+
+        .content .el-form-item__content .mytxt {
+            width: 62%;
+        }
+
+        .content .el-form-item__content .input .el-input {
+            width: 60%;
+        }
+
+        .content .el-form-item__content .myicon {
+            font-size: 24px;
+            margin-left: 10px;
+            margin-right: 100px;
+        }
+
+        .mybtns.el-button {
+            padding: 5px 0 0 10px;
+        }
+
+        @media screen and (max-width: 767px) {
+            .el-form-item__label {
+                width: 100px !important;
+            }
+
+            .el-form-item.long .el-form-item__label {
+                line-height: 20px !important;
+            }
+
+            .el-form-item__content {
+                margin-left: 100px !important;
+            }
+
+            .content .el-form-item__content .input .el-form-item__content {
+                margin-left: 0px !important;
+            }
+
+            .content .el-form-item__content .input .el-input {
+                width: auto;
+            }
+
+            .content .el-form-item__content .mytxt {
+                width: auto;
+            }
+
+            .content .el-form-item__content .myicon {
+                font-size: 18px;
+                margin-right: 0px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" style="width: 100%;">
+        
+        <div class="content">
+            <el-form :model="ruleForm" label-width="200px" :rules="rules" ref="ruleForm" v-cloak>
+                <el-form-item label="举报对象名称：" class="long" required>
+                    <el-form-item :class="index==0?'input':'inputb input'" v-for="(item,index) in ruleForm.name" :prop="'name.'+index+'.value'" :rules="rules.name">
+                        <el-input v-model="item.value" class="myinput"></el-input>
+                        <el-button type="text" @click="addfun('name')" v-if="index==0" class="mybtns"><i class="el-icon-plus myicon"></i></el-button>
+                        <el-button type="text" @click="losefun('name',index)" v-else class="mybtns"><i class="el-icon-minus myicon"></i></el-button>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item label="涉及QQ：">
+                    <el-form-item :class="index==0?'input':'inputb input'" v-for="(item,index) in ruleForm.qq" :prop="'qq.'+index+'.value'" :rules="rules.qq">
+                        <el-input v-model.number="item.value" class="myinput"></el-input>
+                        <el-button type="text" @click="addfun('qq')" v-if="index==0" class="mybtns"><i class="el-icon-plus myicon"></i></el-button>
+                        <el-button type="text" @click="losefun('qq',index)" v-else class="mybtns"><i class="el-icon-minus myicon"></i></el-button>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item label="涉及微信：">
+                    <el-form-item :class="index==0?'input':'inputb input'" v-for="(item,index) in ruleForm.wechat" :prop="'wechat.'+index+'.value'" :rules="rules.wechat">
+                        <el-input v-model="item.value" class="myinput"></el-input>
+                        <el-button type="text" @click="addfun('wechat')" v-if="index==0" class="mybtns"><i class="el-icon-plus myicon"></i></el-button>
+                        <el-button type="text" @click="losefun('wechat',index)" v-else class="mybtns"><i class="el-icon-minus myicon"></i></el-button>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item label="涉及手机：">
+                    <el-form-item :class="index==0?'input':'inputb input'" v-for="(item,index) in ruleForm.tel" :prop="'tel.'+index+'.value'" :rules="rules.tel">
+                        <el-input v-model="item.value" class="myinput"></el-input>
+                        <el-button type="text" @click="addfun('tel')" v-if="index==0" class="mybtns"><i class="el-icon-plus myicon"></i></el-button>
+                        <el-button type="text" @click="losefun('tel',index)" v-else class="mybtns"><i class="el-icon-minus myicon"></i></el-button>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item label="曾用平台系统名称：" class="long">
+                    <el-form-item :class="index==0?'input':'inputb input'" v-for="(item,index) in ruleForm.rname" :prop="'rname.'+index+'.value'" :rules="rules.rname">
+                        <el-input v-model="item.value" class="myinput"></el-input>
+                        <el-button type="text" @click="addfun('rname')" v-if="index==0" class="mybtns"><i class="el-icon-plus myicon"></i></el-button>
+                        <el-button type="text" @click="losefun('rname',index)" v-else class="mybtns"><i class="el-icon-minus myicon"></i></el-button>
+                    </el-form-item>
+                </el-form-item>
+                <div class="wrapItem">
+                    <el-form-item label="对方身份：" class="formitem" prop="type">
+                        <el-radio-group v-model="ruleForm.type">
+                            <el-radio label="10">接单</el-radio>
+                            <el-radio label="20">发单</el-radio>
+                            <el-radio label="30">接单和发单</el-radio>
+                        </el-radio-group>
+
+                    </el-form-item>
+                    <el-form-item label="发生时间：" class="formitem" prop="month">
+                        <el-date-picker v-model="ruleForm.month"
+                                        value-format="yyyy-MM"
+                                        format="yyyy-MM"
+                                        type="month"
+                                        placeholder="选择年月">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+
+                <el-form-item label="涉及金额：" prop="amout">
+                    
+                    <el-input v-model="ruleForm.amout" style="width:220px;"  placeholder="填写金额" onkeyup="clearNoNum(this)"></el-input>
+                </el-form-item>
+                <el-form-item label="举报证据：" required>
+                    <el-upload action="#"
+                               ref="upload"
+                               list-type="picture-card"
+                               :on-preview="handlePreview"
+                               :on-remove="handleRemove"
+                               :http-request="uploadAvatar"
+                               :before-upload="beforeUpload"
+                               :file-list="picList"
+                               accept=".jpg, .png"
+                               :data="policydata"
+                               :limit="10"
+                               :on-exceed="overlimit"
+                               :auto-upload="true"
+                               :multiple="true">
+                        <i slot="default" class="el-icon-plus"></i>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="投诉描述：" prop="remark">
+                    <el-input type="textarea" :rows="6" v-model="ruleForm.remark" maxlength="800" class="mytxt"></el-input>
+                </el-form-item>
+                <el-form-item label="">
+                    <el-checkbox-group v-model="ruleForm.ischeck">
+                        <el-checkbox label="11" name="ischeck">我同意<a style="color:red;" lay-text="平台避坑榜服务使用协议" lay-href="https://www.jidanpu.com/html/blacklistxieyi.html"><<平台避坑榜服务使用协议>></平台避坑榜服务使用协议></a></el-checkbox>
+                    </el-checkbox-group>
+
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" class="sechbtn" @click="onSubmit">提交</el-button>
+                    <el-button @click="resetForm">重置</el-button>
+                    <el-button lay-href="/home/blacklistplan"> 返回搜索</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+    </div>
+    <script src="/JS2019/vue.min.js"></script>
+    <script src="/JS2019/elementindex.js"></script>   
+    <script src="/JS2019/jquery-3.3.1.min.js"></script>
+    <script src="/JS2019/common.js"></script>
+    <script type="text/javascript">
+
+        function clearNoNum(obj) {
+            obj.value = obj.value.replace(/[^\d.]/g, "");//清除"数字"和"."以外的字符
+            obj.value = obj.value.replace(/^\./g, "");//验证第一个字符是数字而不是字符
+            obj.value = obj.value.replace(/\.{2,}/g, ".");//只保留第一个.清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+        }
+
+        //var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        var validatePhone = function (rule, value, callback) {
+            if (!VerifyMoblie(value) && value) {
+                callback(new Error('手机号填写错误'))
+            } else {
+                callback()
+            }
+        }
+
+        var qqReg = /^\d+(\.\d+)?$/;
+        var validateqq = function (rule, value, callback) {
+            if (!qqReg.test(value) && value) {
+                callback(new Error('qq号只能为纯数字'))
+            } else if (value < 10000 && value) {
+                callback(new Error('qq号应大于五位数'))
+            } else {
+                callback()
+            }
+        }
+        var validecomma = function (rule, value, callback) {
+            if (value.indexOf(',') > -1 || value.indexOf('，') > -1) {
+                callback(new Error('不能包含符号“,”'))
+            } else {
+                callback()
+            }
+        }
+        var validateMoney = function (rule, value, callback) {
+            console.log(value,'11111')
+            if (!value) {
+                callback(new Error('涉及金额不能为空'))
+            } else if (value.indexOf(".") != -1 && value.split('.').length > 2) {
+                callback(new Error('请输入正确格式的金额')) //防止输入多个小数点
+            } else if (value.indexOf(".") != -1 && value.split('.')[1].length > 2) {
+                callback(new Error('请输入正确的小数位数')) //小数点后两位
+            } else {
+                callback();
+            }
+        }
+        function mayarr(arrays) {
+            var strs = [];
+            arrays.forEach(function (obj, index) {
+                if (obj.value) {
+                    strs.push(obj.value)
+                }
+            })
+            return strs.join(',');
+        }
+
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                ruleForm: {
+                    name: [{ value: "" }],
+                    qq: [{ value: "" }],
+                    wechat: [{ value: "" }],
+                    tel: [{ value: "" }],
+                    rname: [{ value: "" }],
+                    amout: "",
+                    type: "",
+                    remark: "",
+                    month: "",
+                    ischeck: ""
+                },
+                dialogImageUrl: '',
+                dialogVisible: false,
+                fileList: [],
+                picList: [],
+                curfile: null,
+                policydata: {
+                    OSSAccessKeyId: "",
+                    signature: "",
+                    policy: "",
+                    success_action_status: "",
+                    key: ""
+                },
+                rules: {
+                    name: [{ required: true, message: '请输入举报对象名称', trigger: 'blur' },
+                    { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' },
+                    { validator: validecomma, trigger: 'blur' }
+                    ],
+                    qq: [
+                        { validator: validateqq, trigger: 'blur' }
+                    ],
+                    wechat: [
+                        { min: 2, message: '不少于2个字符', trigger: 'blur' },
+                        { validator: validecomma, trigger: 'blur' }
+                    ],
+                    tel: [
+                        { validator: validatePhone, trigger: 'blur' }
+                    ],
+                    rname: [
+                        { min: 2, message: '不少于2个字符', trigger: 'blur' },
+                        { validator: validecomma, trigger: 'blur' }
+                    ],
+                    remark: [
+                        { required: true, message: '举报内容必填', trigger: 'blur' },
+                        { min: 30, max: 800, message: '长度在 30 到 800 个字符', trigger: 'blur' }
+                    ],
+                    month: [
+                        { required: true, message: '请选择首次发生年月', trigger: 'blur' }
+                    ],
+                    amout: [
+                        { type: 'string', required: true, trigger: 'blur', validator: validateMoney }
+                    ],
+                    type: [
+                        { required: true, message: '请选择身份', trigger: 'change' }
+                    ]
+                }
+            },
+            watch: {
+            },
+            created: function () {
+            },
+            mounted: function () {
+            },
+            methods: {
+                resetForm() {
+                    this.$refs.ruleForm.resetFields();
+                    this.ruleForm = {
+                        name: [{ value: "" }],
+                        qq: [{ value: "" }],
+                        wechat: [{ value: "" }],
+                        tel: [{ value: "" }],
+                        rname: [{ value: "" }],
+                        amout: "",
+                        type: "",
+                        remark: "",
+                        month: "",
+                        ischeck: ""
+                    };
+                    this.picList = [];
+                },
+                onSubmit: function () {
+                    var isvalid = false;
+                    this.$refs.ruleForm.validate((valid) => {
+                        if (valid) {
+                            isvalid = true
+                        }
+                    });
+                    if (!isvalid) {
+                        return false;
+                    }
+
+                    if (this.picList.length == 0) {
+                        this.$message({
+                            message: "至少上传一张图片",
+                            type: 'warning'
+                        })
+                        return false;
+                    }
+                    var str = mayarr(this.ruleForm.rname) + mayarr(this.ruleForm.qq) + mayarr(this.ruleForm.wechat) + mayarr(this.ruleForm.tel);
+
+                    if (!str) {
+                        this.$message({
+                            message: "涉及QQ、涉及微信、涉及手机或曾用平台系统名称，至少填写一项",
+                            type: 'warning'
+                        })
+                        return false;
+                    }
+                    if (!this.ruleForm.ischeck) {
+                        this.$message({
+                            message: "请先阅读并同意《平台避坑榜服务使用协议》",
+                            type: 'warning'
+                        })
+                        return false;
+                    }
+                    var that = this;
+                    var data = {
+                        roleType: this.ruleForm.type,
+                        content: this.ruleForm.remark,
+                        imgList: this.picList.map(function (obj, index) {
+                            return obj.url;
+                        }).join(","),
+                        actionTime: this.ruleForm.month + "-01 00:00:00",
+                        jdpName: mayarr(this.ruleForm.rname) || "",
+                        fee: (this.ruleForm.amout * 1).toFixed(2),
+                        bussineName: mayarr(this.ruleForm.name),
+                        qq: mayarr(this.ruleForm.qq) || "",
+                        wx: mayarr(this.ruleForm.wechat) || "",
+                        phone: mayarr(this.ruleForm.tel) || ""
+                    }
+
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    $.ajax({
+                        type: "Post",
+                        url: "/home/AddBlackListData",
+                        data: data,
+                        dataType: 'json',
+                        cache: false,
+                        timeout: 60000,
+                        error: function () { },
+                        beforeSend: function (XMLHttpRequest) { },
+                        success: function (res) {
+                            if (res.code > 0) {
+                                that.$confirm(res.msg, '提交成功', {
+                                    confirmButtonText: '确定',
+                                    showCancelButton: false,
+                                }).then(() => {
+                                    that.resetForm();
+                                }).catch(() => {
+                                    that.resetForm();
+                                });
+
+                            } else {
+                                that.$message({
+                                    message: res.msg,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        complete: function (XMLHttpRequest) {
+                            loading.close();
+                        }
+                    })
+                },
+                addfun: function (type) {
+                    if (this.ruleForm[type].length == 5) return false;
+                    var obj = { value: "" };
+                    this.ruleForm[type].push(obj)
+
+                },
+                losefun: function (type, index) {
+                    this.ruleForm[type].splice(index, 1)
+                },
+                backsearch: function () {
+                    window.location.href = "blacklist.html"
+                },
+                uploadAvatar: function (item) {
+                    var reg = /,/g;
+                    var that = this;
+                    var filekey = new Date().getTime() + '-' + (Math.random() + "").substring(2, 7) + '-' + item.file.name.replace(reg, '');
+                    this.getpoclixy().then(function (res) {
+
+                        var filedata = new FormData();
+                        filedata.append('key', filekey);
+                        filedata.append('policy', res.policy);
+                        filedata.append('OSSAccessKeyId', res.accessid);
+                        filedata.append('signature', res.signature);
+                        filedata.append('success_action_status', 200);
+                        filedata.append('file', item.file);
+
+                        $.ajax({
+                            url: res.host,
+                            processData: false,
+                            cache: false,
+                            contentType: false,
+                            type: 'POST',
+                            data: filedata,
+                            success: function (ress) {
+                                // 本地直传：res.host 指向后台接口，真实地址在返回的 data.src 里
+                                var realUrl = (ress && ress.data && (ress.data.src || ress.data.url)) || (res.host + '/' + filekey)
+                                var obj = {
+                                    uid: item.file.uid,
+                                    name: item.file.name,
+                                    type: item.file.type,
+                                    url: realUrl
+                                }
+                                that.picList.push(obj)
+                                that.emptyUpload()
+                            },
+                            error: function (i) {
+                                var msg = i;
+                                if (typeof i === Object) {
+                                    msg = JSON.stringify(i)
+                                }
+                                layer.msg(item.file.name + '文件上传失败，请联系技术人员处理，或者重试几次' + msg);
+                                return false;
+                            }
+                        })
+                    }, function (error) {
+
+                    })
+
+                },
+                beforeUpload: function (file) {
+                    const isLt2M = file.size / 1024 / 1024 < 2;
+                    if (!isLt2M) {
+                        this.$message.error('上传图片大小不能超过 2MB!')
+                    }
+                    return isLt2M;
+                },
+                handlePreview: function (file) {
+                    this.dialogVisible = true;
+                    this.dialogImageUrl = file.url;
+                },
+                handleRemove: function (file, fileList) {
+                    var curindex;
+                    var that = this;
+                    for (const i in this.picList) {
+                        if (this.picList[i].uid === file.uid) {
+                            curindex = i
+                        }
+                    }
+                    $.ajax({
+                        type: "Post",
+                        url: "/CommonPermissionAjax/DelSingleImg",
+                        data: { imgpath: this.picList[curindex].url },
+                        dataType: 'json',
+                        cache: false,
+                        timeout: 60000,
+                        error: function () {
+                            that.$message({
+                                message: "请求出错",
+                                type: 'warning'
+                            })
+                        },
+                        success: function (data) {
+                            if (data.code == 1) {
+                                that.$message({
+                                    message: "删除成功",
+                                    type: 'success'
+                                })
+                                that.picList.splice(curindex, 1)
+                            } else {
+                                that.$message({
+                                    message: data.msg,
+                                    type: 'warning'
+                                })
+                                layer.msg('文件上传失败，请联系技术人员处理！')
+                            }
+                        }
+                    });
+
+                },
+                overlimit: function () {
+                    this.$message({
+                        message: "最多只能上传十张图片",
+                        type: 'warning'
+                    })
+                },
+                getpoclixy: function () {
+                    var that = this;
+                    var obj;
+                    var p = new Promise(function (resolve, reject) {
+                        $.ajax({
+                            url: '/CommonPermissionAjax/GetAliOssPolicy',
+                            type: 'GET',
+                            data: { bk: 10 },
+                            headers: { Authorization: layui.data('XCORS').Authorization },
+                            success: function (res) {
+                                if (res.code == 0 && res.success) {
+                                    resolve(res.data);
+                                } else {
+                                    that.$message({
+                                        message: res.msg,
+                                        type: 'warning'
+                                    })
+                                }
+                            },
+                            error: function (res) {
+                                that.$message({
+                                    message: res,
+                                    type: 'warning'
+                                })
+                            }
+                        })
+                    });
+                    return p;
+
+                },
+                emptyUpload() {
+                    const mainImg = this.$refs.upload
+                    this.$refs.upload.clearFiles()
+                    //if (mainImg) {
+                    //    if (mainImg.length) {
+                    //        mainImg.forEach(item => {
+                    //            item.clearFiles()
+                    //        })
+                    //    } else {
+                    //        this.$refs.upload.clearFiles()
+                    //    }
+                    //}
+                }
+            }
+        })
+
+
+        layui.config({
+            base: '../layuiadmin/'
+        }).extend({
+            index: 'lib/index'
+        }).use(['index', 'form'], function () {
+
+        })
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>客户端内容管理</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+
+<style>
+    .layui-elem-quote {
+        margin-bottom: 10px;
+        padding: 0px;
+        line-height: 22px;
+        border-left: 5px solid #009688;
+        border-radius: 0 2px 2px 0;
+        background-color: #f2f2f2;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 2px;
+        position: relative;
+        box-sizing: border-box;
+    }
+    .red{
+        color:red;
+    }
+    .shoptit{
+        font-size:20px;
+        padding-left:25px;
+    }
+
+    .layui-tab-item .layui-row.layui-col-space10 {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* Keep Layui tables inside their responsive grid columns. The browser's
+       default fieldset min-width otherwise grows to the full table width. */
+    .lottery-panels > [class*="layui-col"] {
+        min-width: 0;
+    }
+    .lottery-panels fieldset {
+        box-sizing: border-box;
+        min-width: 0;
+        width: 100%;
+    }
+    /* The two fixed-column tables need roughly 700px + 1450px. Stack them
+       until both can be read without crushing the neighboring panel. */
+    @media (max-width: 2239px) {
+        .lottery-panels > [class*="layui-col"] {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 700px) {
+        /* Several dialogs use desktop pixel widths even after the window is
+           resized. Keep the entire title bar and form within the viewport. */
+        .layui-layer.layui-layer-page {
+            box-sizing: border-box;
+            left: 12px !important;
+            top: 12px !important;
+            width: calc(100vw - 24px) !important;
+            max-height: calc(100dvh - 24px);
+        }
+        .layui-layer-page .layui-layer-content {
+            box-sizing: border-box;
+            max-height: calc(100dvh - 70px);
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+    }
+
+</style>
+
+<form class="layui-form" action="" lay-filter="form">
+    <div class="layui-tab" lay-filter="tabsCk">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="10">新闻与Bannar</li>
+            <li lay-id="20">商品管理</li>
+            <li lay-id="30">积分商品管理</li>
+            <li lay-id="40">积分商品兑换记录</li>
+            <li lay-id="50">抽奖奖品设置</li>
+            <li lay-id="60">其他设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增文章或Bannar"><i class="layui-icon layui-icon-add-1"></i>新增文章或Bannar</button>
+                    </div>
+                </script>
+                <script type="text/html" id="baroperating">
+                    
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-right:1px" lay-event="submitDel" title="删除"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                </script>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-pane">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">所属游戏</label>
+                        <div class="layui-input-block">
+                            <select id="selectGameName" name="selectGameName" lay-filter="selectGame">
+                                <option value="" selected="selected">全部</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+                                            <option value="伊莫">伊莫</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table class="layui-hide" id="tableList2" lay-filter="tableList2"></table>
+                <script type="text/html" id="toolbarDemo2">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增商品"><i class="layui-icon layui-icon-add-1"></i>新增商品</button>
+                    </div>
+                </script>
+                <script type="text/html" id="baroperating2">
+                    <a class="layui-btn layui-btn-xs layui-btn-primary" style="margin-left:2px" lay-event="editDel" title="编辑">编辑</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-left:2px" lay-event="upShopItem" title="上架">上架</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-warm" style="margin-left:2px" lay-event="downShopItem" title="下架">下架</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-left:2px" lay-event="submitDel" title="删除">删除</a>
+                </script>
+                <script type="text/html" id="switchTpl1">
+                    <input type="checkbox" name="sta" value="{{d.ShopItem_Id}}" lay-skin="switch" lay-text="需要|不需要" lay-filter="isNeedGroupChecked" {{ d.IsNeedGroup == 'Y' ? 'checked' : '' }}>
+                </script>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-hide" id="tableList3" lay-filter="tableList3"></table>
+                <script type="text/html" id="toolbarDemo3">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增积分商品"><i class="layui-icon layui-icon-add-1"></i>新增积分商品</button>
+                    </div>
+                </script>
+                <script type="text/html" id="baroperating3">
+                    <a class="layui-btn layui-btn-xs layui-btn-primary" style="margin-left:2px" lay-event="editDel" title="编辑">编辑</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-left:2px" lay-event="upShopItem" title="上架">上架</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-warm" style="margin-left:2px" lay-event="downShopItem" title="下架">下架</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-left:2px" lay-event="submitDel" title="删除">删除</a>
+                </script>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-pane">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">发货状态</label>
+                            <div class="layui-input-block">
+                                <select id="selectShipStatus" name="selectShipStatus" lay-filter="">
+                                    <option value="0" selected="selected">全部</option>
+                                    <option value="10">待发货</option>
+                                    <option value="20">已发货</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">搜索</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="integralkey" id="integralkey" lay-verify="" placeholder="输入手机号、微信号、姓名搜索" autocomplete="off" class="layui-input larry-input-shadow" value="">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <div class="layui-input-inline" style="">
+                                <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn4">搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="layui-hide" id="tableList4" lay-filter="tableList4"></table>
+                <script type="text/html" id="toolbarDemo4">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                    </div>
+                </script>
+                <script type="text/html" id="baroperating4">
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-left:2px" lay-event="shipbtn" title="发货或改单">发货或改单</a>
+                </script>
+            </div>
+            <div class="layui-tab-item">
+                <fieldset class="layui-elem-field">
+                    <legend>抽奖设置</legend>
+                    <div class="layui-field-box">
+                        <div class="layui-form-pane">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:145px">抽奖活动开启状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" name="awardStatus" value="0" title="关闭" [% if (award_settings.awardStatus if award_settings.awardStatus is defined else "0")|string == "0" %][% endif %] [% if (award_settings.awardStatus if award_settings.awardStatus is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="awardStatus" value="10" title="开启"  [% if (award_settings.awardStatus if award_settings.awardStatus is defined else "0")|string == "10" %][% endif %] [% if (award_settings.awardStatus if award_settings.awardStatus is defined else "0")|string == "10" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:145px">用哪种方式抽奖</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" name="awardWay" value="0" title="用户积分" [% if (award_settings.awardWay if award_settings.awardWay is defined else "0")|string == "0" %][% endif %] [% if (award_settings.awardWay if award_settings.awardWay is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="awardWay" value="1" title="预存余额"  [% if (award_settings.awardWay if award_settings.awardWay is defined else "0")|string == "1" %][% endif %] [% if (award_settings.awardWay if award_settings.awardWay is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:145px">抽奖单位名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="awardunit" id="awardunit" placeholder="例如：积分、爆肝值" autocomplete="off" class="layui-input" value="[[ award_settings.awardunit if award_settings.awardunit is defined else '积分' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:145px">多少积分(钱)抽一次</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="awardamount" id="awardamount" placeholder="整数" autocomplete="off" class="layui-input" value="[[ award_settings.awardamount if award_settings.awardamount is defined else '0' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" style="width:145px">每天可以抽几次</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="awardcount" id="awardcount" placeholder="整数" autocomplete="off" class="layui-input" value="[[ award_settings.awardcount if award_settings.awardcount is defined else '1' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn layui-btn-normal" id="saveawardsetting" lay-submit="" type="button" lay-filter="saveawardsetting" style="">保存设置项</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+                <div class="layui-row layui-col-space10 lottery-panels">
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md4 layui-col-lg4">
+                        <fieldset class="layui-elem-field">
+                            <legend>抽奖奖品管理</legend>
+                            <div class="layui-field-box">
+                                <table class="layui-hide" id="tableList5" lay-filter="tableList5"></table>
+                                <script type="text/html" id="toolbarDemo5">
+                                    <div class="layui-btn-container">
+                                        <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addAwardBtn" type="button" title="新增奖品"><i class="layui-icon layui-icon-add-1"></i>新增奖品</button>
+                                        <span style="color:red">注意：必须添加8个奖品，包括未中奖的奖品</span>
+                                    </div>
+
+                                </script>
+                                <script type="text/html" id="baroperating5">
+                                    <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-left:2px" lay-event="editaward" title="编辑奖品">编辑</a>
+                                    <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-left:2px" lay-event="delaward" title="删除">删除</a>
+                                </script>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-lg8">
+                        <fieldset class="layui-elem-field">
+                            <legend>中奖名单</legend>
+                            <div class="layui-field-box">
+
+                                <div class="layui-form-pane">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label" style="width: 80px">发奖状态</label>
+                                        <div class="layui-input-inline">
+                                            <select id="grantStatus" name="grantStatus" lay-filter="">
+                                                <option value="-1">全部</option>
+                                                <option value="0">未发放</option>
+                                                <option value="10">已发放</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label" style="width: 80px">搜索</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="key6" id="key6" lay-verify="" placeholder="手机号/兑奖编码" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <div class="layui-input-inline" style="">
+                                            <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seach6Btn" style="width: 80px">搜索</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="layui-hide" id="tableList6" lay-filter="tableList6"></table>
+                                <script type="text/html" id="toolbarDemo6">
+                                    <div class="layui-btn-container">
+                                        <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据">刷新列表</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="mutAward" type="button" title="可以批量将勾选的中奖记录进行发奖">批量发放奖品</button>
+                                        <span id="totalGrant"></span>
+                                    </div>
+                                </script>
+                                <script type="text/html" id="baroperating6">
+                                    <a class="layui-btn layui-btn-sm layui-btn-danger" style="margin-left:2px" lay-event="deliveraward" title="发放奖品">发放</a>
+                                </script>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
+                        <div class="shoptit">商品满减优惠活动设置</div>
+                        <div class="layui-field-box">
+                            <table class="layui-hide" id="tableList7" lay-filter="tableList7" style="width:100%;"></table>
+                            <script type="text/html" id="toolbarDemo7">
+                                <div class="layui-btn-container" style="display:inline-block;">
+                                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增满减优惠活动"><i class="layui-icon layui-icon-add-1"></i>新增</button>
+                                </div>
+                                <span class="red">最多添加40条</span>
+                            </script>
+                            <script type="text/html" id="baroperating7">
+                                <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-left:2px" lay-event="editmax" title="编辑满减优惠活动">编辑</a>
+                                <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-left:2px" lay-event="delmax" title="删除">删除</a>
+                            </script>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
+                        <div class="shoptit">会员折扣活动设置</div>
+                        <div class="layui-field-box">
+                            <table class="layui-hide" id="tableList8" lay-filter="tableList8"></table>
+                            <script type="text/html" id="toolbarDemo8">
+                                <div class="layui-btn-container" style="display:inline-block;">
+                                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增会员折扣活动"><i class="layui-icon layui-icon-add-1"></i>新增</button>
+
+                                </div>
+                                <span class="red">最多添加20条</span>
+                            </script>
+                            <script type="text/html" id="baroperating8">
+                                <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-left:2px" lay-event="editmax" title="编辑会员折扣活动">编辑</a>
+                                <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-left:2px" lay-event="delmax" title="删除">删除</a>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="fulldiscountSet" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品编号</label>
+                <div class="layui-input-inline">
+                    <select id="selectShopitem" name="selectShopitem" lay-filter="">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">满减活动</label>
+                <div class="layui-input-block">
+                    <label style="margin-left:15px;margin-right:5px;">满</label>
+                    <input type="text" name="fullValue" id="fullValue" oninput="value=value.replace(/^(0+)|[^\d]+/g,'').replace(/[^0-9]/g,'')" lay-verify="" autocomplete="off" placeholder="" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" style="display:inline-block;width:30%;" value="">
+                    <label style="margin:0 5px;">元 减</label>
+                    <input type="text" name="decValue" id="decValue" oninput="value=value.replace(/^(0+)|[^\d]+/g,'').replace(/[^0-9]/g,'')" lay-verify="" autocomplete="off" placeholder="" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" style="display: inline-block; width: 30%;" value="">
+                    <label style="margin-left:5px;">元</label>
+                </div>
+
+            </div>
+            <div style="text-align:center;align-items:center">
+                <div class="layui-input-inline">
+                    <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="saveBtn" lay-submit="" type="button" lay-filter="saveFulDecBtn" style="">保存设置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="memberdiscountset" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">会员等级名称</label>
+                <div class="layui-input-inline">
+                    <select id="hyName" name="hyName" lay-filter="">
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">折扣值</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="hydecValue" id="hydecValue" lay-verify="" onkeyup="value=value.match(/\d+\.?\d{0,2}/,'')" autocomplete="off" placeholder="请输入折扣值" maxlength="10" class="layui-input layui-input-shadow boxshadow-success" value="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">折</div>
+            </div>
+            <div style="text-align:center;align-items:center">
+                <div class="layui-input-inline">
+                    <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="saveBtn" lay-submit="" type="button" lay-filter="saveHyDiscbtn" style="">保存设置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="change" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">文章标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" id="title" lay-verify="" autocomplete="off" placeholder="请输入文章或Bannar标题" maxlength="50" class="layui-input layui-input-shadow boxshadow-success" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文章类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="newsType" value="20" title="Bananr广告" lay-filter="newsTypeFilter" />
+                    <input type="radio" name="newsType" value="10" title="首页公告" checked="" lay-filter="newsTypeFilter" />
+                </div>
+            </div>
+            <div class="layui-form-item upnewdiv" style="display:none">
+                <label class="layui-form-label">封面图片</label>
+                <div class="layui-input-block">
+                    <a class="layui-btn layui-btn-sm" id="uploadOne">上传图片</a>
+                    <a href="" title="点击查看" class="newspichref" target="_blank" style="color:#ff6a00"></a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文章内容</label>
+                <div class="layui-input-block">
+                    <textarea id="edit1"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="saveBtn" lay-submit="" type="button" lay-filter="savebtn" style="">保存文章</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="changeShopItem" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属游戏</label>
+                <div class="layui-input-block">
+                    <select id="gameName" name="gameName" lay-filter="shopGameName">
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+                                    <option value="伊莫">伊莫</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shopTitle" id="shopTitle" lay-verify="" autocomplete="off" placeholder="请输入商品标题" maxlength="30" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属分类</label>
+                <div class="layui-inline">
+                    <select name="itemType" id="itemType" lay-filter="itemType">
+                        <option value="">默认</option>
+                    </select>
+                </div>
+                <div class="layui-inline adddiv">
+                    <span style="margin-right:10px"><a href="#" class="additem" style="color:#1E9FFF">新建分类</a></span>
+                </div>
+                <div class="layui-inline editdiv" style="display:none">
+                    <span style="margin-right:10px"><a href="#" class="edititem" style="color:#1E9FFF">编辑</a></span>
+                </div>
+                <div class="layui-inline deldiv" style="display:none">
+                    <span style="margin-right:10px"><a href="#" class="delitem" style="color:#ff0000">删除</a></span>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品原价</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shopYPrice" id="shopYPrice" lay-verify="" autocomplete="off" placeholder="请输入商品原售卖价" maxlength="6" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">现优惠价</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shopPrice" id="shopPrice" lay-verify="" autocomplete="off" placeholder="请输入商品当前售卖优惠价" maxlength="6" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品图片</label>
+                <div class="layui-input-block">
+                    <a class="layui-btn layui-btn-sm" id="uploadShopItem">上传图片</a>
+                    <a href="" title="点击查看" class="itempic" target="_blank" style="color:#ff6a00"></a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品详情</label>
+                <div class="layui-input-block">
+                    <textarea id="edit2"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="savebtn2" lay-submit="" type="button" lay-filter="savebtn2" style="">保存商品</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="changeIntegralItem" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="intral_shopTitle" id="intral_shopTitle" lay-verify="" autocomplete="off" placeholder="请输入积分商品标题" maxlength="30" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属分类</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="ctype" value="10" title="实体类(如要发快递的)" checked="" lay-filter="ctype">
+                    <input type="radio" name="ctype" value="20" title="抵扣类(如优惠券)" lay-filter="ctype">
+                    <input type="radio" name="ctype" value="30" title="虚拟类(如充值卡)" lay-filter="ctype">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">库存数量</label>
+                <div class="layui-input-block">
+                    <input type="number" name="depositoryNumber" id="depositoryNumber" lay-verify="" autocomplete="off" placeholder="请输入当前库存量" maxlength="6" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">兑换所需积分</label>
+                <div class="layui-input-block">
+                    <input type="number" name="needIntegral" id="needIntegral" lay-verify="" autocomplete="off" placeholder="请输入兑换商品所需积分数" maxlength="6" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品价值/抵扣额</label>
+                <div class="layui-input-block">
+                    <input type="number" name="faceValue" id="faceValue" lay-verify="" autocomplete="off" placeholder="请输入商品价值面额或可以抵扣金额" maxlength="6" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item availableDiv" style="display:none">
+                <label class="layui-form-label">满多少可用</label>
+                <div class="layui-input-block">
+                    <input type="number" name="available" id="available" lay-verify="" autocomplete="off" placeholder="满足多少金额可用" maxlength="6" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品封面图</label>
+                <div class="layui-input-block">
+                    <a class="layui-btn layui-btn-sm" id="uploadIntegralItem">上传图片</a>
+                    <a href="" title="点击查看" class="itempic3" target="_blank" style="color:#ff6a00"></a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">商品详情</label>
+                <div class="layui-input-block">
+                    <textarea id="edit3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="savebtn3" lay-submit="" type="button" lay-filter="savebtn3" style="">保存商品</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="shipDiv" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item expreeDiv">
+                <label class="layui-form-label expreeLabel">快递公司</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="expree" value="无" title="无需快递" checked="">
+                    <input type="radio" name="expree" value="顺丰速运" title="顺丰速运">
+                    <input type="radio" name="expree" value="京东快递" title="京东快递">
+                    <input type="radio" name="expree" value="邮政EMS" title="邮政EMS">
+                    <input type="radio" name="expree" value="申通快递" title="申通快递">
+                    <input type="radio" name="expree" value="圆通速递" title="圆通速递">
+                    <input type="radio" name="expree" value="中通快递" title="中通快递">
+                    <input type="radio" name="expree" value="韵达快递" title="韵达快递">
+                    <input type="radio" name="expree" value="天天快递" title="天天快递">
+                    <input type="radio" name="expree" value="百世物流" title="百世物流">
+                    <input type="radio" name="expree" value="国通快递" title="国通快递">
+                    <input type="radio" name="expree" value="百世汇通" title="百世汇通">
+                    <input type="radio" name="expree" value="优速快递" title="优速快递">
+                    <input type="radio" name="expree" value="宅急送" title="宅急送">
+                    <input type="radio" name="expree" value="德邦物流" title="德邦物流">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label expressNoLabel">快递单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="expressNo" id="expressNo" lay-verify="" autocomplete="off" placeholder="请输入" maxlength="32" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发货状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="shipStatus" value="10" title="待发货">
+                    <input type="radio" name="shipStatus" value="20" title="已发货" checked="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shipRemark" id="shipRemark" lay-verify="" autocomplete="off" placeholder="请输入备注说明" maxlength="50" class="layui-input" value="">
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="savebtn4" lay-submit="" type="button" lay-filter="savebtn4" style="">确定发货</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="awardDiv" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖品名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="awardTitle" id="awardTitle" lay-verify="" autocomplete="off" placeholder="请输入" maxlength="8" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖品类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="awardType" value="0" title="自定义奖品(中奖时)" checked="" lay-filter="awardType">
+                    <input type="radio" name="awardType" value="20" title="未中奖(没中奖时)" lay-filter="awardType">
+                    <input type="radio" name="awardType" value="15" title="奖励积分" lay-filter="awardType">
+                    <input type="radio" name="awardType" value="18" title="奖励余额现金" lay-filter="awardType">
+                    <input type="radio" name="awardType" value="10" title="优惠券类" lay-filter="awardType">
+                </div>
+            </div>
+            <div class="layui-form-item prizeValue" style="display:none">
+                <label class="layui-form-label prizeValueTitle">奖励多少积分</label>
+                <div class="layui-input-inline layui-input-wrap" style="width:100px">
+                    <input type="number" name="integralValue" id="integralValue" placeholder="" autocomplete="off" class="layui-input" value="0">
+                </div>
+                <div class="layui-form-mid layui-text-em prizeValueTips">
+                    抽中此奖品时送多少积分
+                </div>
+            </div>
+            <div class="layui-form-item scoupe" style="display:none">
+                <label class="layui-form-label">选择优惠券</label>
+                <div class="layui-input-block">
+                    <select name="couponList" id="couponList" lay-filter="couponList">
+                        <option value="">默认</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">中奖概率</label>
+                <div class="layui-input-inline layui-input-wrap" style="width:100px">
+                    <input type="number" name="range" id="range" placeholder="" autocomplete="off" class="layui-input" value="0" max="100">
+                </div>
+                <div class="layui-form-mid layui-text-em">
+                    %，所有抽奖商品加起来不能超过100%，支持2位小数
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">库存数量</label>
+                <div class="layui-input-inline layui-input-wrap" style="width:100px">
+                    <input type="number" name="stockNumber" id="stockNumber" lay-verify="" autocomplete="off" placeholder="库存量" min="0" step="1" lay-affix="number" class="layui-input" value="1">
+                </div>
+                <div class="layui-form-mid layui-text-em">
+                    库存数为0时，中奖概率也会等于0
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖品图</label>
+                <div class="layui-input-inline layui-input-wrap" style="width:130px">
+                    <a class="layui-btn layui-btn-sm" id="uploadIntegralItem2">上传图片</a>
+                    <a href="" title="点击查看" class="itempicchoujiang" target="_blank" style="color:#ff6a00"></a>
+                </div>
+                <div class="layui-form-mid layui-text-em">请上传120*120的jpg或png图，大小不超过40KB</div>
+            </div>
+        </div>
+
+        <div style="margin-left:120px">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="savebtn5" lay-submit="" type="button" lay-filter="savebtn5" style="">保存奖品</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="id" name="id" value="0" />
+    <input type="hidden" id="shopItemId" name="shopItemId" value="0" />
+    <input type="hidden" id="integralCommodityId" name="integralCommodityId" value="0" />
+    <input type="hidden" id="newsPic" name="newsPic" value="" />
+    <input type="hidden" id="itemPic" name="itemPic" value="" />
+    <input type="hidden" id="itemPic3" name="itemPic3" value="" />
+    <input type="hidden" id="itemPicChouJiang" name="itemPicChouJiang" value="" />
+
+</form>
+<script src="/JS2019/System/wechatappmange.js?v=20260427" type="text/javascript"></script>
+
+</body>
+</html>

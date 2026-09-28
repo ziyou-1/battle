@@ -1,0 +1,7 @@
+/* Minimal local styles for the Layui tag helper used by the desktop pages. */
+.tag { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tag .tag-item, .tag .button-new-tag { display: inline-flex; align-items: center; min-height: 30px; padding: 0 10px; border: 1px solid #d2d2d2; border-radius: 2px; background: #fff; color: #555; cursor: pointer; }
+.tag .tag-item:hover, .tag .button-new-tag:hover { border-color: #1e9fff; color: #1e9fff; }
+.tag .tag-close { margin-left: 6px; cursor: pointer; }
+.tag .input-new-tag { display: inline-flex; align-items: center; }
+.tag .input-new-tag .layui-input { width: 120px; height: 30px; }

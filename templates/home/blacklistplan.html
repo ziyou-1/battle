@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>避坑板</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>避坑板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+     <link rel="stylesheet" href="/CSS/elementindex.css">     
+    
+    <style>
+        html,body{
+            height: 100%;
+            width: 100%;
+            background-color: #F4F6F8;
+            color: #000;
+            font-size: 14px;
+        }
+        *{
+            margin:0;
+            padding:0;
+        }
+        .searchinput .el-button+.el-button {
+            margin-left: 0px;
+        }
+        a{
+            text-decoration: none;
+        }
+        #app{
+            box-sizing: border-box;
+            padding: 30px;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        .tip{
+            padding: 20px 0;
+            color: red;
+            font-size: 13px;
+            text-align: center;
+        }
+        .nodata{
+            color: #666;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .head{
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 40px;
+            text-align: center;
+            padding-bottom: 30px;
+        }
+        .el-dialog__body{
+            padding-top:0
+        }
+        .el-checkbox__label {
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
+        .searchinput {
+            width: 80%;
+            margin: 0 auto;
+        }
+            .searchinput .input {
+                width: 65%;
+            }
+                .searchinput .input .el-input__inner {
+                    height: 50px;
+                    border: 2px solid #589FFC;
+                }
+                .content {
+                    /* display: flex; */
+                    /* flex-wrap: wrap; */
+                    /* justify-content: space-between; */
+                    width: 100%;
+                }
+                    .content .list {
+                        margin-bottom: 20px;
+                        border-radius: 5px;
+                        padding: 30px;
+                        box-sizing: border-box;
+                        background: #fff;                        
+                        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+                    }
+                        .content .list.warning {
+                            background: #fff url('../../images/warningicon.png') no-repeat top right;
+                            background-size: contain;
+                        }
+        .content .list .item {
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 14px;
+            line-height: 30px;
+        }
+        .content .list .title{
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .content .list .item .label{
+            margin-right: 10px;
+        }
+        .pics .txt{
+            display:flex;
+            flex-wrap:wrap;
+        }
+            .pics .txt img{
+                width:100px;
+                height:100px;
+            }
+            @media screen and (min-width: 767px) {
+                .tip{
+                text-align: left;
+            }
+
+            .searchinput{
+                width: 98%;
+                margin: 0 auto;
+            }
+            .searchinput .input{
+                width: 100%;
+            }
+            .content .list{
+                width: 100%;
+                padding: 20px 10px;
+            }
+                .appeal-page {
+                    padding: 20px;
+                    padding-top:0
+                }
+
+                .appeal-container {
+                    display: flex;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    gap: 40px;
+                }
+
+                .appeal-left {
+                    width: 350px;
+                    background: #f5f5f5;
+                    padding: 20px;
+                }
+
+                .title {
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                .info-item {
+                    margin-bottom: 12px;
+                    font-size: 14px;
+                    line-height: 1.6;
+                }
+
+                .label {
+                    display: inline-block;
+                    color: #333;
+                }
+
+                .value {
+                    color: #666;
+                }
+
+                .desc {
+                    margin-top: 4px;
+                    color: #666;
+                    line-height: 1.6;
+                }
+
+                .evidence-list {
+                    display: flex;
+                    gap: 10px;
+                    margin-top: 8px;
+                }
+
+                .evidence-item img {
+                    width: 80px;
+                    height: 80px;
+                    object-fit: cover;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                }
+
+                .appeal-right {
+                    flex: 1;
+                }
+
+                .form-title {
+                    margin-top: 0;
+                    margin-bottom: 20px;
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                .avatar-uploader .upload-box {
+                    width: 120px;
+                    height: 120px;
+                    border: 1px solid #dcdfe6;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                }
+
+                .upload-icon {
+                    font-size: 40px;
+                    color: #c0c4cc;
+                }
+
+                .link {
+                    color: #f56c6c;
+                }
+
+                .submit-btn {
+                    padding: 10px 30px;
+                }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" style="width: 100%;">
+        <div class="search">
+            
+            <div class="searchinput">
+                <el-input type="text" v-model="serchtxt" class="input" placeholder="可以输入名称、QQ号、微信号、手机号、平台系统名称等"></el-input>
+                <el-button type="primary" class="sechbtn" style="width: 100px;height:50px;" @click="searchfun">查询</el-button>
+                <el-button type="warning" style="background:#FF5722;width: 120px;height:50px;" lay-href="/home/addblacklistplan">我也要举报</el-button>
+                <el-button type="warning" style="width: 100px;height:50px;" @click="mypost">我的举报</el-button>
+            </div>
+        </div>
+        <div class="tip">
+            申明：本页展示结果由平台用户提交发布，不代表平台立场。展示结果仅供参考，平台不对结果负责
+        </div>
+        <div class="content">
+            <div :class="ismy?'list':'warning list'" v-for="item in list" v-cloak>
+                <div class="title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap: wrap;">
+                    <span style="flex:1;display:inline-block;">{{item.bussineName}}</span>
+                    <el-button type="default" v-if="ismy" style="width: 100px;" @click="iscancel(item.bid)">撤销举报</el-button>
+                </div>
+                <div class="info">
+                    <div class="item">
+                        <div class="label">涉及QQ：</div>
+                        <div class="txt">{{item.qq}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">涉及微信：</div>
+                        <div class="txt">{{item.wx}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">涉及手机：</div>
+                        <div class="txt">{{item.phone}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">曾用平台系统名称：</div>
+                        <div class="txt">{{item.jdpName}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">对方身份：</div>
+                        <div class="txt">{{item.roleType==10?"接单":item.roleType==20?"发单":"接单和发单"}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">涉及金额：</div>
+                        <div class="txt">{{item.fee}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">发生时间：</div>
+                        <div class="txt">{{item.actionTime}}</div>
+                    </div>
+                    <div class="item" v-if="!ismy">
+                        <div class="label">举报时间：</div>
+                        <div class="txt">{{item.createTime}}</div>
+                    </div>
+                    <div class="item">
+                        <div class="label">投诉描述：</div>
+                        <div class="txt">{{item.content}}</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div class="item pics">
+                            <div class="label">举报证据：</div>
+                            <div class="txt">
+                                <el-image style="width: 80px; height: 80px; margin-right:5px;border-radius:5px;border:1px solid #c0ccda;"
+                                          v-for="(obj, index) in item.pics"
+                                          :key="index"
+                                          :src="obj"
+                                          :preview-src-list="item.pics">
+                                </el-image>
+                                
+                                
+                            </div>
+                        </div>
+                        <button class="layui-btn layui-btn-primary layui-border-red" @click="openPop(item)">我要申诉</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+        <el-dialog title="申诉投诉"
+                   :visible.sync="popVisible"
+                   width="80%"
+                   top="2vh"
+                   @close="clearForm"
+                   height="50%"
+                   lock-scroll="true"
+                   :before-close="handleClose">
+            <div class="appeal-page">
+                <div class="appeal-container">
+                    <!-- 左侧：举报信息 -->
+                    <div class="appeal-left">
+                        <h3 class="title">举报信息</h3>
+                        <div class="info-item">
+                            <span class="label">被举报对象名称:</span>
+                            <span class="value">{{popData.jdpName}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">涉及QQ:</span>
+                            <span class="value">
+                                {{popData.qq}}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">涉及微信:</span>
+                            <span class="value">
+                                {{popData.wx }}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">涉及手机号:</span>
+                            <span class="value">{{popData.phone}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">曾用平台系统名称:</span>
+                            <span class="value">{{popData.bussineName}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">对方身份:</span>
+                            <span class="value">{{popData.roleType==10?"接单":popData.roleType==20?"发单":"接单和发单"}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">涉及金额:</span>
+                            <span class="value">{{popData.fee}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">发生时间:</span>
+                            <span class="value">{{popData.actionTime}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">举报时间:</span>
+                            <span class="value">{{popData.createTime}}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">投诉描述:</span>
+                            <div class="desc">
+                                {{popData.content}}
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">证据:</span>
+                            <div class="evidence-list">
+                                <el-image style="width: 80px; height: 80px; margin-right:5px;border-radius:5px;border:1px solid #c0ccda;"
+                                          v-for="(obj, index) in  popData.pics"
+                                          :key="index"
+                                          :src="obj"
+                                          :preview-src-list=" popData.pics">
+                                </el-image>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：提交申诉表单 -->
+                    <div class="appeal-right">
+                        <h3 class="form-title">提交申诉</h3>
+                        <el-form ref="appealForm"
+                                 :model="form"
+                                 :rules="rules"
+                                 label-position="left"
+                                 label-width="110px">
+                            <el-form-item label="你的真实姓名" required prop="Name">
+                                <el-input v-model="form.Name" placeholder="请输入真实姓名"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="你的身份证号" required prop="IdCardNo">
+                                <el-input v-model="form.IdCardNo" placeholder="请输入身份证号"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="你的手机号" required prop="Phone">
+                                <el-input v-model="form.Phone" placeholder="请输入手机号"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="你的微信" required prop="WeChat">
+                                <el-input v-model="form.WeChat" placeholder="请输入微信"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="你的QQ">
+                                <el-input v-model="form.QQ" placeholder="请输入QQ"></el-input>
+                            </el-form-item>
+                            <el-form-item label="证明材料上传" required>
+                                <el-upload action="#"
+                                           ref="upload"
+                                           list-type="picture-card"
+                                           :on-preview="handlePreview"
+                                           :http-request="uploadAvatar"
+                                           :before-upload="beforeUpload"
+                                           :on-remove="handleRemove"
+                                           :file-list="picList"
+                                           accept=".jpg, .png"
+                                           :data="policydata"
+                                           :limit="5"
+                                           :on-exceed="overlimit"
+                                           :auto-upload="true"
+                                           :multiple="true">
+                                    <i slot="default" class="el-icon-plus"></i>
+                                </el-upload>
+                            </el-form-item>
+                            <el-form-item label="申诉说明" required prop="Explanation">
+                                <el-input v-model="form.Explanation"
+                                          type="textarea"
+                                          :rows="5"
+                                          placeholder="请输入申诉说明"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-checkbox v-model="form.agree">
+                                    我同意<a style="color:red;" lay-text="平台避坑榜服务使用协议" lay-href="https://www.jidanpu.com/html/blacklistxieyi.html"><<平台避坑榜服务使用协议>></平台避坑榜服务使用协议></a>
+                                </el-checkbox>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" class="submit-btn" @click="submitForm">提交申诉</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+        <div class="nodata" v-if="!list.length" v-cloak>
+            {{nodata}}
+        </div>
+    </div>
+    <script src="/JS2019/vue.min.js"></script>
+    <script src="/JS2019/elementindex.js"></script>
+    <script src="/JS2019/vue.min.js"></script>
+    <script src="/JS2019/elementindex.js"></script>
+    <script src="/JS2019/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                $(".sechbtn").trigger("click");
+            }
+        });
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                serchtxt: "",
+                list: [],
+                nodata: "请搜索关键字查询",
+                dialogVisible: false,
+                dialogImageUrl: "",
+                ismy: false,
+                popVisible: false,
+                picList:[],
+                policydata: {
+                    OSSAccessKeyId: "",
+                    signature: "",
+                    policy: "",
+                    success_action_status: "",
+                    key: ""
+                },
+                form: {
+                    Name: "",
+                    IdCardNo: "",
+                    Phone: "",
+                    WeChat: "",
+                    QQ: "",
+                    Explanation: "",
+                    agree: false,
+                },
+                rules: {
+                    Name: [
+                        { required: true, message: "请输入真实姓名", trigger: "blur" }
+                    ],
+                    IdCardNo: [
+                        { required: true, message: "请输入身份证号", trigger: "blur" },
+                        { pattern: /(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: "请输入正确的身份证号", trigger: "blur" }
+                    ],
+                    Phone: [
+                        { required: true, message: "请输入手机号", trigger: "blur" },
+                        { pattern: /^1[3-9]\d{9}$/, message: "请输入正确的手机号", trigger: "blur" }
+                    ],
+                    WeChat: [
+                        { required: true, message: "请输入微信", trigger: "blur" }
+                    ],
+                    Explanation: [
+                        { required: true, message: "请输入申诉说明", trigger: "blur" }
+                    ]
+                },
+                popData: {}
+
+            },
+
+            watch: {
+
+            },
+            created: function () {
+
+            },
+            mounted: function () {
+                this.searchfun()
+            },
+            methods: {
+                handleRemove: function (file, fileList) {
+                    var curindex;
+                    var that = this;
+                    for (const i in this.picList) {
+                        if (this.picList[i].uid === file.uid) {
+                            curindex = i
+                        }
+                    }
+                    that.picList.splice(curindex, 1)
+                },
+                beforeUpload: function (file) {
+                    const isLt2M = file.size / 1024 / 1024 < 3;
+                    if (!isLt2M) {
+                        this.$message.error('上传图片大小不能超过 3MB!')
+                    }
+                    return isLt2M;
+                },
+                handlePreview: function (file) {
+                    this.dialogVisible = true;
+                    this.dialogImageUrl = file.url;
+                },
+                openPop(item) {
+                    this.popVisible = true;
+                    this.popData = item
+                    console.log(item)
+                },
+                handleClose() {
+                    this.popData = {}
+                    this.popVisible = false;
+
+                },
+                overlimit: function () {
+                    this.$message({
+                        message: "最多只能上传5张图片",
+                        type: 'warning'
+                    })
+                },
+                handleUploadChange(file) {
+                    console.log("选择的文件：", file);
+                },
+                submitForm() {
+                    var that = this
+                    if (!this.form.agree) {
+                        this.$message.warning("请先同意服务协议");
+                        return;
+                    }
+
+                    this.$refs.appealForm.validate((valid) => {
+                        if (valid) {
+                            if (that.picList.length == 0) {
+                                that.$message({
+                                    message: "至少上传一张图片",
+                                    type: 'warning'
+                                })
+                                return false;
+                            }
+                            var model = that.form
+                            model.RedBlackListId = that.popData.bid
+                            model.Images = that.picList.map(function (obj, index) { return obj.url;}).join(","),
+                            $.ajax({
+                                type: "post",
+                                url: "/Home/BlacklistAppeal",
+                                data: JSON.stringify(model),
+                                contentType: "application/json",
+                                dataType: 'json',
+                                cache: false,
+                                timeout: 60000,
+                                error: function (xhr) { re = true; layer.msg(xhr.responseJSON.msg, { time: 2000 }, function (res) { }); },
+                                beforeSend: function (XMLHttpRequest) { indexLoad = layer.load(1); },
+                                success: function (data) {
+                                    layer.close(indexLoad);
+
+                                    re = true;
+                                    if (data.code > 0) {
+                                        that.$message.success('您的申诉材料已成功提交至平台审核中心，审核结果将会在7日内通过短信提醒您，请注意查收。');
+                                        that.popVisible = false;
+                                        that.clearForm()
+                                    } else {
+                                        that.$message.error(data.msg);
+
+                                    }
+                                },
+                                complete: function (XMLHttpRequest) {
+                                    layer.close(indexLoad);
+                                }
+                            });
+                        } else {
+                            this.$message.error("请完善表单信息");
+                            return false;
+                        }
+                    });
+                },
+                clearForm() {
+                    this.form = {
+                        Name: "",
+                        IdCardNo: "",
+                        Phone: "",
+                        WeChat: "",
+                        QQ: "",
+                        Explanation: "",
+                        agree: false
+                    };
+                    this.picList = []
+
+                    if (this.$refs.appealForm) {
+                        this.$refs.appealForm.clearValidate();
+                        this.$refs.appealForm.resetFields();
+                    }
+                },
+                getpoclixy: function () {
+                    var that = this;
+                    var obj;
+                    var p = new Promise(function (resolve, reject) {
+                        $.ajax({
+                            url: '/CommonPermissionAjax/GetAliOssPolicy',
+                            type: 'GET',
+                            data: { bk: 10 },
+                            headers: { Authorization: layui.data('XCORS').Authorization },
+                            success: function (res) {
+                                if (res.code == 0 && res.success) {
+                                    resolve(res.data);
+                                } else {
+                                    that.$message({
+                                        message: res.msg,
+                                        type: 'warning'
+                                    })
+                                }
+                            },
+                            error: function (res) {
+                                that.$message({
+                                    message: res,
+                                    type: 'warning'
+                                })
+                            }
+                        })
+                    });
+                    return p;
+
+                },
+                uploadAvatar: function (item) {
+                    var reg = /,/g;
+                    var that = this;
+                    var filekey = new Date().getTime() + '-' + (Math.random() + "").substring(2, 7) + '-' + item.file.name.replace(reg, '');
+                    this.getpoclixy().then(function (res) {
+
+                        var filedata = new FormData();
+                        filedata.append('key', filekey);
+                        filedata.append('policy', res.policy);
+                        filedata.append('OSSAccessKeyId', res.accessid);
+                        filedata.append('signature', res.signature);
+                        filedata.append('success_action_status', 200);
+                        filedata.append('file', item.file);
+
+                        $.ajax({
+                            url: res.host,
+                            processData: false,
+                            cache: false,
+                            contentType: false,
+                            type: 'POST',
+                            data: filedata,
+                            success: function (ress) {
+                                // 本地直传：res.host 指向后台接口，真实地址在返回的 data.src 里
+                                var realUrl = (ress && ress.data && (ress.data.src || ress.data.url)) || (res.host + '/' + filekey)
+                                var obj = {
+                                    uid: item.file.uid,
+                                    name: item.file.name,
+                                    type: item.file.type,
+                                    url: realUrl
+                                }
+                                that.picList.push(obj)
+                                that.emptyUpload()
+                            },
+                            error: function (i) {
+                                var msg = i;
+                                if (typeof i === Object) {
+                                    msg = JSON.stringify(i)
+                                }
+                                layer.msg(item.file.name + '文件上传失败，请联系技术人员处理，或者重试几次' + msg);
+                                return false;
+                            }
+                        })
+                    }, function (error) {
+
+                    })
+
+                },
+                 emptyUpload() {
+                    const mainImg = this.$refs.upload
+                    this.$refs.upload.clearFiles()
+                    //if (mainImg) {
+                    //    if (mainImg.length) {
+                    //        mainImg.forEach(item => {
+                    //            item.clearFiles()
+                    //        })
+                    //    } else {
+                    //        this.$refs.upload.clearFiles()
+                    //    }
+                    //}
+                },
+                searchfun: function () {
+
+                    //if (!this.serchtxt) {
+                    //    this.$message({
+                    //        message: "请输入关键字查询",
+                    //        type: 'warning'
+                    //    })
+                    //    return false;
+                    //}
+
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    var querrydata = {
+                        key: this.serchtxt
+                    }
+                    var that = this;
+                    $.ajax({
+                        type: "Post",
+                        url: "/home/BlackListGetList",
+                        data: querrydata,
+                        dataType: 'json',
+                        cache: false,
+                        timeout: 60000,
+                        error: function () { },
+                        beforeSend: function (XMLHttpRequest) { },
+                        success: function (res) {
+                            if (res.code > 0) {
+                                var list = JSON.parse(res.data);
+                                list.reverse();
+                                that.list = list;
+                                that.list.forEach(item => {
+                                    item.pics = item.imgList.split(",");
+                                });
+                                that.ismy = false;
+                                that.$message({
+                                    message: "查询成功",
+                                    type: 'success'
+                                })
+                            } else {
+                                that.list = [];
+                                that.$message({
+                                    message: res.msg,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        complete: function (XMLHttpRequest) {
+                            loading.close();
+                        }
+                    })
+
+                },
+                mypost: function () {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    var that = this;
+                    $.ajax({
+                        type: "Post",
+                        url: "/home/GetBlackListMangeByMy",
+                        data: {},
+                        dataType: 'json',
+                        cache: false,
+                        timeout: 60000,
+                        error: function () { },
+                        beforeSend: function (XMLHttpRequest) { },
+                        success: function (res) {
+                            if (res.code > 0) {
+                                that.list = JSON.parse(res.data);
+                                that.list.forEach(item => {
+                                    item.pics = item.imgList.split(",");
+                                });
+                                that.ismy = true;
+                            } else {
+                                that.list = [];
+                                that.$message({
+                                    message: res.msg,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        complete: function (XMLHttpRequest) {
+                            loading.close();
+                        }
+                    })
+                },
+                iscancel: function (bid) {
+                    var that = this;
+                    that.$confirm("确认撤销举报吗", '提示', {
+                        confirmButtonText: '确定',
+                    }).then(() => {
+                        that.cancelpost(bid);
+                    }).catch(() => {
+                    });
+                },
+                cancelpost: function (bid) {
+                    const loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    var that = this;
+                    $.ajax({
+                        type: "Post",
+                        url: "/home/RevokeBlackListData",
+                        data: { logId: bid },
+                        dataType: 'json',
+                        cache: false,
+                        timeout: 60000,
+                        error: function () { },
+                        beforeSend: function (XMLHttpRequest) { },
+                        success: function (res) {
+                            if (res.code > 0) {
+                                that.$confirm(res.msg, '提交成功', {
+                                    confirmButtonText: '确定',
+                                    showCancelButton: false,
+                                }).then(() => {
+                                    that.mypost();
+                                }).catch(() => {
+                                });
+                            } else {
+                                that.list = [];
+                                that.$message({
+                                    message: res.msg,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        complete: function (XMLHttpRequest) {
+                            loading.close();
+                        }
+                    })
+                },
+                privewImg(url) {
+                    this.dialogVisible = true;
+                    this.dialogImageUrl = url;
+                },
+                topost: function () {
+                    window.open("/home/addblacklistplan");
+
+                    //window.location.href = "/home/addblacklistplan"
+                }
+            }
+        })
+
+        layui.config({
+            base: '../layuiadmin/'
+        }).extend({
+            index: 'lib/index'
+        }).use(['index', 'form'], function () {
+
+        })
+
+    </script>
+</body>
+</html>
+
+
+</body>
+</html>

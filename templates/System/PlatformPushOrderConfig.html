@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>交易平台发单配置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 10px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FAFAFA;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="form">
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>       
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                <button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="settconfig" type="button" title="批量配置默认发单参数"><i class="layui-icon">&#xe669;</i>批量配置默认发单参数</button>
+            </div>
+        </script>
+        <script type="text/html" id="baroperating">
+            <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-right:3px" lay-event="submitEdit" title="点击我可以配置这款游戏的默认发单参数"><i class="layui-icon layui-icon-edit"></i>配置参数</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="submitDel" title="将此游戏的默认发单配置清空"><i class="layui-icon layui-icon-delete"></i>清空</a>
+        </script>
+    </div>
+
+    <div class="modifyParamDiv" style="display:none">
+        <blockquote class="layui-elem-quote">
+            <span style="font-size:14px">您需要先对接交易平台，对接好后再配置以下参数，就能在录单页面进行快速发单到交易平台了</span>
+        </blockquote>
+        <div class="layui-form-pane" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">默认发单平台</label>
+                <div class="layui-input-block">
+
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发单联系电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pushorderphone" id="pushorderphone" lay-verify="" autocomplete="off" placeholder="输入打手能联系到您的电话" maxlength="50" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发单联系QQ</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pushorderqq" id="pushorderqq" lay-verify="" autocomplete="off" placeholder="输入打手能联系到您的QQ" maxlength="50" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">发单价比例</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pushorderpricescale" id="pushorderpricescale" lay-verify="" autocomplete="off" placeholder="可以设定一个根据接单价自动生成发单价的比例" class="layui-input" lay-tips="如果你需要让系统根据接单价按照你设定的百分百来自动计算发单价，请在这里输入百分比数值，不要带百分号。如果填0就代表不计算默认发单价" style="cursor:text" value="0">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">安全保证金</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pushordersafeamount" id="pushordersafeamount" lay-verify="" autocomplete="off" placeholder="发单时默认的安全保证金" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">效率保证金</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pushordereffamount" id="pushordereffamount" lay-verify="" autocomplete="off" placeholder="发单时默认的效率保证金" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">填写玩家电话</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="autowritephone" value="0" title="根据订单电话自动填写" checked="checked">
+                    <input type="radio" name="autowritephone" value="1" title="留空">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">自动生成虚拟号</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="autobuilderprivtephone" value="0" title="不生成">
+                    <input type="radio" name="autobuilderprivtephone" value="1" title="生成">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">要求和说明</label>
+                <div class="layui-input-block">
+                    <textarea id="pushorderquire" name="pushorderquire" placeholder="可以将针对此游戏的代练陪玩要求写在此处，发单时将默认用这个要求内容" class="layui-textarea" style="height:180px" maxlength="450"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align:center;align-items:center">
+            <a class="layui-btn layui-btn-normal layui-btn-lg w-lg saveInterfaceBtn">保存设置</a>
+        </div>
+    </div>
+
+</form>
+<script src="/JS2019/System/PlatformPushOrderConfig.js?v=2020102513" type="text/javascript"></script>
+
+
+</body>
+</html>

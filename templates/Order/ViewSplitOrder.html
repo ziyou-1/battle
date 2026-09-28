@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>查看关联订单</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .layui-btn {
+        margin-bottom: 15px;
+        margin-right: 8px;
+    }
+</style>
+<form class="layui-form" action="">
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon layui-refresh2"></i>刷新数据</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setRecMan" type="button" title="批量或单笔将订单指派给接手人"><i class="layui-icon layui-buchongiconsvg15"></i>指派接手</button>
+                <button class="layui-btn layui-btn-xs " lay-event="changeStaBtn" type="button" title="批量或单笔更改订单状态"><i class="layui-icon layui-jibenxinxishezhi"></i>更改状态</button>
+                <button class="layui-btn layui-btn-xs" lay-event="setOrderThrowHomeBtn" type="button" title="将指定订单放到内部接单大厅里让接手人自由领取"><i class="layui-icon layui-pingtai"></i>内部抛单</button>
+                <button class="layui-btn layui-btn-xs " lay-event="cleanOrderThrowHomeBtn" type="button" title="将指定订单从内部接单大厅里撤销抛单"><i class="layui-icon layui-zuixiaohua"></i>内部撤单</button>
+
+                <button class="layui-btn layui-btn-xs" lay-event="setJiWei" type="button" title="批量或单笔设定订单的所在机位或机器"><i class="layui-icon layui-bangdingshebei"></i>设定机位</button>
+
+                <button class="layui-btn layui-btn-xs" lay-event="setOrderTipsBtn" type="button" title="将指定订单打个标记"><i class="layui-icon layui-biaoji"></i>设置标记</button>
+                <button class="layui-btn layui-btn-xs" lay-event="cleanOrderTipsBtn" type="button" title="将指定订单的标记清除"><i class="layui-icon layui-qingchuhuancun2"></i>清除标记</button>
+                <button class="layui-btn layui-btn-xs" lay-event="setOrderJiajiBtn" type="button" title="将指定订单设置加急标记或清除加急标记"><i class="layui-icon layui-shandian"></i>订单加急</button>
+                <button class="layui-btn layui-btn-xs" lay-event="sendSmsBtn" type="button" title="给指定订单的客户发送手机短信"><i class="layui-icon layui-duanxin"></i>发送短信</button>
+
+                <button class="layui-btn layui-btn-xs" lay-event="delOrderBtn" type="button" title="将指定订单删除（谨慎操作）"><i class="layui-icon layui-icon-delete"></i>删除订单</button>
+            </div>
+            <div style="color:#ff6a00" id="total"></div>
+        </script>
+    </div>
+
+    <input type="hidden" id="isNewPage" name="isNewPage" value="N" />
+    <input type="hidden" id="isInvoFee" name="isInvoFee" value="Y" />
+    <input type="hidden" id="gameName" name="gameName" />
+    <input type="hidden" id="splitId" name="splitId" value="[[ o.orderId if o else "" ]]" />
+</form>
+<script src="/JS2019/jquery-3.3.1.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/CSS/jquery.contextmenu.min.css">
+<script src="/JS2019/jquery.contextmenu.min.js"></script>
+<script src="/JS2019/jquery.ui.position.js"></script>
+
+
+<script src="/JS2019/Order/viewsplitorder.js?v=20260429" type="text/javascript"></script>
+
+
+</body>
+</html>

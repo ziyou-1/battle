@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>签约管理</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .addTeammateName {
+        display: inline-block;
+        width: 215px;
+        height: 38px;
+        border: 1px solid #EEEEEE;
+        cursor: pointer;
+        line-height: 38px;
+        color: #ccc;
+        padding-left: 10px
+    }
+
+
+    .teammateName, .uploadMoreIcon {
+        display: none
+    }
+
+    #addTeammateNameBox {
+        position: absolute;
+        top: 38px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+        display: none;
+        border-top: none;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+
+    .addTeammateNameItem {
+        cursor: pointer;
+        padding: 10px 20px;
+    }
+
+        .addTeammateNameItem:hover {
+            background: #a2d1ff
+        }
+
+    .addmatchmaker {
+        display: inline-block;
+        color: #20A0FF;
+        line-height: 38px;
+        cursor: pointer;
+        width: 115px;
+        float: left;
+    }
+    .settingDiv .layui-form-item .layui-input-inline {
+        width: 227px;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="sform" style="background-color:#fff">
+    <div class="" style="padding-left: 5px;padding-top:10px">
+
+        <div class="layui-form-pane">
+            <div class="layui-inline">
+                <label class="layui-form-label">签约时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="start" id="sDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(31) ]]">
+                </div>
+                <div class="layui-input-inline">-</div>
+                <div class="layui-input-inline">
+                    <input type="text" name="end" id="eDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(0) ]]">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">签约结果</label>
+                <div class="layui-input-inline">
+                    <select id="certStatus" name="status" lay-filter="selectGame">
+                        <option value="" selected="selected">全部</option>
+                        <option value="0">已发起</option>
+                        <option value="5">待编辑</option>
+                        <option value="10">待签署</option>
+                        <option value="20">已完成</option>
+                        <option value="-10">已拒签</option>
+                        <option value="-20">已撤销</option>
+                        <option value="-30">已过期</option>
+                        <option value="-99">解约中</option>
+                        <option value="-100">已解约</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userName" id="key1" lay-verify="" placeholder="系统用户名称" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="key2" lay-verify="" placeholder="姓名" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">身份证号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="idCadrNo" id="key3" lay-verify="" placeholder="身份证号搜索" autocomplete="off" class="layui-input layui-input-shadow" maxlength="18" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="width: 80px">搜索</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" title="刷新当前数据">刷新列表</button>
+                <button class="layui-btn layui-btn-sm " lay-event="settingBtn" type="button" title="">发起签约</button>
+                <button class="layui-btn layui-btn-sm" lay-event="buyBtn" type="button" title="">签约功能配置</button>
+                <button class="layui-btn layui-btn-sm layui-bg-purple" lay-event="resetAsynBtn" type="button" title="">购买签约合同套餐包（剩余<span class="btnSpan"></span>次）</button>
+                <button class="layui-btn layui-btn-sm" lay-event="whitelistBtn" type="button" title="">签约白名单</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delBtn" type="button"lay-tips="批量删除时，存在其他状态合同不影响，仅删除已过期合同">批量删除</button>
+            </div>
+        </script>
+    </div>
+    <div class="settingDiv" style="display:none;padding:10px 10px">
+
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                1、是否不允许没有签约的子账号在内部抢单大厅接单？(默认允许)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="allowUncontractedOrder" value="1" title="允许" [% if (contractSetting_settings.allowUncontractedOrder if contractSetting_settings.allowUncontractedOrder is defined else "1")|string == "1" %][% endif %] [% if (contractSetting_settings.allowUncontractedOrder if contractSetting_settings.allowUncontractedOrder is defined else "1")|string == "1" %]checked[% endif %]>
+                <input type="radio" name="allowUncontractedOrder" value="0" title="不允许"  [% if (contractSetting_settings.allowUncontractedOrder if contractSetting_settings.allowUncontractedOrder is defined else "1")|string == "0" %][% endif %] [% if (contractSetting_settings.allowUncontractedOrder if contractSetting_settings.allowUncontractedOrder is defined else "1")|string == "0" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                2、通过系统给子账号在线结算打款时是否要求该用户必须完成签约?(默认不要求此条件)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="allowUncontractedSettlement" value="0" title="不要求" [% if (contractSetting_settings.allowUncontractedSettlement if contractSetting_settings.allowUncontractedSettlement is defined else "0")|string == "0" %][% endif %] [% if (contractSetting_settings.allowUncontractedSettlement if contractSetting_settings.allowUncontractedSettlement is defined else "0")|string == "0" %]checked[% endif %]>
+                <input type="radio" name="allowUncontractedSettlement" value="1" title="要求实名"  [% if (contractSetting_settings.allowUncontractedSettlement if contractSetting_settings.allowUncontractedSettlement is defined else "0")|string == "1" %][% endif %] [% if (contractSetting_settings.allowUncontractedSettlement if contractSetting_settings.allowUncontractedSettlement is defined else "0")|string == "1" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item" style="">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                3、只允许指定范围区间的年龄用户通过签约，不符合年龄范围的将会被拒绝通过(为空或填0代表不限制)
+            </div>
+            <div class="layui-inline" style="margin-left:10px;margin-top:8px">
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="number" name="signMinAge" placeholder="" autocomplete="off" class="layui-input" min="16" step="1" lay-affix="number" value="[[ contractSetting_settings.signMinAge if contractSetting_settings.signMinAge is defined else '18' ]]">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="number" name="signMaxAge" placeholder="" autocomplete="off" class="layui-input" min="20" max="55" step="1" lay-affix="number" value="[[ contractSetting_settings.signMaxAge if contractSetting_settings.signMaxAge is defined else '45' ]]">
+                </div>
+            </div>
+        </div>
+
+
+        <div style="text-align:center;align-items:center">
+            <button type="button" class="layui-btn  layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="saveSettingBtn">保存设置</button>
+        </div>
+    </div>
+    <input type="hidden" id="sid" value="[[ sys.id ]]" />
+</form>
+
+<script src="/JS2019/User/UserContractSigning.js?v=2026058430" type="text/javascript"></script>
+
+
+
+
+
+</body>
+</html>

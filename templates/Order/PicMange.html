@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>管理订单截图</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    li {
+        height: 248px;
+        float: left;
+        display: inline-block;
+        margin-left: 10px;
+        padding: 2px 2px;
+        margin-top: 20px;
+        border-color: #e2dede;
+        border-width: 1px;
+        border-style: solid
+    }
+
+        li img {
+            width: 200px;
+            height: 160px;
+        }
+
+        li div {
+            text-align: center;
+            margin-top: 2px
+        }
+    .layui-elem-quote {
+        margin-bottom: 10px;
+        padding: 10px;
+        line-height: 22px;
+        border-left: 5px solid #009688;
+        border-radius: 0 2px 2px 0;
+        background-color: #f2f2f2;
+    }
+    .picnote {
+        text-align:left;
+        width:190px;
+        overflow: hidden;
+        white-space:nowrap;
+        margin-bottom:5px;
+        text-overflow:ellipsis;
+    }
+</style>
+<form class="layui-form layui-form-pane" action="" lay-filter="formTest">
+    <blockquote class="layui-elem-quote">
+        <span style="color:#ff6a00">提示：距离上传时间超过90天的将会被自动删除，会出现无法浏览的情况</span>
+    </blockquote>
+    <input lay-skin="primary" type="checkbox" id="checkall" name="type" lay-filter="allChoose" value="checkall" /><span>全选</span>
+    <ul class="imgList">
+
+    </ul>
+            <span>该订单没有上传过截图</span>
+
+    <input type="hidden" id="orderId" name="orderId" value="" />
+    <input type="hidden" id="taskId" name="taskId" value="0" />
+</form>
+
+<script src="/JS2019/Order/picmange.js?v=2020050512" type="text/javascript"></script>
+
+</body>
+</html>

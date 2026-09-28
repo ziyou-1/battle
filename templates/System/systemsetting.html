@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>系统设置</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-elem-quote {
+        margin-bottom: 10px;
+        padding: 0px;
+        line-height: 22px;
+        border-left: 5px solid #009688;
+        border-radius: 0 2px 2px 0;
+        background-color: #f2f2f2;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+</style>
+
+<form class="layui-form" action="" lay-filter="sform">
+
+    <div class="layui-tab" lay-filter="tags">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="100">绑定平台个人账号</li>
+            <li lay-id="200">订单业务相关设置</li>
+            <li lay-id="300">魔兽排团设置</li>
+            <li lay-id="400">系统相关设置</li>
+            <li lay-id="500">老板查进度设置</li>
+            <li lay-id="600">会员相关设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <blockquote class="layui-elem-quote" style="padding:10px 16px;background:#fff8e8;color:#754719">当前安卓 APP 使用“会员管理”中的客户手机号账号，连接后台“客户端内容管理”数据。下方原平台个人账号绑定与本项目 APP 无关，本地版未接入原平台接口。</blockquote>
+                <blockquote class="layui-elem-quote" style="padding:10px 10px 10px 10px;">
+                    <p style="font-weight:600;color:#000">功能介绍：</p>
+                    <p style="font-size:14px;color:#000">原平台曾通过个人账号开通短信、淘宝接口、虚拟电话及在线结算等服务；这些外部接口在本地版未接入。</p>
+                </blockquote>
+                <blockquote class="layui-elem-quote" style="padding:10px 10px 10px 10px;color:#808080">
+                    <p style="font-weight:600;color:#000">提示：</p>
+                    <p style="font-size:14px;">1、平台个人账号与本系统子账号是两个不同体系的账号；</p>
+                    <p style="font-size:14px;">2、原平台 APP 和小程序账号不是本项目安卓客户端的登录账号；</p>
+                    <p style="font-size:14px;">3、本项目安卓客户端的客户账号在“会员管理”中维护，无需注册原平台账号。</p>
+                </blockquote>
+                <fieldset class="layui-elem-field">
+                    <legend>与平台个人账号绑定</legend>
+                    <div class="layui-field-box binddiv" style="display:none">
+                        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">平台个人账户</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="jdpAcc" id="jdpAcc" lay-verify="" autocomplete="off" placeholder="平台个人手机号" maxlength="32" class="layui-input layui-input-shadow boxshadow-success" value="[[ sys.ownerAccount ]]">
+                                </div>
+                                <div style="margin-left:110px;margin-top:10px">
+                                    <a href="https://www.jidanpu.com/reg?wk=[[ company ]]" style="color:#1E9FFF;" target="_blank" title="如果没有平台个人账号，可以点击此处注册">还没有平台个人账号？点此注册</a>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">个人账号密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="pwd" id="pwd" lay-verify="" autocomplete="off" placeholder="您已设置过密码，若不需要更改请勿动此处" maxlength="32" class="layui-input layui-input-shadow boxshadow-success" value="">
+                                </div>
+                                <div style="margin-left:110px;margin-top:10px">
+                                    <a style="color:#1E9FFF;" href="https://user.jidanpu.com/login/findloginpwd" target="_blank">如若忘记平台个人账号的登录密码，可以点击这里找回</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="layui-field-box bindsuccessdiv " style="display:none">
+                        <div class="layui-anim-up"><i class="layui-icon layui-icon-ok-circle" style="font-size: 48px; color: #16b777; position: relative; margin: 10px; top: 10px;"></i><span style="font-size:18px">已绑定了平台个人账号：[[ sys.ownerAccount ]]</span></div>
+                    </div>
+                    <div style="text-align:center;align-items:center;padding-bottom:15px;">
+                        <button type="button" style="display:none" class="layui-btn layui-btn-normal layui-btn-lg binddiv" lay-submit="" lay-filter="save1btn">保存并验证绑定</button>
+                        <button type="button" class="layui-btn layui-btn-danger layui-btn-lg" lay-submit="" lay-filter="clearBindbtn">清除绑定</button>
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="layui-tab-item">
+                <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                    <legend>订单相关设置</legend>
+                    <div class="layui-field-box" style="font-size:14px">
+                        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1、订单录入系统后默认状态
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="DefSta" value="未分配" title="未分配" [% if (settings.DefSta if settings.DefSta is defined else "未分配")|string == "未分配" %][% endif %] [% if (settings.DefSta if settings.DefSta is defined else "未分配")|string == "未分配" %]checked[% endif %]>
+                                    <input type="radio" name="DefSta" value="待上号" title="待上号"  [% if (settings.DefSta if settings.DefSta is defined else "未分配")|string == "待上号" %][% endif %] [% if (settings.DefSta if settings.DefSta is defined else "未分配")|string == "待上号" %]checked[% endif %]>
+                                    <input type="radio" name="DefSta" value="代练中" title="代练中"  [% if (settings.DefSta if settings.DefSta is defined else "未分配")|string == "代练中" %][% endif %] [% if (settings.DefSta if settings.DefSta is defined else "未分配")|string == "代练中" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    2、从管理订单页面导出订单时每次最大笔数，为-1代表不能导出，最大不超过5000笔，默认1000（0也是1000）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="text" name="ExpOdMax" lay-verify="required|number" autocomplete="off" class="layui-input layui-input-shadow boxshadow-success" value="[[ settings.ExpOdMax if settings.ExpOdMax is defined else '2000' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    3、从管理订单页面导出订单时的导出密码，如果设置了这个密码，每次导出系统订单将需要输入这里的密码
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:0px;padding-top:15px">
+                                    <span style="color:red;font-weight:600;padding:0px 10px;line-height:35px">还未设置导出密码，导出订单时将会验证账号登录密码</span>
+                                    <a href="#" class="layui-btn layui-btn-warm changeexp">设置或修改导出密码</a>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    4、录单时默认代练周期时间（单位为天，支持1以下的小数，就代表默认为小时，例如输入0.5代表默认时间要求12小时，这里输入0代表默认1小时，）：
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="text" name="DefulatDLHours" lay-verify="required|number" autocomplete="off" class="layui-input layui-input-shadow boxshadow-success" value="[[ settings.DefulatDLHours if settings.DefulatDLHours is defined else '1.0' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5、手动录单的时候游戏账号、密码是否为必填项？（默认不要求必须要输入游戏账号密码）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK102" value="N" title="否" [% if (settings.SK102 if settings.SK102 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK102 if settings.SK102 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK102" value="Y" title="是"  [% if (settings.SK102 if settings.SK102 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK102 if settings.SK102 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5.1、录单页面，账号密码输入框是否永远显示（默认订单类型为代练时显示，陪玩时隐藏）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK139" value="N" title="不设定" [% if (settings.SK139 if settings.SK139 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK139 if settings.SK139 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK139" value="Y" title="永远显示"  [% if (settings.SK139 if settings.SK139 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK139 if settings.SK139 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5.2、录单页面，角色名输入框是否为必填项？（默认不要求必须要输入游戏账号密码）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK142" value="N" title="不要求" [% if (settings.SK142 if settings.SK142 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK142 if settings.SK142 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK142" value="Y" title="必填"  [% if (settings.SK142 if settings.SK142 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK142 if settings.SK142 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5.3、录单页面，联系电话是否为必填项？（默认可留空）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK146" value="N" title="不要求" [% if (settings.SK146 if settings.SK146 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK146 if settings.SK146 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK146" value="Y" title="必填"  [% if (settings.SK146 if settings.SK146 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK146 if settings.SK146 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5.4、录单智能识别出来的职业属性是否需要按识别结果记录？（默认会按官方职业归类，需要按识别结果记录就选是）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK151" value="N" title="否" [% if (settings.SK151 if settings.SK151 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK151 if settings.SK151 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK151" value="Y" title="是"  [% if (settings.SK151 if settings.SK151 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK151 if settings.SK151 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5.5、录单页面快速指派接手人是否需要支持同时指派多人？（默认只支持单人）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK154" value="0" title="单人" [% if (settings.SK154 if settings.SK154 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK154 if settings.SK154 is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="SK154" value="1" title="多人"  [% if (settings.SK154 if settings.SK154 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK154 if settings.SK154 is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    6、录单时订单来源单号是否为必填项(默认可留空)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK10" value="N" title="不要求"  [% if (settings.SK10 if settings.SK10 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK10 if settings.SK10 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK10" value="Y" title="需要必须填" [% if (settings.SK10 if settings.SK10 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK10 if settings.SK10 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7、录单的时候，是不是不允许录入相同订单来源+相同的来源单号的订单(默认允许)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK32" value="N" title="不要求"  [% if (settings.SK32 if settings.SK32 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK32 if settings.SK32 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK32" value="Y" title="是的不允许" [% if (settings.SK32 if settings.SK32 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK32 if settings.SK32 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.1、录单的时候，项目分类是否为必选？(默认不要求，注意：若没有配置游戏的分类，此限制将无效)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK141" value="N" title="不要求" [% if (settings.SK141 if settings.SK141 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK141 if settings.SK141 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK141" value="Y" title="必选"  [% if (settings.SK141 if settings.SK141 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK141 if settings.SK141 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.2、系统是否启用实际付款记录？(默认不启用此功能，启用后，录单页面会出现实际付款输入框，管理订单列表可调出实际付款列表)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK143" value="N" title="不启用" [% if (settings.SK143 if settings.SK143 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK143 if settings.SK143 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK143" value="Y" title="启用"  [% if (settings.SK143 if settings.SK143 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK143 if settings.SK143 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.3、录单页面是否禁止更换接单客服(默认允许，禁止更换后录单客服只能选自己)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK43" value="N" title="不禁止"  [% if (settings.SK43 if settings.SK43 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK43 if settings.SK43 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK43" value="Y" title="禁止更换" [% if (settings.SK43 if settings.SK43 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK43 if settings.SK43 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.4、录单时自动读取淘宝订单价格后是否允许手工编辑订单价格(默认不允许)，该选项决定着识别出来的价格是否能被读取的淘宝价格替换掉
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK44" value="N" title="不允许" [% if (settings.SK44 if settings.SK44 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK44 if settings.SK44 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK44" value="Y" title="允许"  [% if (settings.SK44 if settings.SK44 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK44 if settings.SK44 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="display:none">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.5、录单页面是否需要展示平台手续费输入框(默认不展示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK111" value="N" title="否" [% if (settings.SK111 if settings.SK111 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK111 if settings.SK111 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK111" value="Y" title="是"  [% if (settings.SK111 if settings.SK111 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK111 if settings.SK111 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.6、录单时是否关闭备注项的自动识别(默认开启)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK54" value="N" title="否" [% if (settings.SK54 if settings.SK54 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK54 if settings.SK54 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK54" value="Y" title="是"  [% if (settings.SK54 if settings.SK54 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK54 if settings.SK54 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7.9、是否需要关闭在管理订单列表一键复制成新单功能？(默认开启)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK150" value="N" title="开启" [% if (settings.SK150 if settings.SK150 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK150 if settings.SK150 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK150" value="Y" title="关闭"  [% if (settings.SK150 if settings.SK150 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK150 if settings.SK150 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    8、管理订单列表默认的排序顺序需要按哪种方式排序
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK92" value="1" title="默认的订单序号顺序（最新的总在前面）"  [% if (settings.SK92 if settings.SK92 is defined else "2")|string == "1" %][% endif %] [% if (settings.SK92 if settings.SK92 is defined else "1")|string == "1" %]checked[% endif %]>
+                                    <input type="radio" name="SK92" value="2" title="按录单时间先后（越新录的越在前面，需要拆分的订单挨在一起请选这个）" [% if (settings.SK92 if settings.SK92 is defined else "2")|string == "2" %][% endif %] [% if (settings.SK92 if settings.SK92 is defined else "1")|string == "2" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    10、指派打手的时候，如果同时指派多个打手，是否默认开启智能分配功能(默认开启)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK120" value="N" title="不开启" [% if (settings.SK120 if settings.SK120 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK120 if settings.SK120 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK120" value="Y" title="自动开启"  [% if (settings.SK120 if settings.SK120 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK120 if settings.SK120 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    11、指派接手人后(含自助接单)后订单状态是不是立即变为代练中
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK1" value="N" title="不是"  [% if (settings.SK1 if settings.SK1 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK1 if settings.SK1 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK1" value="Y" title="立即变为代练中" [% if (settings.SK1 if settings.SK1 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK1 if settings.SK1 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    12、指派打手的时候，当启用了智能分配并且中途换人时，是不是保持当前打手不变（默认总是第1个为当前打手）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK77" value="N" title="不保持"  [% if (settings.SK77 if settings.SK77 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK77 if settings.SK77 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK77" value="Y" title="保持当前打手不变" [% if (settings.SK77 if settings.SK77 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK77 if settings.SK77 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    12.1、当发单价大于接单价时(接单价大于0时,如果接单价为0则不检测)，是否禁止指派订单或发单（默认没要求）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK135" value="N" title="不要求" [% if (settings.SK135 if settings.SK135 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK135 if settings.SK135 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK135" value="Y" title="禁止"  [% if (settings.SK135 if settings.SK135 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK135 if settings.SK135 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    13、打手提交完成后(交单)，订单状态要不要直接变成已完成（默认订单状态会变成待验收）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK91" value="N" title="不要"  [% if (settings.SK91 if settings.SK91 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK91 if settings.SK91 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK91" value="Y" title="要" [% if (settings.SK91 if settings.SK91 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK91 if settings.SK91 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    14、查看订单详情时要不要将订单内容项里的手机号屏蔽（如果选是，打手将无法看到手机号）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK5" value="N" title="不屏蔽" [% if (settings.SK5 if settings.SK5 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK5 if settings.SK5 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK5" value="Y" title="屏蔽"  [% if (settings.SK5 if settings.SK5 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK5 if settings.SK5 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    15、订单详情界面和订单内容里，要不要显示QQ和微信
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK39" value="N" title="不要" [% if (settings.SK39 if settings.SK39 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK39 if settings.SK39 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK39" value="Y" title="要"  [% if (settings.SK39 if settings.SK39 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK39 if settings.SK39 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    16、打手代练员那边（我的订单列表页）需不需要显示已完成的订单(默认不显示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK9" value="N" title="不显示" [% if (settings.SK9 if settings.SK9 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK9 if settings.SK9 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK9" value="Y" title="显示"  [% if (settings.SK9 if settings.SK9 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK9 if settings.SK9 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    17、打手提交订单完成时如果没有上传过截图（至少1张），要不要让他提交（默认不限制）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK80" value="N" title="可以提交" [% if (settings.SK80 if settings.SK80 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK80 if settings.SK80 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK80" value="Y" title="不能提交"  [% if (settings.SK80 if settings.SK80 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK80 if settings.SK80 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    18、订单管理列表(一般是客服和管理者用)要不要显示已完成的订单(不受按状态筛选影响，默认显示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK27" value="N" title="显示" [% if (settings.SK27 if settings.SK27 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK27 if settings.SK27 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK27" value="Y" title="不显示"  [% if (settings.SK27 if settings.SK27 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK27 if settings.SK27 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    19、清除订单的代练员打手后需不需要将订单状态立即变成未分配
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK11" value="N" title="不需要"  [% if (settings.SK11 if settings.SK11 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK11 if settings.SK11 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK11" value="Y" title="需要" [% if (settings.SK11 if settings.SK11 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK11 if settings.SK11 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    20、订单是不是在任何状态下都要显示倒计时(默认一直显示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK12" value="N" title="不是"  [% if (settings.SK12 if settings.SK12 is defined else "Z")|string == "N" %][% endif %] [% if (settings.SK12 if settings.SK12 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK12" value="Y" title="是"  [% if (settings.SK12 if settings.SK12 is defined else "Z")|string == "Y" %][% endif %] [% if (settings.SK12 if settings.SK12 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                    <input type="radio" name="SK12" value="Z" title="永不倒计时" [% if (settings.SK12 if settings.SK12 is defined else "Z")|string == "Z" %][% endif %] [% if (settings.SK12 if settings.SK12 is defined else "N")|string == "Z" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    21、对于已经收到款的单子需不需要禁止编辑接单价格
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK15" value="N" title="不需要"  [% if (settings.SK15 if settings.SK15 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK15 if settings.SK15 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK15" value="Y" title="需要禁止" [% if (settings.SK15 if settings.SK15 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK15 if settings.SK15 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    25、对于从上家系统发送过来的订单，在本系统里将订单状态改成问题单后，要不要自动同步到上家系统（默认会同步）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK96" value="N" title="不要同步"  [% if (settings.SK96 if settings.SK96 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK96 if settings.SK96 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK96" value="Y" title="要同步" [% if (settings.SK96 if settings.SK96 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK96 if settings.SK96 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    26、对于从上家系统发送过来的订单，在本系统里将订单状态改成已暂停后，要不要自动同步到上家系统（默认会同步）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK103" value="N" title="不要同步"  [% if (settings.SK103 if settings.SK103 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK103 if settings.SK103 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK103" value="Y" title="要同步" [% if (settings.SK103 if settings.SK103 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK103 if settings.SK103 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    27、当上家系统那边撤单或删除订单后，本系统的对应订单状态如何变化（默认会变成已退单）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK65" value="N" title="变成已退单" [% if (settings.SK65 if settings.SK65 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK65 if settings.SK65 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK65" value="Z" title="变成问题单"  [% if (settings.SK65 if settings.SK65 is defined else "N")|string == "Z" %][% endif %] [% if (settings.SK65 if settings.SK65 is defined else "N")|string == "Z" %]checked[% endif %]>
+                                    <input type="radio" name="SK65" value="Y" title="不要改变状态"  [% if (settings.SK65 if settings.SK65 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK65 if settings.SK65 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    28、当上家系统那边撤单后又重新指派过来时，本系统的对应订单状态需要变成什么状态？（默认会变成撤销之前的状态）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK115" value="" title="变成撤销之前的状态"  [% if (settings.SK115 if settings.SK115 is defined else "待上号")|string == "" %][% endif %] [% if (settings.SK115 if settings.SK115 is defined else "")|string == "" %]checked[% endif %]>
+                                    <input type="radio" name="SK115" value="待上号" title="变成待上号" [% if (settings.SK115 if settings.SK115 is defined else "待上号")|string == "待上号" %][% endif %] [% if (settings.SK115 if settings.SK115 is defined else "")|string == "待上号" %]checked[% endif %]>
+                                    <input type="radio" name="SK115" value="未分配" title="变成未分配"  [% if (settings.SK115 if settings.SK115 is defined else "待上号")|string == "未分配" %][% endif %] [% if (settings.SK115 if settings.SK115 is defined else "")|string == "未分配" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    31、对于从上家系统发送过来的订单，本系统更改机位后是否需要同步到上家系统（默认不同步）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK119" value="N" title="不同步"  [% if (settings.SK119 if settings.SK119 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK119 if settings.SK119 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK119" value="Y" title="同步" [% if (settings.SK119 if settings.SK119 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK119 if settings.SK119 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    31.1、对于从上家系统发送过来的订单，本系统更改重要备注后是否需要同步给上家系统（默认不同步）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK140" value="N" title="不同步" [% if (settings.SK140 if settings.SK140 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK140 if settings.SK140 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK140" value="Y" title="同步"  [% if (settings.SK140 if settings.SK140 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK140 if settings.SK140 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px;">
+                                    31.2、将上家系统内部抢单大厅的订单同步到本系统时，需要按原接单价多少百分比给此系统的打手？
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;width: 150px;margin-top: 12px;">
+                                    <input type="text" name="SK152" class="layui-input layui-input-shadow boxshadow-success" lay-tips='80%就填80，75%就填75，填0或空代表按原价' lay-verify="number" autocomplete="off" value="[[ settings.SK152 if settings.SK152 is defined else '0' ]]">
+                                    <div style="line-height:38px;width:40px;position: absolute;right: -50px;top: 1px;">%</div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    32、已结算过的打手/客服绩效账单可不可以编辑(默认不可以)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK23" value="N" title="不可以编辑"  [% if (settings.SK23 if settings.SK23 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK23 if settings.SK23 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK23" value="Y" title="可以编辑" [% if (settings.SK23 if settings.SK23 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK23 if settings.SK23 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    33、订单状态改成已完成时，是否需要自动清理无效打手账单(默认自动清理)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK118" value="N" title="不清理"  [% if (settings.SK118 if settings.SK118 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK118 if settings.SK118 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK118" value="Y" title="自动清理" [% if (settings.SK118 if settings.SK118 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK118 if settings.SK118 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    34、当订单有多个打手并列显示，且订单状态改成待验收时，是否需要只对提交完单的打手记录绩效账单(默认全部记录同时生效)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK123" value="N" title="否" [% if (settings.SK123 if settings.SK123 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK123 if settings.SK123 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK123" value="Y" title="是"  [% if (settings.SK123 if settings.SK123 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK123 if settings.SK123 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    35、订单详情界面，订单号后面是不是需要屏蔽订单来源名称（默认不屏蔽）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK26" value="N" title="不屏蔽"  [% if (settings.SK26 if settings.SK26 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK26 if settings.SK26 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK26" value="Y" title="需要屏蔽" [% if (settings.SK26 if settings.SK26 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK26 if settings.SK26 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    36、打手能不能将订单状态改成问题单(默认可以改)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK30" value="N" title="能"  [% if (settings.SK30 if settings.SK30 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK30 if settings.SK30 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK30" value="Y" title="不能" [% if (settings.SK30 if settings.SK30 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK30 if settings.SK30 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    37、打手能不能将问题单改成其它状态(默认不能更改)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK31" value="N" title="不能" [% if (settings.SK31 if settings.SK31 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK31 if settings.SK31 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK31" value="Y" title="能"  [% if (settings.SK31 if settings.SK31 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK31 if settings.SK31 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    38、打手能不能将已暂停的订单改成其它状态(默认允许更改)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK84" value="N" title="能"  [% if (settings.SK84 if settings.SK84 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK84 if settings.SK84 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK84" value="Y" title="不能" [% if (settings.SK84 if settings.SK84 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK84 if settings.SK84 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    39、任何人将订单状态改成问题单时，是不是必须填写原因备注(默认不需要)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK46" value="N" title="不要求"  [% if (settings.SK46 if settings.SK46 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK46 if settings.SK46 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK46" value="Y" title="必须填写" [% if (settings.SK46 if settings.SK46 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK46 if settings.SK46 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    40、订单管理列表中页面，角色信息列要不要显示服务器(默认显示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK34" value="N" title="显示" [% if (settings.SK34 if settings.SK34 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK34 if settings.SK34 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK34" value="Y" title="不显示"  [% if (settings.SK34 if settings.SK34 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK34 if settings.SK34 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    41、订单管理列表中页面，是否需要单独将来源列分离出来显示(默认来源集成在旺旺/来源列表里显示，如果选择需要，则会导致机位/团长列隐藏)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK101" value="N" title="不需要" [% if (settings.SK101 if settings.SK101 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK101 if settings.SK101 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK101" value="Y" title="需要独立显示"  [% if (settings.SK101 if settings.SK101 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK101 if settings.SK101 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    42、是否需要记忆每次录单选择的订单来源？(默认会记住客服每次录单选择的来源，方便下次直接选中)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK69" value="Y" title="记忆" [% if (settings.SK69 if settings.SK69 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK69 if settings.SK69 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                                    <input type="radio" name="SK69" value="N" title="不记忆"  [% if (settings.SK69 if settings.SK69 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK69 if settings.SK69 is defined else "Y")|string == "N" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    43、代练打手那边要不要显示已退单的订单(默认不显示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK38" value="N" title="不显示"  [% if (settings.SK38 if settings.SK38 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK38 if settings.SK38 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK38" value="Y" title="要显示" [% if (settings.SK38 if settings.SK38 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK38 if settings.SK38 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    44、从订单管理列表里点击订单号时，需不需要同时打开多个订单详情页(默认不多开)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK42" value="N" title="不需要" [% if (settings.SK42 if settings.SK42 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK42 if settings.SK42 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK42" value="Y" title="需要多开"  [% if (settings.SK42 if settings.SK42 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK42 if settings.SK42 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    48、订单管理列表页面是否需要显示服务区&服务器的筛选条件(默认不显示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK47" value="N" title="否"  [% if (settings.SK47 if settings.SK47 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK47 if settings.SK47 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK47" value="Y" title="是" [% if (settings.SK47 if settings.SK47 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK47 if settings.SK47 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    49、订单管理列表页面是否隐藏阵营门派的筛选条件(默认不隐藏)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK48" value="N" title="否" [% if (settings.SK48 if settings.SK48 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK48 if settings.SK48 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK48" value="Y" title="是"  [% if (settings.SK48 if settings.SK48 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK48 if settings.SK48 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    50、订单管理列表页面，是否需要显示QA问题答案输入框(默认不展示)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK112" value="N" title="否" [% if (settings.SK112 if settings.SK112 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK112 if settings.SK112 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK112" value="Y" title="是"  [% if (settings.SK112 if settings.SK112 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK112 if settings.SK112 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    51、内部接单大厅是否开启按系统内用户所交纳保证金接单限制(默认不开启)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK51" value="N" title="否"  [% if (settings.SK51 if settings.SK51 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK51 if settings.SK51 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK51" value="Y" title="是" [% if (settings.SK51 if settings.SK51 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK51 if settings.SK51 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    52、内部接单时每次接单间隔最少几分钟（默认为0，代表无限制，该功能可以防止扫单）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="text" name="recOrderInterval" lay-verify="number" autocomplete="off" class="layui-input layui-input-shadow boxshadow-success" value="[[ settings.recOrderInterval if settings.recOrderInterval is defined else '0' ]]">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    53、内部接单大厅是否禁止显示订单角色名（默认禁止）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK67" value="N" title="显示"  [% if (settings.SK67 if settings.SK67 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK67 if settings.SK67 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK67" value="Y" title="不显示" [% if (settings.SK67 if settings.SK67 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK67 if settings.SK67 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    53.1、内部接单大厅排序方式（默认发单时间近到远）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK136" value="0" title="录单时间远到近" [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="SK136" value="1" title="录单时间近到远"  [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "1" %]checked[% endif %]>
+                                    <input type="radio" name="SK136" value="2" title="发单时间远到近"  [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "2" %][% endif %] [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "2" %]checked[% endif %]>
+                                    <input type="radio" name="SK136" value="3" title="发单时间近到远"  [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "3" %][% endif %] [% if (settings.SK136 if settings.SK136 is defined else "0")|string == "3" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    53.2、内部接单大厅是否显示参考图（默认显示）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK153" value="0" title="显示" [% if (settings.SK153 if settings.SK153 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK153 if settings.SK153 is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="SK153" value="1" title="不显示"  [% if (settings.SK153 if settings.SK153 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK153 if settings.SK153 is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    55、订单管理列表和我的订单列表“重要备注”栏是否放在角色名后面(默认在机位后面)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK55" value="N" title="否" [% if (settings.SK55 if settings.SK55 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK55 if settings.SK55 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK55" value="Y" title="是"  [% if (settings.SK55 if settings.SK55 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK55 if settings.SK55 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    57、从系统里导出订单是否保留订单密码（为尽量减少被盗号风险，默认从系统里导出订单时不含密码，请谨慎开启）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK57" value="N" title="否"  [% if (settings.SK57 if settings.SK57 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK57 if settings.SK57 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK57" value="Y" title="是" [% if (settings.SK57 if settings.SK57 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK57 if settings.SK57 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    58、从系统里导出订单是否保留订单电话（为尽量减少被盗号风险，默认从系统里导出订单时不含电话，请谨慎开启）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK58" value="N" title="否"  [% if (settings.SK58 if settings.SK58 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK58 if settings.SK58 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK58" value="Y" title="是" [% if (settings.SK58 if settings.SK58 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK58 if settings.SK58 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="display:none">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    59、在线下单支付成功的订单是否允许删除（默认不允许删除）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK59" value="N" title="否" [% if (settings.SK59 if settings.SK59 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK59 if settings.SK59 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK59" value="Y" title="是"  [% if (settings.SK59 if settings.SK59 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK59 if settings.SK59 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    60、是否需要在我的订单列表（代练员看的）里显示旺旺或来源（默认不显示该列）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK60" value="N" title="否" [% if (settings.SK60 if settings.SK60 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK60 if settings.SK60 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK60" value="Y" title="是"  [% if (settings.SK60 if settings.SK60 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK60 if settings.SK60 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    61、我的订单（代练员看的）搜索机位时是否为精确搜索（默认模糊搜索机位）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK63" value="N" title="否" [% if (settings.SK63 if settings.SK63 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK63 if settings.SK63 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK63" value="Y" title="是"  [% if (settings.SK63 if settings.SK63 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK63 if settings.SK63 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    62、管理订单列表鼠标右键是否需要显示复制订单内容的菜单（默认不显示）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK66" value="N" title="否"  [% if (settings.SK66 if settings.SK66 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK66 if settings.SK66 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK66" value="Y" title="是" [% if (settings.SK66 if settings.SK66 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK66 if settings.SK66 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    63、代练打手提交订单完成后，是否不允许将待验收的订单又改成其它的（默认不允许）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK72" value="N" title="能" [% if (settings.SK72 if settings.SK72 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK72 if settings.SK72 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK72" value="Y" title="不能"  [% if (settings.SK72 if settings.SK72 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK72 if settings.SK72 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    64、订单管理列表中的来源列是否只显示来源名称而不需要显示旺旺（默认有旺旺显示旺旺，没有旺旺显示来源名称）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK74" value="N" title="否" [% if (settings.SK74 if settings.SK74 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK74 if settings.SK74 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK74" value="Y" title="是"  [% if (settings.SK74 if settings.SK74 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK74 if settings.SK74 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    65、订单管理列表上是否需要显示订单的现有截图数量（默认不显示，注意，开启这个功能后，会降低订单管理列表加载速度）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK75" value="N" title="否" [% if (settings.SK75 if settings.SK75 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK75 if settings.SK75 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK75" value="Y" title="是"  [% if (settings.SK75 if settings.SK75 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK75 if settings.SK75 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    66、已结算的绩效账单是否允许更改成未结算
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK108" value="Y" title="是" [% if (settings.SK108 if settings.SK108 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK108 if settings.SK108 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                                    <input type="radio" name="SK108" value="N" title="否"  [% if (settings.SK108 if settings.SK108 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK108 if settings.SK108 is defined else "Y")|string == "N" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    67、内部接单限制同时抢单数是否包含待验收状态(默认不包含待验收)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK133" value="N" title="不含" [% if (settings.SK133 if settings.SK133 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK133 if settings.SK133 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK133" value="Y" title="包含"  [% if (settings.SK133 if settings.SK133 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK133 if settings.SK133 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    68、对于拉进客户黑名单的手机号/旺旺/QQ微信的订单能不能录入系统(默认不能)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK134" value="N" title="能" [% if (settings.SK134 if settings.SK134 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK134 if settings.SK134 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK134" value="Y" title="不能"  [% if (settings.SK134 if settings.SK134 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK134 if settings.SK134 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    69、您可以设置当订单状态改成什么状态时自动清除游戏密码，默认不清除，注意，一旦清除将无法恢复
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK137" value="N" title="不清" [% if (settings.SK137 if settings.SK137 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK137 if settings.SK137 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK137" value="Z" title="改代练中"  [% if (settings.SK137 if settings.SK137 is defined else "N")|string == "Z" %][% endif %] [% if (settings.SK137 if settings.SK137 is defined else "N")|string == "Z" %]checked[% endif %]>
+                                    <input type="radio" name="SK137" value="Y" title="改已完成"  [% if (settings.SK137 if settings.SK137 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK137 if settings.SK137 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align:center;align-items:center">
+                            <button type="button" class="layui-btn  layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="save2btn">保存设置</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="layui-tab-item">
+                <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                    <legend>魔兽排团相关设置</legend>
+                    <div class="layui-field-box" style="font-size:14px">
+                        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1、排团状态改成已完成时，是否将当前排团内所有账号全部清除指派
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK13" value="N" title="否" [% if (settings.SK13 if settings.SK13 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK13 if settings.SK13 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK13" value="Y" title="是"  [% if (settings.SK13 if settings.SK13 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK13 if settings.SK13 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    2、排团状态改成已完成时，是否将当前排团内所有账号全部解除排团
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK64" value="N" title="否" [% if (settings.SK64 if settings.SK64 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK64 if settings.SK64 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK64" value="Y" title="是"  [% if (settings.SK64 if settings.SK64 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK64 if settings.SK64 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    3、排团状态改成已完成时，是否将当前排团内所有的订单全部变为待验收(提示：如果有设置代练员交单直接变已完成，则此项也会直接变已完成)？
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK147" value="N" title="否" [% if (settings.SK147 if settings.SK147 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK147 if settings.SK147 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK147" value="Y" title="是"  [% if (settings.SK147 if settings.SK147 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK147 if settings.SK147 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    4、排团状态改成进行中时，是否将当前排团内所有的账号全部变为代练中(当订单为待上号时才有效)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK14" value="N" title="否"  [% if (settings.SK14 if settings.SK14 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK14 if settings.SK14 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK14" value="Y" title="是" [% if (settings.SK14 if settings.SK14 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK14 if settings.SK14 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5、排团详情中剔除账号后是否将接手人清空
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK18" value="N" title="否" [% if (settings.SK18 if settings.SK18 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK18 if settings.SK18 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK18" value="Y" title="是"  [% if (settings.SK18 if settings.SK18 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK18 if settings.SK18 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    6、排团详情中上传的截图是否同步到该团内所有订单里(默认同步)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK53" value="N" title="否"  [% if (settings.SK53 if settings.SK53 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK53 if settings.SK53 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK53" value="Y" title="是" [% if (settings.SK53 if settings.SK53 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK53 if settings.SK53 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7、是否开启魔兽专用排团模式(默认不开启，可同步使用)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK62" value="N" title="否" [% if (settings.SK62 if settings.SK62 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK62 if settings.SK62 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK62" value="Y" title="是"  [% if (settings.SK62 if settings.SK62 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK62 if settings.SK62 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    8、订单管理页面排团团号下拉列表是否显示所有排团(默认显示所有)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK71" value="N" title="否" [% if (settings.SK71 if settings.SK71 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK71 if settings.SK71 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK71" value="Y" title="是"  [% if (settings.SK71 if settings.SK71 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK71 if settings.SK71 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    9、排团详情页面里的订单号列表是否需要按接手人排序(默认按分组标记排序)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK76" value="N" title="否"  [% if (settings.SK76 if settings.SK76 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK76 if settings.SK76 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK76" value="Y" title="是" [% if (settings.SK76 if settings.SK76 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK76 if settings.SK76 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div style="text-align:center;align-items:center">
+                            <button type="button" class="layui-btn layui-btn-normal layui-btn-lg" lay-submit="" lay-filter="save2btn">保存设置</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="layui-tab-item">
+                <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                    <legend>系统相关设置</legend>
+                    <div class="layui-field-box" style="font-size:14px">
+                        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1、系统顶部是否禁止代练员/打手看“找上下家”入口（默认所有人都可以看到）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK70" value="N" title="否"  [% if (settings.SK70 if settings.SK70 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK70 if settings.SK70 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK70" value="Y" title="是" [% if (settings.SK70 if settings.SK70 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK70 if settings.SK70 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    2、新开子账号时，是否默认禁止看订单真实电话（默认不禁止）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK138" value="N" title="否"  [% if (settings.SK138 if settings.SK138 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK138 if settings.SK138 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK138" value="Y" title="是" [% if (settings.SK138 if settings.SK138 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK138 if settings.SK138 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    3、通过系统给打手结算工资打款时，需要从哪方扣手续费（默认从打手方扣手续费）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="OnlinePayDecPt" value="0" title="打手" [% if (settings.OnlinePayDecPt if settings.OnlinePayDecPt is defined else "0")|string == "0" %][% endif %] [% if (settings.OnlinePayDecPt if settings.OnlinePayDecPt is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="OnlinePayDecPt" value="1" title="工作室"  [% if (settings.OnlinePayDecPt if settings.OnlinePayDecPt is defined else "0")|string == "1" %][% endif %] [% if (settings.OnlinePayDecPt if settings.OnlinePayDecPt is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    4、系统登录界面风格
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SystemLoginStyle" value="" title="默认风格" [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "" %][% endif %] [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "" %]checked[% endif %]>
+                                    <input type="radio" name="SystemLoginStyle" value="1" title="风格1"  [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "1" %][% endif %] [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "1" %]checked[% endif %]>
+                                    <input type="radio" name="SystemLoginStyle" value="2" title="风格2"  [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "2" %][% endif %] [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "2" %]checked[% endif %]>
+                                    <input type="radio" name="SystemLoginStyle" value="3" title="风格3"  [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "3" %][% endif %] [% if (settings.SystemLoginStyle if settings.SystemLoginStyle is defined else "")|string == "3" %]checked[% endif %]>
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:20px;margin-top:5px">
+                                    <span>风格展示样例：</span>
+                                    <a href="/Login/Index.html" target="_blank" title="默认风格，点击查看风格展示" style="color:#ff6a00;">默认风格</a>
+                                    <a href="/Login/Index1.html" target="_blank" title="风格1，点击查看风格展示" style="color:#ff6a00;margin-left:20px">风格1</a>
+                                    <a href="/Login/Index2.html" target="_blank" title="风格2，点击查看风格展示" style="color: #ff6a00; margin-left: 20px">风格2</a>
+                                    <a href="/Login/Index3.html" target="_blank" title="风格3，点击查看风格展示" style="color: #ff6a00; margin-left: 20px">风格3</a>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5、是否开启邀请大神(员工)自助注册系统账号的功能（默认不开启）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="applyOnboarding" value="0" title="关闭" [% if (settings.applyOnboarding if settings.applyOnboarding is defined else "0")|string == "0" %][% endif %] [% if (settings.applyOnboarding if settings.applyOnboarding is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="applyOnboarding" value="1" title="开启"  [% if (settings.applyOnboarding if settings.applyOnboarding is defined else "0")|string == "1" %][% endif %] [% if (settings.applyOnboarding if settings.applyOnboarding is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    6、是否开启账单结算扣点功能（默认关闭）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="deductPointsFee" value="0" title="关闭" [% if (settings.deductPointsFee if settings.deductPointsFee is defined else "0")|string == "0" %][% endif %] [% if (settings.deductPointsFee if settings.deductPointsFee is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="deductPointsFee" value="1" title="开启"  [% if (settings.deductPointsFee if settings.deductPointsFee is defined else "0")|string == "1" %][% endif %] [% if (settings.deductPointsFee if settings.deductPointsFee is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align:center;align-items:center">
+                            <button type="button" class="layui-btn   layui-btn-normal layui-btn-lg w-lg" lay-submit="" lay-filter="save2btn">保存设置</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="layui-tab-item ">
+                <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                    <legend>老板查进度设置</legend>
+                    <div class="layui-field-box" style="font-size:14px">
+                        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                            <div class="layui-form-item" style="font-size:16px">
+                                <div class="layui-form-mid layui-word-aux">
+                                    老板查进度链接地址：<a target="_blank" class="" style="color:#1E9FFF;font-size:16px" href="https://www.jidanpu.com/search/order/[[ sys.id ]]" title="这就是你家系统专用查进度链接，可以复制给客户">https://www.jidanpu.com/search/order/[[ sys.id ]]</a>
+                                    <br /><br />备用地址：https://seach.jidanpu.net/?u=[[ sys.id ]]
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1、是否开放自助查询订单进度和截图功能
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK20" value="N" title="关闭"  [% if (settings.SK20 if settings.SK20 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK20 if settings.SK20 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK20" value="Y" title="开放" [% if (settings.SK20 if settings.SK20 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK20 if settings.SK20 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    2、是否在查询结果显示订单项目（默认不显示）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK68" value="N" title="不显示"  [% if (settings.SK68 if settings.SK68 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK68 if settings.SK68 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK68" value="Y" title="显示" [% if (settings.SK68 if settings.SK68 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK68 if settings.SK68 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    3、查询进度那里是否支持按角色名查询（默认支持）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK99" value="Y" title="支持" [% if (settings.SK99 if settings.SK99 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK99 if settings.SK99 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                                    <input type="radio" name="SK99" value="N" title="不支持"  [% if (settings.SK99 if settings.SK99 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK99 if settings.SK99 is defined else "Y")|string == "N" %]checked[% endif %]>
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    3.1、查询进度那里是否支持按手机号查询（默认支持）
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK99_1" value="Y" title="支持" [% if (settings.SK99_1 if settings.SK99_1 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK99_1 if settings.SK99_1 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                                    <input type="radio" name="SK99_1" value="N" title="不支持"  [% if (settings.SK99_1 if settings.SK99_1 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK99_1 if settings.SK99_1 is defined else "Y")|string == "N" %]checked[% endif %]>
+                                </div>
+
+                            </div>
+                            <div class="layui-form-item layui-hide" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    4、是否开放客户自助在线下单(请先将本系统绑定平台账户，否则客户无法在线支付)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK50" value="N" title="关闭" [% if (settings.SK50 if settings.SK50 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK50 if settings.SK50 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK50" value="Y" title="开放"  [% if (settings.SK50 if settings.SK50 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK50 if settings.SK50 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">下单网址：<a class="" href="/app/" target="_blank" style="color: #0094ff; font-size: 16px" title="">/app/</a></div>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                5、是否允许老板通过查进度界面修改订单里的游戏密码(默认不允许)
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="SK81" value="N" title="不允许" [% if (settings.SK81 if settings.SK81 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK81 if settings.SK81 is defined else "N")|string == "N" %]checked[% endif %]>
+                                <input type="radio" name="SK81" value="Y" title="允许"  [% if (settings.SK81 if settings.SK81 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK81 if settings.SK81 is defined else "N")|string == "Y" %]checked[% endif %]>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                6、如果允许号主通过在线查进度界面修改订单游戏密码的话是选择验证原订单账号还是原订单密码(默认验证账号)
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="SK87" value="10" title="验证原账号" [% if (settings.SK87 if settings.SK87 is defined else "10")|string == "10" %][% endif %] [% if (settings.SK87 if settings.SK87 is defined else "10")|string == "10" %]checked[% endif %]>
+                                <input type="radio" name="SK87" value="20" title="验证原密码"  [% if (settings.SK87 if settings.SK87 is defined else "10")|string == "20" %][% endif %] [% if (settings.SK87 if settings.SK87 is defined else "10")|string == "20" %]checked[% endif %]>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                7、是否需要在查询订单进度显示当前问题情况描述（默认显示）
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="PublicSeachOrderPushQsRemarkSwitch" value="N" title="不开放"  [% if (settings.PublicSeachOrderPushQsRemarkSwitch if settings.PublicSeachOrderPushQsRemarkSwitch is defined else "Y")|string == "N" %][% endif %] [% if (settings.PublicSeachOrderPushQsRemarkSwitch if settings.PublicSeachOrderPushQsRemarkSwitch is defined else "N")|string == "N" %]checked[% endif %]>
+                                <input type="radio" name="PublicSeachOrderPushQsRemarkSwitch" value="Y" title="开放" [% if (settings.PublicSeachOrderPushQsRemarkSwitch if settings.PublicSeachOrderPushQsRemarkSwitch is defined else "Y")|string == "Y" %][% endif %] [% if (settings.PublicSeachOrderPushQsRemarkSwitch if settings.PublicSeachOrderPushQsRemarkSwitch is defined else "N")|string == "Y" %]checked[% endif %]>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                8、是否需要在查询订单进度页面顶部显示常见问题答案（默认不显示）
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="PublicSeachOrderQuestionSwitch" value="N" title="不显示"  [% if (settings.PublicSeachOrderQuestionSwitch if settings.PublicSeachOrderQuestionSwitch is defined else "Y")|string == "N" %][% endif %] [% if (settings.PublicSeachOrderQuestionSwitch if settings.PublicSeachOrderQuestionSwitch is defined else "N")|string == "N" %]checked[% endif %]>
+                                <input type="radio" name="PublicSeachOrderQuestionSwitch" value="Y" title="显示" [% if (settings.PublicSeachOrderQuestionSwitch if settings.PublicSeachOrderQuestionSwitch is defined else "Y")|string == "Y" %][% endif %] [% if (settings.PublicSeachOrderQuestionSwitch if settings.PublicSeachOrderQuestionSwitch is defined else "N")|string == "Y" %]checked[% endif %]>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                9、是否需要在查询订单进度页面开放暂停/恢复上号的按钮（默认不开放）
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="PublicSeachOrderPushRestartSwitch" value="N" title="不开放" [% if (settings.PublicSeachOrderPushRestartSwitch if settings.PublicSeachOrderPushRestartSwitch is defined else "N")|string == "N" %][% endif %] [% if (settings.PublicSeachOrderPushRestartSwitch if settings.PublicSeachOrderPushRestartSwitch is defined else "N")|string == "N" %]checked[% endif %]>
+                                <input type="radio" name="PublicSeachOrderPushRestartSwitch" value="Y" title="开放"  [% if (settings.PublicSeachOrderPushRestartSwitch if settings.PublicSeachOrderPushRestartSwitch is defined else "N")|string == "Y" %][% endif %] [% if (settings.PublicSeachOrderPushRestartSwitch if settings.PublicSeachOrderPushRestartSwitch is defined else "N")|string == "Y" %]checked[% endif %]>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                10、是否需要在查询订单进度页面显示联系在线客服的按钮（默认显示）
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="PublicSeachOrderOnlineService" value="Y" title="显示" [% if (settings.PublicSeachOrderOnlineService if settings.PublicSeachOrderOnlineService is defined else "Y")|string == "Y" %][% endif %] [% if (settings.PublicSeachOrderOnlineService if settings.PublicSeachOrderOnlineService is defined else "Y")|string == "Y" %]checked[% endif %]>
+                                <input type="radio" name="PublicSeachOrderOnlineService" value="N" title="不显示"  [% if (settings.PublicSeachOrderOnlineService if settings.PublicSeachOrderOnlineService is defined else "Y")|string == "N" %][% endif %] [% if (settings.PublicSeachOrderOnlineService if settings.PublicSeachOrderOnlineService is defined else "Y")|string == "N" %]checked[% endif %]>
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                11、是否需要在查询订单进度页面显示当前打手直播地址（默认不显示）
+                            </div>
+                            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                <input type="radio" name="PublicSeachOrderLiveStreaming" value="N" title="不显示"  [% if (settings.PublicSeachOrderLiveStreaming if settings.PublicSeachOrderLiveStreaming is defined else "Y")|string == "N" %][% endif %] [% if (settings.PublicSeachOrderLiveStreaming if settings.PublicSeachOrderLiveStreaming is defined else "N")|string == "N" %]checked[% endif %]>
+                                <input type="radio" name="PublicSeachOrderLiveStreaming" value="Y" title="显示" [% if (settings.PublicSeachOrderLiveStreaming if settings.PublicSeachOrderLiveStreaming is defined else "Y")|string == "Y" %][% endif %] [% if (settings.PublicSeachOrderLiveStreaming if settings.PublicSeachOrderLiveStreaming is defined else "N")|string == "Y" %]checked[% endif %]>
+                            </div>
+
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="layui-elem-field" style="">
+                    <legend>查进度顶部公告设置</legend>
+                    <div class="layui-field-box" style="">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block" style="margin-left:10px">
+                                请在下面输入显示在查进度页面顶部的公告内容
+                            </div>
+                            <div class="layui-input-block" style="margin-left:10px">
+                                <input type="text" name="PublicSeachOrderBulletin" id="PublicSeachOrderBulletin" lay-verify="" autocomplete="off" placeholder="你可以在此输入要显示在查询进度页面顶部的公告，如果为空则不会显示" maxlength="200" class="layui-input" value="[[ settings.PublicSeachOrderBulletin if settings.PublicSeachOrderBulletin is defined else '' ]]">
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <div style="text-align:center;align-items:center">
+                    <button type="button" class="layui-btn   layui-btn-normal layui-btn-lg w-lg" lay-submit="" lay-filter="save2btn">保存设置</button>
+                </div>
+
+                <fieldset class="layui-elem-field" style="">
+                    <legend>查进度页面常见问题答案设置</legend>
+                    <div class="layui-field-box" style="">
+                        <div class="layui-form-item">
+                            <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+                            <script type="text/html" id="toolbarDemo">
+                                <div class="layui-btn-container">
+                                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增常见问题(最多6个)"><i class="layui-icon layui-icon-add-1"></i>新增常见问题(最多6个)</button>
+                                </div>
+                            </script>
+                            <script type="text/html" id="baroperating">
+                                <a class="layui-btn layui-btn-xs layui-btn-primary" style="margin-left:2px" lay-event="editDel" title="编辑">编辑</a>
+                                <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-left:2px" lay-event="submitDel" title="删除">删除</a>
+                            </script>
+                            <script type="text/html" id="switchTp">
+                                <input type="checkbox" name="sta" value="{{d.SeachQuestion_Id}}" lay-skin="switch" lay-text="显示|不显示" lay-filter="isNeedViewChecked" {{ d.Status ==10 ? 'checked' : '' }}>
+                            </script>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="layui-tab-item">
+                <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                    <legend>会员相关设置</legend>
+                    <div class="layui-field-box" style="font-size:14px">
+                        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1、录单时如果匹配到会员，是否默认从会员预存余额扣款(默认不启用)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK148" value="N" title="不启用" [% if (settings.SK148 if settings.SK148 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK148 if settings.SK148 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK148" value="Y" title="启用"  [% if (settings.SK148 if settings.SK148 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK148 if settings.SK148 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1、录单时如果是陪玩单，是否需要将老板角色名当作老板名称同步录入会员系统(默认不同步)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="SK149" value="N" title="不同步" [% if (settings.SK149 if settings.SK149 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK149 if settings.SK149 is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="SK149" value="Y" title="同步"  [% if (settings.SK149 if settings.SK149 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK149 if settings.SK149 is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    1.2、是在录入订单时扣会员余额还是在订单变成待验收（打手交单）时扣会员余额？默认订单录入后扣会员余额(仅限面向会员，散客不受影响)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="DeductionTiming" value="0" title="录单时扣" [% if (settings.DeductionTiming if settings.DeductionTiming is defined else "0")|string == "0" %][% endif %] [% if (settings.DeductionTiming if settings.DeductionTiming is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="DeductionTiming" value="1" title="打手交单时扣"  [% if (settings.DeductionTiming if settings.DeductionTiming is defined else "0")|string == "1" %][% endif %] [% if (settings.DeductionTiming if settings.DeductionTiming is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    2、当会员余额不足时，是否允许产生欠款？
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="AllowDebt" value="N" title="不允许"  [% if (settings.AllowDebt if settings.AllowDebt is defined else "Y")|string == "N" %][% endif %] [% if (settings.AllowDebt if settings.AllowDebt is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="AllowDebt" value="Y" title="允许" [% if (settings.AllowDebt if settings.AllowDebt is defined else "Y")|string == "Y" %][% endif %] [% if (settings.AllowDebt if settings.AllowDebt is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    3、会员充值的余额进行撤销时是否允许余额成负数
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="NegativeBalance" value="N" title="不允许"  [% if (settings.NegativeBalance if settings.NegativeBalance is defined else "Y")|string == "N" %][% endif %] [% if (settings.NegativeBalance if settings.NegativeBalance is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="NegativeBalance" value="Y" title="允许" [% if (settings.NegativeBalance if settings.NegativeBalance is defined else "Y")|string == "Y" %][% endif %] [% if (settings.NegativeBalance if settings.NegativeBalance is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    4、会员充值是否允许实际充值0元
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="RechargeLimit" value="N" title="不允许" [% if (settings.RechargeLimit if settings.RechargeLimit is defined else "N")|string == "N" %][% endif %] [% if (settings.RechargeLimit if settings.RechargeLimit is defined else "N")|string == "N" %]checked[% endif %]>
+                                    <input type="radio" name="RechargeLimit" value="Y" title="允许"  [% if (settings.RechargeLimit if settings.RechargeLimit is defined else "N")|string == "Y" %][% endif %] [% if (settings.RechargeLimit if settings.RechargeLimit is defined else "N")|string == "Y" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    5、会员等级需要按哪一种方式匹配等级(默认此功能关闭，任选其一就会自动打开此功能)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="LevelCalculationMethod" value="0" title="关闭 "  [% if (settings.LevelCalculationMethod if settings.LevelCalculationMethod is defined else "1")|string == "0" %][% endif %] [% if (settings.LevelCalculationMethod if settings.LevelCalculationMethod is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="LevelCalculationMethod" value="1" title="累计消费" [% if (settings.LevelCalculationMethod if settings.LevelCalculationMethod is defined else "1")|string == "1" %][% endif %] [% if (settings.LevelCalculationMethod if settings.LevelCalculationMethod is defined else "0")|string == "1" %]checked[% endif %]>
+                                    <input type="radio" name="LevelCalculationMethod" value="2" title="累计实充"  [% if (settings.LevelCalculationMethod if settings.LevelCalculationMethod is defined else "1")|string == "2" %][% endif %] [% if (settings.LevelCalculationMethod if settings.LevelCalculationMethod is defined else "0")|string == "2" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    6、会员充值时，是否必须填写付款单号
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="AllowCustomerOrderNo" value="0" title="不要求" [% if (settings.AllowCustomerOrderNo if settings.AllowCustomerOrderNo is defined else "0")|string == "0" %][% endif %] [% if (settings.AllowCustomerOrderNo if settings.AllowCustomerOrderNo is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="AllowCustomerOrderNo" value="1" title="必填"  [% if (settings.AllowCustomerOrderNo if settings.AllowCustomerOrderNo is defined else "0")|string == "1" %][% endif %] [% if (settings.AllowCustomerOrderNo if settings.AllowCustomerOrderNo is defined else "0")|string == "1" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    7、新建会员时，会员名称是否要求必填？(若不要求必填，则自动生成随机名称)
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="RequiredMemberName" value="1" title="必填 " [% if (settings.RequiredMemberName if settings.RequiredMemberName is defined else "1")|string == "1" %][% endif %] [% if (settings.RequiredMemberName if settings.RequiredMemberName is defined else "1")|string == "1" %]checked[% endif %]>
+                                    <input type="radio" name="RequiredMemberName" value="0" title="非必填"  [% if (settings.RequiredMemberName if settings.RequiredMemberName is defined else "1")|string == "0" %][% endif %] [% if (settings.RequiredMemberName if settings.RequiredMemberName is defined else "1")|string == "0" %]checked[% endif %]>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="">
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                                    8、可设置新建会员的会员号随机生成位数
+                                </div>
+                                <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                                    <input type="radio" name="MemberNumberLength" value="0" title="6-8位随机 " [% if (settings.MemberNumberLength if settings.MemberNumberLength is defined else "0")|string == "0" %][% endif %] [% if (settings.MemberNumberLength if settings.MemberNumberLength is defined else "0")|string == "0" %]checked[% endif %]>
+                                    <input type="radio" name="MemberNumberLength" value="6" title=" 固定6位"  [% if (settings.MemberNumberLength if settings.MemberNumberLength is defined else "0")|string == "6" %][% endif %] [% if (settings.MemberNumberLength if settings.MemberNumberLength is defined else "0")|string == "6" %]checked[% endif %]>
+                                    <input type="radio" name="MemberNumberLength" value="8" title="固定8位"  [% if (settings.MemberNumberLength if settings.MemberNumberLength is defined else "0")|string == "8" %][% endif %] [% if (settings.MemberNumberLength if settings.MemberNumberLength is defined else "0")|string == "8" %]checked[% endif %]>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div style="text-align:center;align-items:center">
+                            <button type="button" class="layui-btn   layui-btn-normal layui-btn-lg w-lg" lay-submit="" lay-filter="save2btn">保存设置</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="changequestion" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="qtitle" id="qtitle" lay-verify="" autocomplete="off" placeholder="请输入常见问题的标题" maxlength="50" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">内容</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;align-items:center">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-lg w-lg" id="savequestionbtn" lay-submit="" type="button" lay-filter="savequestionbtn" style="">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="changeexpwddiv" style="display:none">
+        <div class="layui-form-pane" style="margin-top:10px;margin-left:10px;margin-right:10px">
+            <div class="layui-form-item" style="display:none">
+                <label class="layui-form-label">原密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="extorigpwd" id="extorigpwd" lay-verify="" autocomplete="off" placeholder="请输入原导出密码" maxlength="32" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新导出密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="extnewpwd" id="extnewpwd" lay-verify="" autocomplete="off" placeholder="请输入新的导出密码" maxlength="32" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认新密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="extnewpwd2" id="extnewpwd2" lay-verify="" autocomplete="off" placeholder="请再次输入新的导出密码" maxlength="32" class="layui-input" value="">
+                </div>
+            </div>
+
+            <div style="text-align: center; align-items: center; position: relative;">
+                <div class="layui-input-inline">
+                    <a class="layui-btn layui-btn-normal layui-btn-lg w-lg extsavebtn" style="">确定设置</a>
+                </div>
+                <div class="clearPassword" style="position: absolute; right: 18px; top: 16px; cursor: pointer; color: #1E9FFF;display:none ">清空导出密码</div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="company" name="company" value="[[ company ]]" />
+    <input type="hidden" id="jid" name="jid" value="[[ sys.jdpId ]]" />
+    <input type="hidden" id="loginAcc" name="loginAcc" value="[[ sys.ownerAccount ]]" />
+</form>
+
+<script src="/JS2019/System/systemsetting.js?v=20288155" type="text/javascript"></script>
+
+</body>
+</html>

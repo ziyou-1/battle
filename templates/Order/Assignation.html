@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>指派接手人</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style>
+    .layui-form-radio * {
+        font-size: 12px;
+    }
+
+    .layui-form-item {
+        margin-bottom: 5px;
+        clear: both;
+    }
+
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-form-checkbox[lay-skin=primary] span {
+        padding-left: 0;
+        padding-right: 2px;
+        line-height: 18px;
+        background: 0 0;
+        color: #666;
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .layui-form-checkbox span label {
+        color: #ff0000;
+    }
+
+    .layui-form-checkbox[lay-skin=primary] span {
+        padding-left: 0;
+        padding-right: 2px;
+        line-height: 18px;
+        background: 0 0;
+    }
+    #user_laypage {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+</style>
+
+
+
+<form class="layui-form layui-form-pane" action="" style="padding:10px">
+
+    <div class="layui-field-box" style="margin-left:0px;padding: 0px 0px;margin-top:3px">
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">用户职位</label>
+            <div class="layui-input-block">
+                <input type="radio" name="userRole" lay-filter="userRole" value="0" title="全部" checked="">
+[% for r in roles %]<input type="radio" name="userRole" lay-filter="userRole" value="[[ r.id ]]" title="[[ r.roleName ]]" >[% endfor %]
+
+
+                <button class="layui-btn layui-btn-warm layui-btn-xs layui-disabled saveConfigBtn" lay-submit="" type="button" lay-filter="saveConfigBtn" style="" disabled="" title="保存选中的职位，下次进入该界面默认就是筛选该职位">保存筛选</button>
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">业务类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="bussType" value="0" title="代练+陪玩" checked lay-filter="bussTypechange">
+                <input type="radio" name="bussType" value="1" title="代练" lay-filter="bussTypechange">
+                <input type="radio" name="bussType" value="2" title="陪玩" lay-filter="bussTypechange">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">排序方式</label>
+            <div class="layui-input-block">
+                <input type="radio" name="userOrderBy" value="0" title="默认排序" checked=&#39;checked&#39; lay-filter="userOrderBy">
+                <input type="radio" name="userOrderBy" value="1" title="按用户排序值大到小"  lay-filter="userOrderBy">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-bottom:0px">
+            <label class="layui-form-label">搜索打手</label>
+            <div class="layui-input-inline" style=" ">
+                <input type="text" name="key1" id="key1" lay-verify="" placeholder="用户名/名称/标记" autocomplete="off" class="layui-input" value="">
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal sechbtn" lay-submit="" type="button" lay-filter="seachBtn" style="">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row">
+        <div class="layui-col-xs12 layui-col-sm7 layui-col-md7 layui-col-lg7">
+            <div class="user" style="margin-left:0px">
+            </div>
+            <div id="user_laypage"></div>
+        </div>
+        <div class="layui-col-xs12 layui-col-sm5 layui-col-md5 layui-col-lg5">
+            <fieldset class="layui-elem-field" style="margin-right:10px;">
+                <legend style="font-size:14px">当前订单分配打手</legend>
+                <div class="layui-field-box">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">开启智能派单<a class="larry-icon larry-bangzhu autoTips" style="color:#A3AFB7;margin-left:3px" href="javascript:void(0)"></a></label>
+                            <div class="layui-input-block" style="">
+                                <input type="checkbox" name="autoAss"  lay-skin="switch" lay-text="开|关">
+                                <span class="autoSW" style="width:0px"></span>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <span class="" style="color:#999" lay-tips="当您想同时指派给多个打手，但又不想让他们同时看到订单，需要他们按顺序看单子上号时，可以开启此功能。开启后，订单会采用和流水线作业一样的形式智能分配接手人。首先会将订单分配给第1个接手人，当第1个接手人提交完成后，系统会自动将订单指派给第2个接手人，此时订单会出现在第2个接手人那里，第1个人接手人那里看不到此单(但有指派记录)。当第2个接手人提交完成后，系统会自动将订单指派给第3个接手人，依此类推，直到最后一位接手人提交完成，订单才会进入待验收状态。">智能派单是什么意思?</span>
+                        </div>
+                    </div>
+                    <div class="layui-form-item throwPerc" style="display: none">
+                        <label class="layui-form-label" style="width:200px;padding:8px 5px">是否按订单价格百分比设发单价</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="orderPricePerc" lay-skin="switch" lay-text="是|否" lay-filter="orderPricePerc">
+                        </div>
+                    </div>
+                    <div style="">
+                        <table class="layui-hide" id="tableList2" lay-filter="tableList2" title=""></table>
+                        <script type="text/html" id="baroperating2">
+                            <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-right:1px" lay-event="delAss" title="移除该接手人的指派">移除</a>
+                        </script>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" title="如果你需要打手看到的上号电话是你设定的，请在这里输入上号电话，若不需要，请留空">指定上号电话</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="sphone" id="sphone" value="" autocomplete="off" title="如果你需要打手看到的上号电话是你设定的，请在这里输入上号电话，若不需要，请留空" placeholder="若需要打手只能看到指定上号电话，请在这里输入，若为空，则按现有规则提取电话" class="layui-input" maxlength="50">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field" style="margin-right:10px;">
+                <legend style="font-size:14px">该订单的打手账单<span style="color:#ff0000;font-weight:600">【↓中途换打手请从下面列表中把没用的账单删除，这关系到后面与代练结算↓】</span></legend>
+                <div class="layui-field-box">
+                    <div style="">
+                        <table class="layui-hide" id="tableList3" lay-filter="tableList3" title=""></table>
+                        <script type="text/html" id="baroperating3">
+                            <a class="layui-btn layui-btn-xs layui-btn-normal" style="margin-right:1px" lay-event="upEmp" title="更改该绩效金额"><i class="layui-icon layui-icon-edit"></i></a>
+                            <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-right:1px" lay-event="delEmp" title="删除该绩效记录"><i class="layui-icon layui-icon-delete"></i></a>
+                        </script>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div style="align-items:center;text-align:center;">
+        <div>
+            <button class="layui-btn layui-btn-normal w-lg "  id="saveBtn" lay-submit="" type="button" lay-filter="saveBtn">保存指派(没改动请勿点)</button>
+            <button class="layui-btn layui-btn-danger w-lg " lay-submit="" type="button" lay-filter="delBtn" style="">清除当前所有接手人</button>
+        </div>
+    </div>
+    <input type="hidden" id="defaultJobId" name="defaultJobId" value="0" />
+    <input type="hidden" id="taskId" name="taskId" value="[[ taskId ]]" />
+    <input type="hidden" id="gameName" name="gameName" value="[[ o.gameName ]]" />
+    <input type="hidden" id="orderId" name="orderId" value="[[ o.orderId ]]" />
+    <input type="hidden" id="orderProject" name="orderProject" value="[[ o.project ]]" />
+    <input type="hidden" id="orderHours" name="orderHours" value="[[ o.days * 24 + o.hours ]]" />
+    <input type="hidden" id="repeatedlyAss" name="repeatedlyAss" value="N" />
+    <input type="hidden" id="price" name="price" value="[[ o.price ]]" />
+    <input type="hidden" id="isAutoSwitch" name="isAutoSwitch" value="N" />
+    <input type="hidden" id="firstOrderBussType" name="firstOrderBussType" value="0" />
+    <input type="hidden" id="taskNeedJobId" name="taskNeedJobId" value="[[ taskNeedJobId ]]" />
+
+
+</form>
+<script src="/JS2019/Order/assignation.js?v=202560501" type="text/javascript"></script>
+
+</body>
+</html>

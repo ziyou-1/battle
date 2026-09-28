@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>会员管理</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+
+
+    body {
+        background-color: #fff;
+    }
+
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .tableChartDom table {
+        width: 100%
+    }
+
+    .layui-btn + .layui-btn {
+        margin-left: 6px;
+    }
+
+    .layui-layer-tips {
+        z-index: 777777777 !important
+    }
+
+    .layui-input-block {
+        margin-left: 99px;
+    }
+</style>
+<form class="layui-form" action="" lay-filter="fm">
+    <div class="" style="padding-left: 5px;padding-top:10px">
+        <div class="layui-form-pane">
+            <div class="layui-inline">
+                <label class="layui-form-label">建档日期</label>
+                <div class="layui-input-inline" style="width: 120px;">
+                    <input type="text" name="minDate" id="sDate" lay-verify="date" placeholder="" autocomplete="off" class="layui-input" value="2024-10-01">
+                </div>
+                <div class="layui-input-inline">-</div>
+                <div class="layui-input-inline" style="width: 120px;">
+                    <input type="text" name="maxDate" id="eDate" lay-verify="date" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(0) ]]">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">余额范围</label>
+                <div class="layui-input-inline" style="width:80px">
+                    <input type="text" name="min" id="minPrice" lay-verify="number" placeholder="" autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-input-inline">-</div>
+                <div class="layui-input-inline" style="width:80px">
+                    <input type="text" name="max" id="maxPrice" lay-verify="number" placeholder="" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">建档人</label>
+                <div class="layui-input-inline" style="width: 120px">
+                    <select id="createUserId" name="createUserId" lay-search="">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">排序方式</label>
+                <div class="layui-input-inline">
+                    <select name="orderMethod" id="sortMode" lay-verify="">
+                        <option value="0|1">建档时间/降序</option>
+                        <option value="0|0">建档时间/升序</option>
+                        <option value="10|1">可用余额/降序</option>
+                        <option value="10|0">可用余额/升序</option>
+                        <option value="20|1">消费总额/降序</option>
+                        <option value="20|0">消费总额/升序</option>
+                        <option value="30|1">实际充值/降序</option>
+                        <option value="30|0">实际充值/升序</option>
+                        <option value="4|1">会员等级/降序</option>
+                        <option value="4|0">会员等级/升序</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">会员等级</label>
+                <div class="layui-input-inline" style="">
+                    <select id="memberLevel" name="level" lay-search="">
+                        <option value="">全部</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">名称搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="key1" lay-verify="" placeholder="搜索会员号或者会员名称" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">号码搜索</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="phoneOrAcc" id="key2" lay-verify="" placeholder="搜索手机号" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width:120px;">其它搜索输入框</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="keyword" id="keyword" lay-verify="" placeholder="附加信息1/备注关键词" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-left:5px">
+                只查欠款
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="seachDebt" lay-filter="checkbox-filter" title="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="width: 120px">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-danger" style="margin-right:5px;" lay-event="addNewBtn" type="button" title="新增一个会员进来">新增会员</button>
+                <button class="layui-btn layui-btn-xs layui-bg-blue" lay-event="refresh" type="button" title="刷新当前数据">刷新列表</button>
+                <button class="layui-btn layui-btn-xs" lay-event="resetHistoryRecharge" type="button">重算累计实充</button>
+                <button class="layui-btn layui-btn-xs" lay-event="resetConsumer" type="button">重算累计消费</button>
+                <button class="layui-btn layui-btn-xs" lay-event="exportBtn" type="button" lay-tips="导出当前查询的结果，每次最多导出30000条">导出</button>
+                <button class="layui-btn layui-btn-xs layui-bg-blue" lay-event="chartsBtn" type="button">会员统计排行榜</button>
+                <button class="layui-btn layui-btn-xs layui-btn-warm" style="margin-right:5px" lay-event="delUserBtn" type="button" lay-tips="删除指定会员，慎用"><i class="layui-icon layui-shanchu" />删除会员</button>
+            </div>
+            <div style="color:#ff6a00" id="total"></div>
+        </script>
+        <script type="text/html" id="table_tool">
+            <div class="layui-clear-space">
+                <a class="layui-btn layui-btn-xs layui-bg-blue" style="margin-right:0px" lay-event="recharge" lay-tips="给会员充值">充值</a>
+                <a class="layui-btn layui-btn-xs layui-btn-warm" style="margin-right:0px" lay-event="edit" lay-tips="编辑会员资料">编辑</a>
+                
+                <a class="layui-btn layui-btn-xs" lay-event='deduce' lay-tips="对此会员的可用余额进行手工减扣，通常用于当实际余额大于系统记录的可用余额时用。一般情况下不建议使用该功能。">扣余额</a>
+            </div>
+        </script>
+    </div>
+
+
+    <div class="modifyBalanceDiv" style="display:none; margin-right:20px">
+        <blockquote class="layui-elem-quote">注意：您正在对会员进行充值操作</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding:9px 9px">可用金额</label>
+            <div class="layui-input-block">
+                <span style="color:#ff0000;font-weight:600;line-height:38px;font-size:14px" class="currentBalanceSpan"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding:9px 9px">实充金额</label>
+            <div class="layui-input-block">
+                <input type="text" name="actionBalance" id="actionBalance" lay-verify="" placeholder="实充金额" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding:9px 9px">赠送金额</label>
+            <div class="layui-input-inline">
+                <input type="text" name="giftAmount" id="giftAmount" lay-verify="" placeholder="另外赠送的金额" autocomplete="off" class="layui-input" value="0">
+            </div>
+            <div class="layui-form-mid layui-word-aux layui-font-red">
+                本次充值额=实充金额+赠送额
+            </div>
+        </div>
+        <div class="layui-form-item " style="">
+            <label class="layui-form-label" style="padding:9px 9px">付钱方式</label>
+            <div class="layui-form">
+                <input type="radio" name="payMethed" value="" title="全部" checked="checked">
+                <input type="radio" name="payMethed" value="0" title="微信">
+                <input type="radio" name="payMethed" value="1" title="支付宝">
+                <input type="radio" name="payMethed" value="2" title="银行转账">
+                <input type="radio" name="payMethed" value="3" title="平台">
+                <input type="radio" name="payMethed" value="4" title="内部">
+                <input type="radio" name="payMethed" value="5" title="其它">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label style="padding: 9px 9px">收款单号：<span style="color: red; text-align: left; position: absolute; width: 260px;">提示：有多笔单号请换行，一行一笔单号</span></label>
+            <div class="layui-input-block">
+                <textarea name="corresOrderId" id="corresOrderId" placeholder="有多支付流水号请换行，一行一笔单号" class="layui-textarea" maxlength="500"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="padding:9px 9px">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="baRemark" id="baRemark" lay-verify="" placeholder="非必填" autocomplete="off" class="layui-input" value="" maxlength="100">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-left:110px">
+            <dic class="layui-btn layui-btn-normal layui-btn-fluid saveModifyBalanceBtn">确定充值</dic>
+        </div>
+    </div>
+
+</form>
+
+<script src="/JS2019/Customer/customerlist.js?v=202609261220" type="text/javascript"></script>
+
+</body>
+</html>

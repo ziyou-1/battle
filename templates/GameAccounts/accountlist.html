@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>账号管理中心</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style type="text/css">
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+        font-size: 12px;
+    } 
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        background-color: #999;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .layui-btn {
+        margin-right: 8px;
+    }
+</style>
+<form class="layui-form" action="">
+    <div class="" style="padding-left: 5px;padding-top:10px">
+        <div class="layui-form-pane">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">账号类型</label>
+                <div class="layui-input-inline">
+                    <select name="accType" xm-select="accType" xm-select-radio xm-select-skin="default" xm-select-height="36px">
+                        <option value="">全部</option>
+                        <option value="A">内部账号</option>
+                        <option value="E">售卖账号</option>
+                        <option value="Z">出租账号</option>
+                        <option value="C">借用账号</option>
+                        <option value="D">临时账号</option>
+                        <option value="B">订单账号</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">选择游戏</label>
+                <div class="layui-input-inline" style="width:160px;">
+                    <select id="gameName" name="gameName" lay-filter="selectGame">
+[% for gm in games %]<option value="[[ gm.gameId ]]" data-mobliegame="[[ gm.isMoblieGame ]]" data-pw="[[ gm.isPw ]]"[% if o and o.gameId == gm.gameId %] selected='selected'[% endif %]>[[ gm.gameName ]]</option>[% endfor %]
+</select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">大区/平台</label>
+                <div class="layui-input-inline" style="width:160px;">
+                    <select style="" name="gameArea" id="gameArea" xm-select-radio lay-search="" xm-select-create xm-select="gameArea" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">选择或输入大区/平台</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">服务器</label>
+                <div class="layui-input-inline" style="width: 140px">
+                    <select name="gameServer" id="gameServer" xm-select-radio lay-search="" xm-select-create xm-select="gameServer" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">选择或输入服务器</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">阵营门派</label>
+                <div class="layui-input-inline" style="width: 160px">
+                    <select name="gameGroup" id="gameGroup" xm-select-radio lay-search="" xm-select="gameGroup" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">选择阵营门派</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="width: 90px;">
+                    <select id="timeType" name="timeType" lay-filter="">
+                        <option value="0">录入时间</option>
+                        <option value="10">卖/租时间</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline" style="width:140px">
+                    <input type="text" name="stime" id="stime" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(92) ]] 00:00:00">
+                </div>
+                <div class="layui-input-inline">-</div>
+                <div class="layui-input-inline" style="width:140px">
+                    <input type="text" name="etime" id="etime" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(0) ]] 23:59:59">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">接手人</label>
+                <div class="layui-input-inline" style="">
+                    <select name="recUser" id="recUser" xm-select-radio lay-search="" xm-select="recUser" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">选择或输入</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">账号状态</label>
+                <div class="layui-input-inline" style="width:160px">
+                    <select id="accStatus" name="accStatus" lay-filter="">
+                        <option value="0">全部</option>
+                        <option value="10">正常</option>
+                        <option value="20">库存</option>
+                        <option value="50">出租中</option>
+                        <option value="21">已卖出</option>
+                        <option value="55">密码错误</option>
+                        <option value="30">临时封号</option>
+                        <option value="40">永久封号</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">用途类型</label>
+                <div class="layui-input-inline" style="width:160px">
+                    <select name="useType" id="useType" xm-select-radio lay-search="" xm-select="useType" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">售卖/出租人</label>
+                <div class="layui-input-inline" style="width: 140px">
+                    <select name="inputOrderKefu" id="inputOrderKefu" xm-select-radio lay-search="" xm-select="inputOrderKefu" xm-select-skin="default" xm-select-height="36px" xm-select-search="" class="" title="">
+                        <option value="">选择或输入</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline layui-hide">
+                <label class="layui-form-label" style="width: 80px">进度状态</label>
+                <div class="layui-input-inline" style="width:160px">
+                    <select id="proStatus" name="proStatus" lay-filter="">
+                        <option value="0">全部</option>
+                        <option value="10">未分配</option>
+                        <option value="20">待上号</option>
+                        <option value="30">代练中</option>
+                        <option value="40">待验收</option>
+                        <option value="50">已完成</option>
+                        <option value="60">已暂停</option>
+                        <option value="70">有问题</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">标签</label>
+                <div class="layui-input-inline" style="width:158px">
+                    <select id="tipsSelect" name="tipsSelect" lay-filter="">
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">搜索</label>
+                <div class="layui-input-inline" style="">
+                    <input type="text" name="key1" id="key1" lay-verify="" placeholder="编号/角色名/排团号/机位" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">游戏账号</label>
+                <div class="layui-input-inline" style="">
+                    <input type="text" name="gameAcc" id="gameAcc" lay-verify="" placeholder="可输入游戏账号搜索" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">标签</label>
+                <div class="layui-input-inline" style="">
+                    <input type="text" name="tipstxt" id="tipstxt" lay-verify="" placeholder="请输入标签" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">信息3搜索</label>
+                <div class="layui-input-inline" style="">
+                    <input type="text" name="info2key" id="info2key" lay-verify="" placeholder="输入关键词搜索" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">卖/租单号</label>
+                <div class="layui-input-inline" style="">
+                    <input type="text" name="sellNo" id="sellNo" lay-verify="" placeholder="请输入卖出或出租交易单号" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: 80px">搜索备注</label>
+                <div class="layui-input-inline" style="">
+                    <input type="text" name="remarktext" id="remarktext" lay-verify="" placeholder="请输入备注关键词" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline" style="">
+                    <button class="layui-btn layui-btn-normal seachBtn" lay-submit="" type="button" lay-filter="seachBtn" style="width: 80px">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="" style="">
+        <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="refresh" type="button" lay-tips="刷新当前数据">刷新数据</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setRecMan" type="button" lay-tips="将账号指派给接手人">指派接手</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setChangeUseStatus" type="button" lay-tips="批量或单个更改账号的使用状态">更改使用状态</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setChangeUseType" type="button" lay-tips="批量或单个更改账号的用途类型">更改用途类型</button>
+                <button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="setChangeProStatus" type="button" lay-tips="批量或单个更改账号的进度状态">更改进度状态</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setChangeprice" type="button" lay-tips="批量或单个修改账号售价">修改账号售价</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setChangecost" type="button" lay-tips="批量或单个修改成本价">修改成本价</button>
+                <button class="layui-btn layui-btn-xs " lay-event="setChangeJiWei" type="button" lay-tips="批量或单个更改账号的机位">更改机位</button>
+                <button class="layui-btn layui-btn-xs layui-btn-warm" lay-event="getAccUseInfo" type="button" lay-tips="批量或单个提取使用资料">提取使用资料</button>
+                <button class="layui-btn layui-btn-xs layui-btn-warm" lay-event="getAccPrivateInfo" type="button" lay-tips="批量或单个提取机密资料">提取机密资料</button>
+                <button class="layui-btn layui-btn-xs" lay-event="sendMsgBtn" type="button" lay-tips="给指定账号换绑手机发送短信">发送短信</button>
+                <button class="layui-btn layui-btn-xs" lay-event="exportBtn" type="button" lay-tips="批量导出账号">导出账号</button>
+                <button class="layui-btn layui-btn-xs layui-btn-normal copyurl" type="button" lay-tips="点击即可复制选号网址" data-content="https://www.jidanpu.com/sellacc/?id=[[ sys.id ]]" data-clipboard-text="https://www.jidanpu.com/sellacc/?id=[[ sys.id ]]">查看选号网址</button>
+                <button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="exportTXTBtn" type="button" lay-tips="批量导出TXT方便给客户选号用">导出选号TXT</button>
+                <button class="layui-btn layui-btn-xs" lay-event="delOrderBtn" type="button" lay-tips="将指定账号删除（谨慎操作）">删除账号</button>
+            </div>
+            <div style="color:#ff6a00" id="total"></div>
+        </script>
+    </div>
+
+    <div class="setAccountUseStatus" style="display:none;padding:10px 10px">
+        <div class="layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">账号状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="accStatus" value="10" title="正常" checked="checked" lay-filter="accStatusRd" />
+                    <input type="radio" name="accStatus" value="20" title="库存" lay-filter="accStatusRd" />
+                    <input type="radio" name="accStatus" value="55" title="密码错误" lay-filter="accStatusRd" />
+                    <input type="radio" name="accStatus" value="30" title="临时封号" lay-filter="accStatusRd" />
+                    <input type="radio" name="accStatus" value="40" title="永久封停" lay-filter="accStatusRd" />
+                </div>
+            </div>
+            <div class="layui-form-item ftime" style="display:none">
+                <label class="layui-form-label" style="color:#ff0000">封号到期时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="disableTime" id="disableTime" autocomplete="off" placeholder="封号到期时间" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align:center;margin:0 auto">
+                <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="saveChangeUseStatusbtn"><i class="layui-icon">&#x1005;</i>保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="setAccountUseType" style="display:none;padding:10px 10px">
+        <span style="color:#ff0000">提示：可以直接输入新的用途，输入完记得选中再提交哦</span>
+        <div class="layui-form-pane" style="padding-top:20px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用途类型</label>
+                <div class="layui-input-block">
+                    <select name="useType2" id="useType2" xm-select-radio xm-select-create lay-search="" xm-select="useType2" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                        <option value="">请直接选择或输入后再选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align:center;margin:0 auto">
+                <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="saveChangeUseTypebtn"><i class="layui-icon">&#x1005;</i>保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="setAccountProStatus" style="display:none;padding:10px 10px">
+        <div class="layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">进度状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="accProStatus" value="10" title="未分配" checked="checked" lay-filter="accProStatusRd" />
+                    <input type="radio" name="accProStatus" value="20" title="待上号" lay-filter="accProStatusRd" />
+                    <input type="radio" name="accProStatus" value="30" title="代练中" lay-filter="accProStatusRd" />
+                    <input type="radio" name="accProStatus" value="40" title="待验收" lay-filter="accProStatusRd" />
+                    <input type="radio" name="accProStatus" value="50" title="已完成" lay-filter="accProStatusRd" />
+                    <input type="radio" name="accProStatus" value="60" title="已暂停" lay-filter="accProStatusRd" />
+                    <input type="radio" name="accProStatus" value="70" title="有问题" lay-filter="accProStatusRd" />
+                </div>
+            </div>
+            <div class="layui-form-item yy" style="display:none">
+                <label class="layui-form-label">原因备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="yytext" id="yytext" autocomplete="off" placeholder="请输入原因或备注" class="layui-input layui-input-shadow boxshadow-success" maxlength="100">
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align:center;margin:0 auto">
+                <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="saveChangeProStatusbtn"><i class="layui-icon">&#x1005;</i>保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sellAccDiv" style="display:none;padding:10px 10px">
+        <div class="layui-form-pane">
+            <div class="layui-form-item">
+                <label class="layui-form-label">卖出/出租价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sellPriceInput" id="sellPriceInput" autocomplete="off" placeholder="请输入实际价格" class="layui-input" maxlength="6">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">卖出/出租渠道</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sellChoee" value="淘宝" title="淘宝店" checked="checked" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="天猫" title="天猫店" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="京东" title="京东店" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="拼多多" title="拼多多" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="代练宝" title="代练宝" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="交易猫" title="交易猫" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="3YX" title="3YX" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="5173" title="5173" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="闲鱼" title="闲鱼" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="微信" title="微信" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="QQ" title="QQ" lay-filter="sellChoee" />
+                    <input type="radio" name="sellChoee" value="" title="其它" lay-filter="sellChoee" />
+                </div>
+            </div>
+            <div class="layui-form-item otherSell" style="display:none">
+                <label class="layui-form-label">渠道名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="otherSellChoee" id="otherSellChoee" autocomplete="off" placeholder="请输入卖出的渠道名称" class="layui-input" maxlength="50">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">交易订单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sellTradeNoInput" id="sellTradeNoInput" autocomplete="off" placeholder="可以输入淘宝成交的单号或其它平台的单号" class="layui-input" maxlength="50">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">换绑手机号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="changeBindPhone" id="changeBindPhone" autocomplete="off" placeholder="请输入客户要换绑的手机号" class="layui-input" maxlength="20">
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align:center;margin:0 auto">
+                <button class="layui-btn layui-btn-normal layui-btn-lg" type="button" lay-submit="" lay-filter="confimSellbtn">确定卖出</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="sellAccInfoDiv" style="display:none;padding:10px 10px">
+        <div class="layui-form-pane">
+            <div class="layui-bg-gray" style="padding: 30px;">
+                <div class="layui-card">
+                    <div class="layui-card-header">提号信息</div>
+                    <div class="layui-card-body getAccInfo">
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-btn-container copyCon">
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="" id="hidDiv" style="display:none">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:130px">选择导出数据：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="importDataType" value="1" title="当前勾选的" checked="checked">
+                <input type="radio" name="importDataType" value="2" title="当前查询的结果">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:130px">选择导出格式：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="importConten" value="1" title="默认格式" checked="checked">
+                <input type="radio" name="importConten" value="2" title="售卖选号格式">
+            </div>
+        </div>
+        <br />
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:130px"></label>
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="button" lay-submit="" lay-filter="exportBtn" id="exportBtn"><i class="layui-icon">&#x1005;</i>点击导出</button>
+            </div>
+        </div>
+       
+    </div>
+    <input type="hidden" id="isAllowAddModitySellAcc" name="isAllowAddModitySellAcc" value="Y" />
+</form> 
+
+<script src="/JS2019/GameAccounts/accountlist.js?v=20260427" type="text/javascript"></script>
+
+
+</body>
+</html>

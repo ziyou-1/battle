@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户端设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+    <style>body { background-color: #fff } .layui-form-label { width: 130px } .layui-input-block { margin-left: 160px } .tips { color: #999; font-size: 12px; margin-top: 4px }</style>
+</head>
+<body>
+<div class="layui-fluid" style="padding-bottom:30px">
+    <blockquote class="layui-elem-quote">客户端（安卓 APP / 电脑网页版，前台地址 <a href="/app/" target="_blank" style="color:#1E9FFF">[[ request.host_url ]]app/</a>）的运营设置：新客券、邀请有礼、首页活动位、用户协议与隐私政策。公告、商品、积分商品和抽奖在“客户端内容管理”里维护。</blockquote>
+    <form class="layui-form" lay-filter="cs">
+        <fieldset class="layui-elem-field"><legend>基本信息</legend><div class="layui-field-box">
+            <div class="layui-form-item"><label class="layui-form-label">店铺 / 系统名称</label><div class="layui-input-inline" style="width:260px"><input type="text" name="companyName" class="layui-input" value="[[ company ]]" maxlength="20"></div><div class="layui-form-mid layui-word-aux">显示在后台左上角、登录页、客户端和短信签名位置</div></div>
+        </div></fieldset>
+        <fieldset class="layui-elem-field"><legend>新客礼</legend><div class="layui-field-box">
+            <div class="layui-form-item"><label class="layui-form-label">注册自动发券</label><div class="layui-input-block">
+                <input type="radio" name="newCouponOn" value="Y" title="开启" [% if c.newCouponOn == 'Y' %]checked[% endif %]><input type="radio" name="newCouponOn" value="N" title="关闭" [% if c.newCouponOn != 'Y' %]checked[% endif %]></div></div>
+            <div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">券名称</label><div class="layui-input-inline"><input type="text" name="newCouponName" class="layui-input" value="[[ c.newCouponName ]]" maxlength="20"></div></div>
+                <div class="layui-inline"><label class="layui-form-label">面值（元）</label><div class="layui-input-inline" style="width:100px"><input type="text" name="newCouponValue" class="layui-input" value="[[ c.newCouponValue ]]"></div></div>
+                <div class="layui-inline"><label class="layui-form-label">满多少可用</label><div class="layui-input-inline" style="width:100px"><input type="text" name="newCouponMin" class="layui-input" value="[[ c.newCouponMin ]]"></div><div class="layui-form-mid layui-word-aux">0 = 无门槛</div></div></div>
+        </div></fieldset>
+        <fieldset class="layui-elem-field"><legend>邀请有礼</legend><div class="layui-field-box">
+            <div class="layui-form-item"><label class="layui-form-label">邀请有礼</label><div class="layui-input-block">
+                <input type="radio" name="inviteOn" value="Y" title="开启" [% if c.inviteOn == 'Y' %]checked[% endif %]><input type="radio" name="inviteOn" value="N" title="关闭" [% if c.inviteOn != 'Y' %]checked[% endif %]></div></div>
+            <div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">邀请人奖励积分</label><div class="layui-input-inline" style="width:100px"><input type="text" name="inviteReward" class="layui-input" value="[[ c.inviteReward ]]"></div><div class="layui-form-mid layui-word-aux">好友首次付款下单后到账</div></div>
+                <div class="layui-inline"><label class="layui-form-label">被邀请人奖励积分</label><div class="layui-input-inline" style="width:100px"><input type="text" name="inviteeReward" class="layui-input" value="[[ c.inviteeReward ]]"></div><div class="layui-form-mid layui-word-aux">注册即到账</div></div></div>
+        </div></fieldset>
+        <fieldset class="layui-elem-field"><legend>首页活动位</legend><div class="layui-field-box">
+            <div class="layui-form-item"><label class="layui-form-label">显示活动位</label><div class="layui-input-block">
+                <input type="radio" name="activityOn" value="Y" title="显示" [% if c.activityOn == 'Y' %]checked[% endif %]><input type="radio" name="activityOn" value="N" title="隐藏" [% if c.activityOn != 'Y' %]checked[% endif %]></div></div>
+            <div class="layui-form-item"><label class="layui-form-label">活动标题</label><div class="layui-input-block"><input type="text" name="activityTitle" class="layui-input" value="[[ c.activityTitle ]]" maxlength="30" placeholder="如：国庆代练 8 折"></div></div>
+            <div class="layui-form-item"><label class="layui-form-label">活动说明</label><div class="layui-input-block"><input type="text" name="activityDesc" class="layui-input" value="[[ c.activityDesc ]]" maxlength="60" placeholder="一句话说明"></div></div>
+            <div class="layui-form-item"><div class="layui-inline"><label class="layui-form-label">截止时间</label><div class="layui-input-inline"><input type="text" name="activityEnd" id="activityEnd" class="layui-input" value="[[ c.activityEnd ]]" placeholder="yyyy-MM-dd HH:mm" autocomplete="off"></div><div class="layui-form-mid layui-word-aux">客户端显示倒计时，留空不显示</div></div>
+                <div class="layui-inline"><label class="layui-form-label">点击跳转</label><div class="layui-input-inline"><input type="text" name="activityLink" class="layui-input" value="[[ c.activityLink ]]" placeholder="如 /shop 或 /lottery"></div></div></div>
+        </div></fieldset>
+        <fieldset class="layui-elem-field"><legend>用户协议 / 隐私政策（注册页与个人中心展示，应用商店上架必填）</legend><div class="layui-field-box">
+            <div class="layui-form-item layui-form-text"><label class="layui-form-label">用户协议</label><div class="layui-input-block"><textarea name="agreement" class="layui-textarea" style="min-height:160px">[[ c.agreement ]]</textarea></div></div>
+            <div class="layui-form-item layui-form-text"><label class="layui-form-label">隐私政策</label><div class="layui-input-block"><textarea name="privacy" class="layui-textarea" style="min-height:160px">[[ c.privacy ]]</textarea></div></div>
+        </div></fieldset>
+        <div class="layui-form-item"><div class="layui-input-block"><button type="button" class="layui-btn" lay-submit lay-filter="save">保存设置</button></div></div>
+    </form>
+</div>
+<script>
+    layui.config({ base: '../layuiadmin/' }).extend({ index: 'lib/index' }).use(['index', 'form', 'layer', 'laydate'], function () {
+        var $ = layui.$, form = layui.form, layer = layui.layer, laydate = layui.laydate;
+        laydate.render({ elem: '#activityEnd', type: 'datetime', format: 'yyyy-MM-dd HH:mm' });
+        form.on('submit(save)', function (data) {
+            $.post('/SystemAjax/SaveClientSetting', data.field, function (res) { layer.msg(res.msg); }, 'json');
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

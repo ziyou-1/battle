@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>我要群发短信</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    .content{
+        display:flex;
+    }
+    .content_left{
+        width:60%
+    }
+    .content_right {
+        width: 40%;
+        display:flex;
+        justify-content:center;
+    }
+    .phone_mode {
+        /* 本地版不依赖原平台 OSS 图片，避免浏览器跨域 ORB 拦截。 */
+        background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 18%, #ffffff 100%);
+        border: 8px solid #20242b;
+        border-radius: 34px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.18);
+        width:420px;
+        height:740px;
+        position:relative
+    }
+    .phone_time {
+        position: absolute;
+        font-size: 14px;
+        top: 56px;
+        left: 86px;
+    }
+    .phone_title {
+        position: absolute;
+        font-size: 16px;
+        top: 92px;
+        width:100%;
+        text-align:center;
+        font-weight:bold;
+    }
+    .phone_text {
+        width: 236px;
+        margin: 142px auto 0;
+        padding: 10px;
+        background: #F6F6F6;
+        border-radius: 10px;
+        min-height: 30px;
+        max-height: 472px;
+        overflow: auto;
+        color: #999;
+        word-break: break-all;
+    }
+    .phone_tip {
+        color: #999;
+        text-align:center;
+        width:100%;
+        position:absolute;
+        bottom:35px;
+    }
+</style>
+<form class="layui-form" action="">
+  
+    <div class="content">
+        <div class="content_left">
+            <div class="layui-tab layui-tab-brief" lay-filter="changeSoure">
+                <ul class="layui-tab-title phone_tab">
+                    <li class="layui-this" lay-id="10">通过系统订单搜索手机</li>
+                    <li lay-id="20">从TXT导入手机号</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="" style="padding-left: 5px;padding-top:10px">
+
+                            <div class="layui-form-pane">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">游戏区服</label>
+                                    <div class="layui-input-inline">
+                                        <select id="gameName" name="gameName" lay-filter="selectGame">
+                                            <option value="" selected="selected">全部</option>
+[% for gm in games %]<option value="[[ gm.gameName ]]">[[ gm.gameName ]]</option>[% endfor %]
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">订单状态</label>
+                                    <div class="layui-input-inline" style="">
+                                        <select name="orderSta" xm-select="orderSta" xm-select-skin="default" xm-select-height="36px">
+                                            <option value="抢单中">抢单中</option>
+                                            <option value="待完善">待完善</option>
+                                            <option value="未分配">未分配</option>
+                                            <option value="待上号">待上号</option>
+                                            <option value="代练中">代练中</option>
+                                            <option value="待验收">待验收</option>
+                                            <option value="已完成">已完成</option>
+                                            <option value="问题单">问题单</option>
+                                            <option value="已退单">已退单</option>
+                                            <option value="已暂停">已暂停</option>
+                                            <option value="已超时">已超时(限2019版)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">接单客服</label>
+                                    <div class="layui-input-inline">
+                                        <select name="inputOrderKefu" id="inputOrderKefu" xm-select="inputOrderKefu" xm-select-skin="default" xm-select-height="36px" class="" title=""></select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">订单来源</label>
+                                    <div class="layui-input-inline">
+                                        <select name="orderSoures" id="orderSoures" xm-select-radio xm-select="orderSoures" xm-select-skin="default" xm-select-height="36px" class="" title=""></select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">录单时间</label>
+                                    <div class="layui-input-inline" style="">
+                                        <input type="text" name="sDate" id="sDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="2025-09-19 00:00:00">
+                                    </div>
+                                    <div class="layui-input-inline">-</div>
+                                    <div class="layui-input-inline" style="">
+                                        <input type="text" name="eDate" id="eDate" lay-verify="datetime" placeholder="" autocomplete="off" class="layui-input" value="[[ dago(0) ]] 23:59:59">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">搜索1</label>
+                                    <div class="layui-input-inline" style="">
+                                        <input type="text" name="key1" id="key1" lay-verify="" placeholder="订单号/角色名/电话" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">搜索2</label>
+                                    <div class="layui-input-inline" style="">
+                                        <input type="text" name="key2" id="key2" lay-verify="" placeholder="微信/旺旺" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="">搜索3</label>
+                                    <div class="layui-input-inline" style="">
+                                        <input type="text" name="key3" id="key3" lay-verify="" placeholder="代练项目" autocomplete="off" class="layui-input layui-input-shadow" value="">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline" style="">
+                                        <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="">搜索</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                            <legend>搜索结果</legend>
+                            <div class="layui-field-box remark" style="color:#000000;font-size:14px">
+                                请点击搜索按钮
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="layui-tab-item">
+                        <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                            <legend>或者导入手机号</legend> 
+                            <div class="layui-field-box" style="font-size:12px">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label" style="padding:8px 10px">选择TXT文件</label>
+                                    <div class="layui-input-block">
+                                        <button type="button" class="layui-btn layui-btn-normal" id="uptxt"><i class="layui-icon">&#xe62f;</i>导入手机号文本</button>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <span style="color:#ff6a00;" class="total importMoblie">
+                                            或者可以上传手机号TXT文件，一行一个手机号
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div> 
+
+
+            <fieldset class="layui-elem-field" style="margin-top:20px;margin-left:5px;margin-right:5px">
+                <legend>群发短信</legend>
+                <div class="layui-field-box" style="font-size:12px">
+                    <div class="layui-form-pane" style="margin-top:10px;margin-left:10px">
+                        <div class="layui-field-box" style="color:#ff6a00;font-size:14px">
+                            【注意】群发之前，请确保短信内容已通过审核！可进入 短信业务-->群发短信模板 提交审核。晚上20点至次日8点，请不要发送营销类短信。
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">群发短信内容</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="sendSms0" id="sendSms0" lay-verify="" autocomplete="off" placeholder="请输入已通过审核的短信模板内容，可以从群发短信模板列表里复制一条过来" maxlength="300" class="layui-input layui-input-shadow boxshadow-success" value="">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <p class="zishu0" style="color:#ff6a00">每67个字符算1条短信</p>
+                            </div>
+                        </div>
+                        <div style="text-align:center;align-items:center">
+                            <button type="button" class="layui-btn   layui-btn-normal w-lg" lay-submit="" lay-filter="sendBtn">开始群发</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="content_right">
+            <div class="phone_mode">
+                <div class="phone_time"></div>
+                <div class="phone_title">短信预览</div>
+                <div class="phone_text"></div>
+                <div class="phone_tip">此效果为展示。请以实际接收为准</div>
+
+            </div>
+        </div>
+    </div>
+
+   
+    <input type="hidden" id="moblieCount" name="moblieCount" value="0" />
+</form>
+
+<script src="/JS2019/Sms/smsbulkhair.js?v=20260427" type="text/javascript"></script>
+
+</body>
+</html>

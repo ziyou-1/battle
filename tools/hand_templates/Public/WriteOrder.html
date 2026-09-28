@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>补充订单资料 - [[ company ]]</title>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <style>
+        body { background: #f2f2f2; font-size: 14px; }
+        .box { max-width: 560px; margin: 0 auto; padding: 12px; }
+        .card { background: #fff; border-radius: 8px; padding: 16px 12px; margin-bottom: 12px; }
+        .card h2 { font-size: 17px; margin-bottom: 10px; color: #333; }
+        .info { color: #666; line-height: 26px; }
+        .info b { color: #333; }
+        .layui-form-label { width: 80px; padding: 9px 5px; }
+        .layui-input-block { margin-left: 90px; }
+        .done { text-align: center; padding: 30px 0; }
+        .done .layui-icon { font-size: 56px; color: #5FB878; }
+        .done p { margin-top: 12px; line-height: 24px; white-space: pre-wrap; }
+        .done img { max-width: 100%; margin-top: 12px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<div class="box">
+    [% if not lk %]
+    <div class="card done"><i class="layui-icon layui-icon-close-fill" style="color:#FF5722"></i><p>链接无效或已失效，请联系客服重新获取</p></div>
+    [% elif done %]
+    <div class="card done"><i class="layui-icon layui-icon-ok-circle"></i><p>[[ cfg.mark ]]</p>[% if cfg.pic %]<img src="[[ cfg.pic ]]">[% endif %]
+        [% if cfg.swtich == 'Y' %]<p><a class="layui-btn layui-btn-normal" href="/Public/SearchOrder?no=[[ lk.soureOrderId or lk.orderId ]]">查订单进度</a></p>[% endif %]</div>
+    [% else %]
+    <div class="card">
+        <h2>[[ company or '订单资料补充' ]]</h2>
+        <div class="info">游戏：<b>[[ lk.gameName ]]</b><br>项目：<b>[[ lk.project or '-' ]]</b><br>价格：<b>[[ fmt(lk.price) ]] 元</b>[% if lk.day or lk.hours %]<br>预计耗时：<b>[[ fmt(lk.day or 0) ]] 天 [[ fmt(lk.hours or 0) ]] 小时</b>[% endif %]
+            [% if lk.soureOrderId %]<br>来源单号：<b>[[ lk.soureOrderId ]]</b>[% endif %]</div>
+    </div>
+    <form class="layui-form card" lay-filter="wo" onsubmit="return false">
+        <input type="hidden" name="key" value="[[ lk.key ]]">
+        [% if gm and gm.isNotAccPwd != 'Y' %]
+        <div class="layui-form-item"><label class="layui-form-label">游戏账号</label><div class="layui-input-block"><input type="text" name="gameAcc" class="layui-input" placeholder="请输入游戏账号" autocomplete="off" maxlength="50"></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">游戏密码</label><div class="layui-input-block"><input type="text" name="gamePwd" class="layui-input" placeholder="请输入游戏密码" autocomplete="off" maxlength="50"></div></div>
+        [% endif %]
+        [% if areas %]
+        <div class="layui-form-item"><label class="layui-form-label">大区</label><div class="layui-input-block"><select name="gameArea"><option value="">请选择</option>[% for a in areas %]<option value="[[ a.name ]]">[[ a.name ]]</option>[% endfor %]</select></div></div>
+        [% else %]
+        <div class="layui-form-item"><label class="layui-form-label">区服</label><div class="layui-input-block"><input type="text" name="gameArea" class="layui-input" placeholder="如：安卓QQ区 / 微信区" autocomplete="off" maxlength="30"></div></div>
+        [% endif %]
+        <div class="layui-form-item"><label class="layui-form-label">角色名</label><div class="layui-input-block"><input type="text" name="gameRole" class="layui-input" placeholder="请输入游戏角色名" autocomplete="off" maxlength="30"></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">联系手机</label><div class="layui-input-block"><input type="text" name="moblie" class="layui-input" placeholder="方便通知进度" autocomplete="off" maxlength="20"></div></div>
+        <div class="layui-form-item"><label class="layui-form-label">QQ</label><div class="layui-input-block"><input type="text" name="qq" class="layui-input" placeholder="选填" autocomplete="off" maxlength="20"></div></div>
+        <div class="layui-form-item layui-form-text"><label class="layui-form-label">备注要求</label><div class="layui-input-block"><textarea name="dlcontent" class="layui-textarea" placeholder="如：指定英雄、上号时间等（选填）" maxlength="300"></textarea></div></div>
+        <div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn layui-btn-fluid" lay-submit lay-filter="submit">提交资料</button></div></div>
+    </form>
+    <div class="card done" id="result" style="display:none"><i class="layui-icon layui-icon-ok-circle"></i><p id="mark"></p><img id="pic" style="display:none"><p id="search"></p></div>
+    [% endif %]
+</div>
+<script>
+layui.use(['form', 'layer'], function () {
+    var $ = layui.$, form = layui.form, layer = layui.layer;
+    form.on('submit(submit)', function (data) {
+        $.post('/Public/SubmitWriteOrder', data.field, function (res) {
+            if (res.code > 0) {
+                $('form.card').hide();
+                $('#mark').text(res.data.mark);
+                if (res.data.pic) { $('#pic').attr('src', res.data.pic).show(); }
+                if (res.data.searchUrl) { $('#search').html('<a class="layui-btn layui-btn-normal" href="' + res.data.searchUrl + '">查订单进度</a>'); }
+                $('#result').show();
+            } else {
+                layer.msg(res.msg);
+            }
+        }, 'json');
+        return false;
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>内部QA中心</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .container-l {
+        flex: 0 0 250px;
+    }
+
+    .container-r {
+        flex: 1;
+        padding: 10px
+    }
+
+    .nav-item {
+    }
+
+    .nav-fir {
+        font-size: 14px;
+        color: #7e8ea8;
+        line-height: 36px;
+        height: 36px;
+        background: #f3f3f3;
+        cursor: pointer;
+    }
+
+    .nav-sec-wrap {
+        background: #fff;
+    }
+
+        .nav-sec-wrap li {
+            line-height: 30px;
+            height: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+        }
+
+    .url {
+        color: #1E9FFF;
+        margin-left: 10px
+    }
+
+    .top30 {
+        padding-top: 30px;
+    }
+    .changelogs {
+        background-color: #e4eaec;
+    }
+</style>
+
+<form class="layui-form" action="">
+    <div class="layui-form-item top30">
+        <div class="layui-input-block">
+            <div class="layui-inline" style="width:90%">
+                <input type="text" name="seachKey" id="seachKey" lay-verify="" autocomplete="off" placeholder="请输入要搜索的关键词" class="layui-input" value="">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal" lay-submit="" type="button" lay-filter="seachBtn" style="width: 80px">搜索</button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <a href="javascript:void(0)" class="layui-btn layui-btn-xs layui-btn-danger add" title="新增QA"><i class="layui-icon">&#xe654;</i>新增QA</a>
+        </div>
+    </div>
+</form>
+
+<div class="layui-row layui-col-space10">
+    <div class="layui-col-xs12 layui-col-sm12 layui-col-md2 layui-col-md2">
+
+    </div>
+    <div class="layui-col-xs12 layui-col-sm12 layui-col-md10 layui-col-md10">
+        <h1>QA中心-[[ company ]]</h1>
+        <hr>
+        <blockquote class="layui-elem-quote layui-quote-nm">
+
+        </blockquote>
+    </div>
+</div>
+
+<script type="text/javascript" src="/JS2019/Emp/qacenter.js?v=20200205"></script>
+</body>
+</html>

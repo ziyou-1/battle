@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>系统圈子</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    .layui-side-menu .layui-nav .layui-nav-item a {
+        height: 35px;
+        line-height: 35px;
+        padding-left: 45px;
+        padding-right: 30px;
+    }
+
+    .layui-nav-child dd {
+        position: relative;
+        margin-left: 20px;
+    }
+
+    .layadmin-pagetabs .layui-icon-refresh-1 {
+        left: 0;
+        border-left: none;
+        border-right: 1px solid #f6f6f6;
+        color: #ff0000
+    }
+
+    .layadmin-pagetabs .layui-icon-refresh-3 {
+        right: 40px;
+        color: #ff0000
+    }
+    .navLayer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #393D49;
+    }
+        .navLayer .rbtn{
+            margin-right:10px;
+        }
+        .con {
+            margin-top: 5px;
+        }
+    .con_head {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 14px;
+       padding:10px 10px;
+       justify-content:space-between;
+
+    } 
+        .con_head .lt {
+            display:flex;
+            flex-direction:row;
+        }
+        .con_head .lt .tou {
+            display: flex;
+            height: 36px;
+            width: 36px;
+            border-radius: 18px;
+            background-color: #CCD5DB;
+            color: #fff;
+            font-size: 18px;
+            align-items: center;
+            justify-content: center;
+        }
+        .con_head .lt .head{
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+            margin-left:5px;
+        }
+        .con_head .lt .head .company {
+            align-items: center;
+            color: #37474F;
+            font-weight: 600;
+            font-size: 14px; 
+        }
+        .con_head .lt .head .tipslayer {
+                display: flex;
+                flex-direction: row;
+            }
+            .con_head .lt .head .rlcont {
+                display: flex;
+                flex-direction: row;
+                align-items:center
+            }
+            .con_head .releaseTime {
+                align-items: center;
+                color: #A3AFB7;
+                margin-left: 10px;
+                font-size: 12px;
+            }
+    .con_cont {
+        padding-top: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #76838F;
+        flex-direction: row;
+        line-height: 20px;
+        height:43px;
+        width:470px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    .con_cont_my {
+        padding-top: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom:10px;
+        color: #76838F;
+        flex-direction: row;
+        line-height: 20px;
+        display:flex;
+    }
+    .con_cont_btn_layer{
+        display:flex;
+        flex-direction:row;
+        justify-content:flex-end;
+        align-items:center;
+        margin-right:10px;
+        padding-bottom:10px;
+    }
+    .icon_verified {
+        color: #5FB878;
+        font-size:12px;
+    }
+    .sendLyaer{
+        display:none;
+        padding:10px;
+    } 
+    .noneData{
+        display:flex;
+        justify-content:center;
+        height:100px;
+        align-items:center;
+        font-size:28px;
+        color:#A3AFB7;
+    }
+</style>
+<link rel="stylesheet" href="/layuiadmin/lib/extend/notice.css">
+<div class="navLayer">
+    <ul class="layui-nav">
+        <li class="layui-nav-item layui-this t1">
+            <a href="javascript:;" class="activeGame">全部游戏</a>
+            <dl class="layui-nav-child">
+[% for gm in games %]<dd><a href="javascript:;" class="sgame" data-game="[[ gm.gameName ]]">[[ gm.gameName ]]</a></dd>[% endfor %]
+
+
+            </dl>
+        </li>
+        <li class="layui-nav-item t2">
+            <a href="javascript:;" class="activeViewType">查看全部</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;" class="viewType" data-type="">查看全部</a></dd>
+                <dd><a href="javascript:;" class="viewType" data-type="20">只看接的</a></dd>
+                <dd><a href="javascript:;" class="viewType" data-type="10">只看发的</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;" class="mylist">我发布的</a>
+        </li>
+    </ul> 
+    <div class="rbtn">
+        <a href="javascript::" class="layui-btn layui-btn-danger releBtn">我要发布</a>
+    </div>
+</div>
+
+<form class="layui-form" action="" lay-filter="">
+    <div class="layui-carousel " id="topMsg" lay-filter="topMsg" style="background-color:#fff">
+        <div carousel-item="" class="topsList">
+
+        </div>
+    </div>
+
+    <div class="normalList">
+    </div> 
+    
+    <div class="sendLyaer">
+        <blockquote class="layui-elem-quote">
+            您在此发布的业务消息所有用平台管理系统的商家均能看到，此功能适用于寻求订单方面上下家合作，不适合用于招募散人打手。请勿发布虚假、违法等垃圾信息，否则平台有权删除或禁止该系统发布消息
+        </blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发单还是接单</label>
+            <div class="layui-input-block">
+                <input type="radio" name="beg" value="0" title="接单" checked="checked">
+                <input type="radio" name="beg" value="1" title="发单">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="" title="">发布内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入要发布的寻求合作内容，不超过200个字符" class="layui-textarea" name="inputContent" id="inputContent" maxlength="200"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="" title="">是否置顶</label>
+            <div class="layui-input-block">
+                <select name="tops" id="tops" lay-verify="">
+                    <option value="0" selected="selected">不置顶</option>
+                    <option value="3">3小时3元</option>
+                    <option value="6">6小时6元</option>
+                    <option value="12">半天12元</option>
+                    <option value="24">1天24元</option>
+                    <option value="72">3天72元</option>
+                    <option value="168">7天168元</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="" title="">联络微信</label>
+            <div class="layui-input-block">
+                <input type="text" name="concantwechat" id="concantwechat" lay-verify="" autocomplete="off" placeholder="必填" class="layui-input" maxlength="50">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="" title="">联络QQ</label>
+            <div class="layui-input-block">
+                <input type="text" name="concantqq" id="concantqq" lay-verify="" autocomplete="off" placeholder="必填" class="layui-input" maxlength="50">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="" title=""></label>
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="subBtn">确定发布出去</button>
+        </div>
+    </div>
+    <input type="hidden" id="defineGame" name="defineGame" value="全部游戏" />
+
+</form>
+
+    <audio id="chatAudio">
+        <source src="/media/msg.wav" type="audio/mpeg">
+    </audio>
+
+   <script src="/JS2019/Home/systemcircle.js?v=20201212"></script>
+
+</body>
+</html>

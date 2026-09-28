@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>修改分组包含角色</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+    <style>body { background-color: #fff; font-size: 12px }</style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+<form class="layui-form layui-form-pane" action="" style="margin:10px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">分组名称</label>
+        <div class="layui-input-inline" style="width:200px">
+            <input type="text" name="groupName" id="groupName" lay-verify="required" autocomplete="off" class="layui-input" maxlength="20" value="[[ group.groupName if group else '' ]]">
+        </div>
+        <div class="layui-form-mid layui-word-aux">勾选这个分组要包含的角色职位</div>
+    </div>
+    <div class="layui-form-item" pane="">
+        <label class="layui-form-label">包含职位</label>
+        <div class="layui-input-block">
+            [% for r in roles %]<input type="checkbox" name="jobs" lay-skin="primary" value="[[ r.roleName ]]" title="[[ r.roleName ]]" [% if r.roleName in group_roles %]checked[% endif %]>[% endfor %]
+        </div>
+    </div>
+    <div style="text-align:center">
+        <button type="button" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="savebtn">保存</button>
+    </div>
+    <input type="hidden" name="groupId" id="groupId" value="[[ group.id if group else 0 ]]" />
+</form>
+<script type="text/javascript">
+    layui.config({ base: '../layuiadmin/' }).extend({ index: 'lib/index' }).use(['index', 'form', 'layer'], function () {
+        var $ = layui.$, form = layui.form, layer = layui.layer;
+        form.on('submit(savebtn)', function (data) {
+            var jobs = [];
+            $('input[name="jobs"]:checked').each(function () { jobs.push($(this).val()); });
+            if (jobs.length < 1) { layer.msg('请至少勾选一个职位'); return false; }
+            $.ajax({
+                type: 'POST', url: '/SystemAjax/AddEditUserGroup', dataType: 'json',
+                data: { groupId: data.field.groupId, groupName: data.field.groupName, containJobName: jobs.join(',') },
+                success: function (res) {
+                    layer.msg(res.msg, { time: 1200 }, function () {
+                        if (res.code > 0) { try { parent.tools.reloadOrderData(); } catch (e) { } }
+                    });
+                },
+                error: function () { layer.msg('请求出错'); }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

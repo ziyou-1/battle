@@ -1,0 +1,20 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.yunxu.client'
+    compileSdk 35
+    buildToolsVersion '34.0.0'
+
+    defaultConfig {
+        applicationId 'com.yunxu.client'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

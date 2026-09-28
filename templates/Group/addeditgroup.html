@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新增编辑排团</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+ 
+<style>
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 8px;
+        position: relative;
+        box-sizing: border-box;
+    }
+    .jobss div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom:10px;
+    }
+        .jobss div a {
+            margin-left: 10px
+        }
+        .jobss div span {
+            font-weight: 600;
+            font-size:14px;
+            width:70px;
+        }
+</style>
+<form class="layui-form" action="" style="margin-left:10px;padding-top:10px">
+
+    <div class="layui-form-pane  " style="color:#444;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属游戏</label>
+            <div class="layui-input-inline">
+                <select id="gameName" name="gameName" lay-filter="selectGame">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开团名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="taskName" id="taskName" autocomplete="off" lay-verify="required" placeholder="给该排团起个名称吧，必填" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">阵营</label>
+            <div class="layui-input-inline">
+                <select id="gameGroup" name="gameGroup">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">服务器名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="gameServer" id="gameServer" autocomplete="off" lay-verify="" placeholder="写上打团的服务器，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="15" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目</label>
+            <div class="layui-input-block">
+                <select name="projectSelect" id="projectSelect" xm-select-radio lay-search="" xm-select-create xm-select="projectSelect" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                    <option value="">选择或输入后再选择</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">难度标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="taskTips" id="taskTips" autocomplete="off" placeholder="用于标识该排团的难度或简要标记，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="20" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">指定团长</label>
+            <div class="layui-input-block">
+                <select name="leader" id="leader" xm-select-radio lay-search="" xm-select="leader" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                    <option value="">请选择这个团的团长，可不选</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注说明</label>
+            <div class="layui-input-block">
+                <input type="text" name="taskRemark" id="taskRemark" autocomplete="off" placeholder="用于对该排团进行备注或说明，可空" class="layui-input layui-input-shadow boxshadow-success" maxlength="50" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开团时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="sDate" id="sDate" placeholder="请选择要开团日期和时间" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+
+    </div>
+    <blockquote class="layui-elem-quote layui-text jobDiv">
+        可在此配置该排团坑位和成员，也可以
+        <div class="layui-input-inline">
+            <select name="tempList" id="tempList" lay-filter="selectTemp"></select>
+        </div>
+        <a href="#" class="savetemp" style="color:#1E9FFF;display:none" title="点击我，将下面的坑位配置保存成模板">保存模板</a>
+        <a href="#" class="saveOtherTemp" style="color:#02CED1;display:none" title="点击我，将下面的坑位配置另外为一个新的模板">另存为新模板</a>
+        <a href="#" class="deltemp" style="color:#E03636;display:none;margin-left:10px" title="将此模板删除">删除模板</a>
+
+    </blockquote>
+    <div class="jobs layui-hide" style="margin-left:0px">
+
+    </div>
+    <div class="layui-row jobDiv">
+        <div class="layui-col-lg6 layui-col-md6 layui-col-xs6 layui-col-sm6">
+            <div class="jobss" style="margin-left:0px;display:flex;flex-direction:column;">
+                <div class="wowJob" style="">
+                    <span>德鲁伊</span>
+                    <a href="javascript:void(0)" data-job="德鲁伊" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="德鲁伊" data-tf="熊德" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">熊德</a>
+                    <a href="javascript:void(0)" data-job="德鲁伊" data-tf="猫德" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">猫德</a>
+                    <a href="javascript:void(0)" data-job="德鲁伊" data-tf="鸟德" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">鸟德</a>
+                    <a href="javascript:void(0)" data-job="德鲁伊" data-tf="奶德" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">奶德</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>盗贼</span>
+                    <a href="javascript:void(0)" data-job="盗贼" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="盗贼" data-tf="奇袭" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">奇袭</a>
+                    <a href="javascript:void(0)" data-job="盗贼" data-tf="狂徒" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">狂徒</a>
+                    <a href="javascript:void(0)" data-job="盗贼" data-tf="敏锐" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">敏锐</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>恶魔猎手</span>
+                    <a href="javascript:void(0)" data-job="恶魔猎手" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="恶魔猎手" data-tf="浩劫" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">浩劫</a>
+                    <a href="javascript:void(0)" data-job="恶魔猎手" data-tf="复仇" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">复仇</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>法师</span>
+                    <a href="javascript:void(0)" data-job="法师" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="法师" data-tf="冰法" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">冰法</a>
+                    <a href="javascript:void(0)" data-job="法师" data-tf="火法" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">火法</a>
+                    <a href="javascript:void(0)" data-job="法师" data-tf="奥法" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">奥法</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>猎人</span>
+                    <a href="javascript:void(0)" data-job="猎人" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="猎人" data-tf="兽王" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">兽王</a>
+                    <a href="javascript:void(0)" data-job="猎人" data-tf="射击" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">射击</a>
+                    <a href="javascript:void(0)" data-job="猎人" data-tf="生存" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">生存</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>牧师</span>
+                    <a href="javascript:void(0)" data-job="牧师" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="牧师" data-tf="神牧" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">神牧</a>
+                    <a href="javascript:void(0)" data-job="牧师" data-tf="戒律" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">戒律</a>
+                    <a href="javascript:void(0)" data-job="牧师" data-tf="暗牧" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">暗牧</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>龙希尔</span>
+                    <a href="javascript:void(0)" data-job="龙希尔" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="龙希尔" data-tf="增辉" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">增辉</a>
+                    <a href="javascript:void(0)" data-job="龙希尔" data-tf="湮灭" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">湮灭</a>
+                    <a href="javascript:void(0)" data-job="龙希尔" data-tf="恩护" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">恩护</a>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-lg6 layui-col-md6 layui-col-xs6 layui-col-sm6">
+            <div class="jobss" style="margin-left:0px;display:flex;flex-direction:column;">
+                <div class="wowJob" style="">
+                    <span>死亡骑士</span>
+                    <a href="javascript:void(0)" data-job="死亡骑士" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="死亡骑士" data-tf="邪恶" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">邪恶</a>
+                    <a href="javascript:void(0)" data-job="死亡骑士" data-tf="冰霜" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">冰霜</a>
+                    <a href="javascript:void(0)" data-job="死亡骑士" data-tf="鲜血" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">鲜血</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>圣骑士</span>
+                    <a href="javascript:void(0)" data-job="圣骑士" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="圣骑士" data-tf="奶骑" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">奶骑</a>
+                    <a href="javascript:void(0)" data-job="圣骑士" data-tf="惩戒骑" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">惩戒骑</a>
+                    <a href="javascript:void(0)" data-job="圣骑士" data-tf="防骑" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">防骑</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>术士</span>
+                    <a href="javascript:void(0)" data-job="术士" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="术士" data-tf="恶魔" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">恶魔术</a>
+                    <a href="javascript:void(0)" data-job="术士" data-tf="痛苦" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">痛苦术</a>
+                    <a href="javascript:void(0)" data-job="术士" data-tf="毁灭" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">毁灭术</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>萨满</span>
+                    <a href="javascript:void(0)" data-job="萨满" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="萨满" data-tf="奶萨" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">奶萨</a>
+                    <a href="javascript:void(0)" data-job="萨满" data-tf="增强" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">增强萨</a>
+                    <a href="javascript:void(0)" data-job="萨满" data-tf="元素" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">元素萨</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>武僧</span>
+                    <a href="javascript:void(0)" data-job="武僧" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="武僧" data-tf="织雾" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">织雾</a>
+                    <a href="javascript:void(0)" data-job="武僧" data-tf="酒仙" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">酒仙</a>
+                    <a href="javascript:void(0)" data-job="武僧" data-tf="踏风" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">踏风</a>
+                </div>
+                <div class="wowJob" style="">
+                    <span>战士</span>
+                    <a href="javascript:void(0)" data-job="战士" data-tf="" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">无要求</a>
+                    <a href="javascript:void(0)" data-job="战士" data-tf="防战" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">防战</a>
+                    <a href="javascript:void(0)" data-job="战士" data-tf="武器" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">武器战</a>
+                    <a href="javascript:void(0)" data-job="战士" data-tf="狂暴" lay-tips="点击就能添加到坑位里去" class="layui-btn layui-btn-primary layui-btn-sm addjobtotable">狂暴战</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="jobDiv">
+        <table class="layui-hide" id="tableList" lay-filter="tableList" title=""></table>
+        <script type="text/html" id="baroperating">
+            <a class="layui-btn layui-btn-xs layui-btn-success" style="margin-right:1px" lay-event="addpostion" title="新增一个这样的职业坑位">再加一个这坑位</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger" style="margin-right:1px" lay-event="submitDel" title="移除这个坑位">移除</a>
+        </script>
+    </div>
+
+    <div class="layui-form-item" style="justify-content:center;align-items:center;text-align:center">
+        <button class="layui-btn layui-btn-normal layui-btn-lg savebtn" lay-submit="" lay-filter="savebtn" style="">确定保存</button>
+    </div>
+
+    <input type="hidden" id="taskId" name="taskId" value="0" />
+    <input type="hidden" id="leaderID" name="leaderID" value="0" />
+    <input type="hidden" id="selectProject" name="selectProject" />
+    <input type="hidden" id="defaultJobId" name="defaultJobId" value="0" />
+    <input type="hidden" id="isConfigJob" name="isConfigJob" value="N" />
+    <input type="hidden" id="wechatApp" name="wechatApp" value="N" />
+    <div style="display:none" class="selectUser">
+        <div class="layui-field-box" style="margin-left:0px;padding: 0px 0px;margin-top:3px">
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">用户职位</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="userRole" lay-filter="userRole" value="0" title="全部" checked="">
+                                <input type="radio" name="userRole" lay-filter="userRole" value="3" title="客服" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="5" title="总经理" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="6" title="系统管理员" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="7" title="客服主管" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="13" title="代练员" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="19" title="系统开发员" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="20" title="外部录单用" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="21" title="售后客服" >
+                                <input type="radio" name="userRole" lay-filter="userRole" value="22" title="机器人专用" >
+
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom:0px">
+                <label class="layui-form-label">搜索用户</label>
+                <div class="layui-input-inline" style=" ">
+                    <input type="text" name="key1" id="key1" lay-verify="" placeholder="用户名/名称/标记" autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline" style="">
+                        <a href="#" class="layui-btn layui-btn-info seachBtn" style="">搜索</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user" style="margin-left:10px;line-height:25px">
+        </div>
+
+    </div>
+
+    <div class="selectJobDiv" style="display:none">
+        <div class="layui-field-box selectJobRadio" style="margin-left:0px;padding: 0px 0px;margin-top:3px">
+
+        </div>
+    </div>
+    <input type="hidden" name="defGame" id="defGame" />
+</form>
+<script src="/JS2019/Group/addeditgroup.js?v=20260427" type="text/javascript"></script>
+
+</body>
+</html>

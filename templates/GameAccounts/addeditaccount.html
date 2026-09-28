@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>新增/编辑账号</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+
+<style> 
+    .layui-form-checkbox[lay-skin=primary] span {
+        font-size: 12px
+    }
+
+    .layui-form-pane .layui-form-label {
+        width: 110px;
+        padding: 8px 8px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 2px 0 0 2px;
+        text-align: center;
+        background-color: #FBFBFB;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .lrd{
+        color:red;
+    }
+</style>
+
+<form class="layui-form" action="" style="margin-left:10px">
+
+    <div class="layui-form-pane" style="color:#444;margin-top:20px">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="accType" value="A" title="" checked>
+                <div lay-radio><span lay-tips="内部存储或当库存号使用，不会展示在外部自助选号页面">内部账号</span></div>
+                        <input type="radio" name="accType" value="E" title="" >
+                        <div lay-radio><span lay-tips="用于出售的游戏号，会展示在外部自助选号页面，允许外部用户挑选。如果您需要让外部购买游戏号的用户自助挑选，请选这个类型">售卖账号</span></div>
+                        <input type="radio" name="accType" value="Z" title="" >
+                        <div lay-radio><span lay-tips="用于出租的游戏号，会展示在外部自助选号页面，允许外部用户挑选。如果您需要让外面租游戏号的用户自助挑选，可以选这个类型">出租账号</span></div>
+
+
+                <input type="radio" name="accType" value="C" title="" >
+                <div lay-radio><span lay-tips="从其它渠道借来的临时游戏号，不会展示在外部自助选号页面，一般用不到太多">借用账号</span></div>
+                <input type="radio" name="accType" value="D" title="" >
+                <div lay-radio><span lay-tips="临时存储的游戏号，不会展示在外部自助选号页面">临时账号</span></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label lrd">游戏区/平台</label>
+            <div class="layui-input-inline">
+                <select id="gameName" name="gameName" lay-filter="selectGame">
+                                <option value="21714"  data-mobliegame="N">全部游戏</option>
+                                <option value="21708"  data-mobliegame="N">[[ gameName ]]</option>
+                                <option value="21701"  data-mobliegame="Y">原神</option>
+                                <option value="21703"  data-mobliegame="Y">三角洲行动</option>
+                                <option value="21704"  data-mobliegame="N">鸣潮</option>
+                                <option value="21706"  data-mobliegame="Y">绝区零</option>
+                                <option value="21707"  data-mobliegame="N">无限暖暖</option>
+                                <option value="21722"  data-mobliegame="N">遗忘之海</option>
+                                <option value="21721"  data-mobliegame="N">异环</option>
+                                <option value="21720"  data-mobliegame="N">王者荣耀世界</option>
+                                <option value="21719"  data-mobliegame="N">洛克王国：世界</option>
+                                <option value="21718"  data-mobliegame="N">逆战：未来</option>
+                                <option value="21717"  data-mobliegame="N">明日方舟：终末地</option>
+                                <option value="21716"  data-mobliegame="N">燕云十六声</option>
+
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <span style="width:0px" id="gameAreaTips"></span>
+                <select name="gameArea" id="gameArea" xm-select-radio lay-search="" xm-select-create xm-select="gameArea" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                    <option value="">请选择或输入</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <span style="width:0px" id="gameServerTips"></span>
+                <select name="gameServer" id="gameServer" xm-select-radio lay-search="" xm-select-create xm-select="gameServer" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                    <option value="">请选择或输入</option>
+                </select>
+            </div>
+            <div class="layui-input-inline jobDiv" style="">
+                <select name="gameJob" xm-select-radio xm-select="gameJob" xm-select-create xm-select-skin="default" xm-select-height="36px">
+                    <option value="">请选择或输入</option>
+                </select>
+            </div>
+            <div class="layui-input-inline groupdiv" style="display:none">
+                <span style="width:0px" id="gameGroupTips"></span>
+                <select name="gameGroup" xm-select-radio xm-select="gameGroup" xm-select-create xm-select-skin="default" xm-select-height="36px">
+                    <option value="">请选择或输入</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label lrd">游戏账号</label>
+                <div class="layui-input-inline" style="min-width:190px;">
+                    <input type="text" name="gameAcc" id="gameAcc" lay-verify="required" autocomplete="off" placeholder="请输入登录账号，必填" class="layui-input layui-input-shadow " maxlength="50" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label lrd">登录密码</label>
+                <div class="layui-input-inline" style="min-width:190px">
+                    <input type="text" name="gamePwd" id="gamePwd" lay-verify="required" autocomplete="off" placeholder="请输入登录密码，必填" class="layui-input layui-input-shadow " maxlength="50" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">子账号/ID号</label>
+                <div class="layui-input-inline" style="min-width:190px">
+                    <input type="text" name="gameZAcc" id="gameZAcc" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow " maxlength="50" value="">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label lrd">角色名</label>
+                <div class="layui-input-inline" style="min-width:190px">
+                    <input type="text" name="gameRole" id="gameRole" lay-verify="required" autocomplete="off" placeholder="请输入角色名，必填" class="layui-input layui-input-shadow " maxlength="50">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" id="mark1">游戏信息1</label>
+                <div class="layui-input-inline" style="min-width:190px">
+                    <input type="text" name="gaemTf" id="gaemTf" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow " maxlength="200">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" id="mark2">游戏信息2</label>
+                <div class="layui-input-inline" style="min-width:190px">
+                    <input type="text" name="gameSQ" id="gameSQ" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow " maxlength="200">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">游戏信息3</label>
+            <div class="layui-input-block">
+                <input type="text" name="remark2" id="remark2" autocomplete="off" placeholder="可留空" class="layui-input layui-input-shadow" maxlength="250">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">密保类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="safeKeyType" value="10" title="无" >
+                <input type="radio" name="safeKeyType" value="20" title="安全令牌" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密保手机号</label>
+            <div class="layui-input-block">
+                <input type="text" name="moblie" id="moblie" lay-verify="moblie" autocomplete="off" placeholder="若无请留空" class="layui-input layui-input-shadow " maxlength="11">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账号状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="accStatus" value="10" checked=&#39;checked&#39; title="正常" lay-filter="accStatusRd">
+                    <input type="radio" name="accStatus" value="20" title="库存" lay-filter="accStatusRd" >
+                    <input type="radio" name="accStatus" value="21" title="已卖出" lay-filter="accStatusRd" >
+                    <input type="radio" name="accStatus" value="30" title="临时封号" lay-filter="accStatusRd" >
+                    <input type="radio" name="accStatus" value="40" title="永久封停" lay-filter="accStatusRd" >
+                </div>
+            </div>
+            <div class="layui-inline ftime" style="display:none">
+                <label class="layui-form-label" style="color:#ff0000">封号到期时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="disableTime" id="disableTime" autocomplete="off" placeholder="封号到期时间" class="layui-input layui-input-shadow " value="">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">用途类型</label>
+            <div class="layui-input-block">
+                <select name="useType" id="useType" xm-select-radio lay-search="" xm-select-create xm-select="useType" xm-select-skin="default" xm-select-height="36px" xm-select-search="" xm-select-search-type="title">
+                    <option value="">可自定义输入并选择或直接选择</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用资料</label>
+            <div class="layui-input-block">
+                <input type="text" name="useInfo" id="useInfo" autocomplete="off" placeholder="可留空，一般存放用于正常上号所需要的账号、密码，不要放密保信息在这里，不主动显示出来，可单独提取，受权限控制" class="layui-input layui-input-shadow " maxlength="600">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">机密资料</label>
+            <div class="layui-input-block">
+                <input type="text" name="privateInfo" id="privateInfo" placeholder="可留空，一般存放用于除了账号、密码外，还包括密保、手机等信息，不主动显示出来，可单独提取，受权限控制" class="layui-input layui-input-shadow  autokeys" maxlength="800">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block" style="">
+                <input type="text" name="remark" id="remark" style="" lay-verify="" autocomplete="off" placeholder="请输入重要的资料备注" class="layui-input layui-input-shadow boxshadow-red" maxlength="500" title="">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签或多角色</label>
+            <div class="layui-input-block">
+                <input type="text" name="tips" id="tips" autocomplete="off" title="可以自定义标签或多角色的名称，多个标签请用空格分隔" placeholder="多个标签请用空格分隔" class="layui-input layui-input-shadow" maxlength="50">
+            </div>
+        </div>
+        <div class="layui-btn-container tag" lay-filter="tipsBtn" style="margin-left:110px;font-size:12px;margin-bottom:5px">
+
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">成本价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="costPrice" id="costPrice" autocomplete="off" title="请输入进成价，可为0" placeholder="" class="layui-input layui-input-shadow" maxlength="6">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">预计售价</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sellPrice" id="sellPrice" autocomplete="off" title="请输入预计售价，可为0" placeholder="" class="layui-input layui-input-shadow" maxlength="6">
+                </div>
+            </div>
+        </div> 
+
+        <div class="layui-form-item gameCdDiv" style="display:none">
+            <label class="layui-form-label">初始CD日</label>
+            <div class="layui-input-block">
+                <input type="text" name="cd" id="cd" autocomplete="off" placeholder="魔兽专用，该号最近的CD日期，可不选" class="layui-input layui-input-shadow">
+            </div>
+        </div>
+
+        <div style="height: 10px"></div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="savebtn" style="width: 190px">保存账号</button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <input type="hidden" id="gameAccId" name="gameAccId" value="0" />
+    <input type="hidden" id="tGameArea" name="tGameArea" />
+    <input type="hidden" id="tGameServer" name="tGameServer" />
+    <input type="hidden" id="tGameJob" name="tGameJob" />
+    <input type="hidden" id="tGameGroup" name="tGameGroup" />
+    <input type="hidden" id="accUseTypeTxt" name="accUseTypeTxt" />
+</form>
+
+<script src="/JS2019/GameAccounts/addeditaccount.js?v=20260427" type="text/javascript"></script>
+
+
+
+</body>
+</html>

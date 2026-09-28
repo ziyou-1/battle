@@ -1,0 +1,5 @@
+flask>=3.0
+qrcode[pil]
+openpyxl
+cryptography>=42
+Pillow>=10

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>设置第三方交易平台接</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});window.addEventListener('unhandledrejection',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:'unhandledrejection: '+String(e.reason)}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<form class="layui-form" action="" lay-filter="form">
+
+    <blockquote class="layui-elem-quote layui-text">
+        <p>设置了以下各项，您就可以很方便的在系统里一键发单到各大交易平台，系统会自动同步代练平台的交易状态和交易信息。若您不会设置，我们的技术人员很乐意协助您设置。</p>
+        <p>允许相同平台添加多个发单账号</p>
+    </blockquote>
+
+    <fieldset class="layui-elem-field">
+        <legend>第三方交易平台对接设置</legend>
+        <div class="layui-field-box">
+            <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+            <script type="text/html" id="switchTpl1">
+                <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="staChecked" {{ d.status == 0 ? 'checked' : '' }}>
+                <div lay-checkbox>
+                    <span lay-tips="绿色代表启用，灰色代表禁用">启用|禁用</span>
+                </div>
+            </script>
+            <script type="text/html" id="switchTpl5">
+                <input type="checkbox" name="isDefault" value="{{d.id}}" lay-skin="switch" lay-text="" lay-filter="defaultChecked" {{ d.isDefault == 'Y' ? 'checked' : '' }}>
+                <div lay-checkbox>
+                    <span lay-tips="绿色代表发单到交易平台时，默认以这个账号发单。相同平台只能有1个默认账号">默认|非默认</span>
+                </div>
+            </script>
+            <script type="text/html" id="switchTpl2">
+                <input type="checkbox" name="isAutoAccep" value="{{d.id}}" lay-skin="switch" lay-text="" lay-filter="isAutoAccepChecked" {{ d.isAutoAccep == 0 ? 'checked' : '' }}>
+                <div lay-checkbox>
+                    <span lay-tips="绿色代表当本系统订单状态改成已完成时，自动把平台上的单子也验收。灰色代表不会自动验收平台订单，需要你手动验收平台订单">自动|手动</span>
+                </div>
+            </script>
+            <script type="text/html" id="switchTpl3">
+                <input type="checkbox" name="isNotifyPushMan" value="{{d.id}}" lay-skin="switch" lay-text="" lay-filter="isNotifyPushManChecked" {{ d.isNotifyPushMan == 1 ? 'checked' : '' }}>
+                <div lay-checkbox>
+                    <span lay-tips="绿色代表当平台有人接单时，本系统自动发送一条通知短信到发单客服手机上">需要|不需</span>
+                </div>
+            </script>
+            <script type="text/html" id="switchTpl4">
+                <input type="checkbox" name="isAutoSelect" value="{{d.id}}" lay-skin="switch" lay-text="" lay-filter="isAutoSelectChecked" {{ d.isAutoSelect == 0 ? 'checked' : '' }}>
+                <div lay-checkbox>
+                    <span lay-tips="绿色代表在发单时，会自动包含发单到这个平台">包含|不含</span>
+                </div>
+            </script>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-xs" lay-event="refresh" type="button" title="刷新当前数据"><i class="layui-icon">&#xe669;</i>刷新列表</button>
+                    <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="addBtn" type="button" title="新增一个交易平台对接账号"><i class="layui-icon layui-icon-add-1"></i>新增平台对接</button>
+                </div>
+            </script>
+            <script type="text/html" id="baroperating">
+                <a class="layui-btn layui-btn-xs layui-btn-warm" style="" lay-event="submitEdit" title="编辑对接参数"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger" style="" lay-event="submitDel" title="删除该对接"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </fieldset>
+
+    <div class="modifyParamDiv" style="display:none">
+        <blockquote class="layui-elem-quote">
+            <span style="font-size:14px">请联系我们售后人员帮您对接</span>
+        </blockquote>
+        <div class="layui-form-pane" style="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">要对接的平台</label>
+                <div class="layui-input-block">
+                    
+                    
+                    <input type="radio" name="platforms" value="10" title="代练通" lay-filter="platforms">
+                    <input type="radio" name="platforms" value="30" title="代练妈妈" lay-filter="platforms">
+                    <input type="radio" name="platforms" value="80" title="代练丸子" lay-filter="platforms">
+                    <input type="radio" name="platforms" value="90" title="趣代练" lay-filter="platforms">
+                    <input type="radio" name="platforms" value="93" title="天玩代练" lay-filter="platforms">
+                    
+                    
+                    <input type="radio" name="platforms" value="50" title="咕噜代练" lay-filter="platforms">
+                    <input type="radio" name="platforms" value="60" title="易代练" lay-filter="platforms">
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+            <div class="layui-form-item plataccdiv">
+                <label class="layui-form-label platacclabel">平台账号</label>
+                <div class="layui-input-inline layui-input-wrap">
+                    <input type="text" name="plaftacc" id="plaftacc" lay-verify="" autocomplete="off" placeholder="请填写平台的账号" maxlength="30" class="layui-input">
+                </div>
+                <div class="layui-form-mid pt0" style="padding: 0!important;display:none">
+                    <a href="https://pt.shangdailian.com/pages/register.html" class="layui-btn layui-btn-primary layui-border-blue" target="_blank">没账号？点这里注册</a>
+                </div>
+            </div>
+            <div class="layui-form-item platloginpwddiv" style="display:none">
+                <label class="layui-form-label">平台登录密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="plaftloginpwd" id="plaftloginpwd" lay-verify="" autocomplete="new-password" placeholder="请填写平台的登录密码" maxlength="30" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item platpaypwddiv">
+                <label class="layui-form-label platpaypwdlabel">平台支付密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="plaftpaypwd" id="plaftpaypwd" lay-verify="" autocomplete="new-password" placeholder="请填写平台的支付密码，如果没改变请不要动此处" maxlength="30" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item platappiddiv">
+                <label class="layui-form-label platappidlabel">AppId</label>
+                <div class="layui-input-block">
+                    <input type="text" name="appId" id="appId" lay-verify="" autocomplete="off" placeholder="请填写AppID" maxlength="20" class="layui-input layui-input-shadow boxshadow-success appId">
+                </div>
+            </div>
+            <div class="layui-form-item platappsecretdiv1" style="display:none">
+                <label class="layui-form-label platappsecretlabel">AppSecret</label>
+                <div class="layui-input-block">
+                    <input type="text" name="appSecret" id="appSecret" lay-verify="" autocomplete="off" placeholder="" maxlength="1000" placeholder="请填写密钥" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注说明</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" id="remark" lay-verify="" autocomplete="off" placeholder="" maxlength="100" class="layui-input layui-input-shadow boxshadow-success">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">发单联系QQ</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="concactQQ" id="concactQQ" lay-verify="" lay-tips="您可以针对此平台定制不一样的联系QQ号，发单时这里的优先级最高，会忽略其它地方的设置" autocomplete="off" placeholder="" maxlength="50" class="layui-input layui-input-shadow boxshadow-success">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">发单联系电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="concactPhone" id="concactPhone" lay-verify="" lay-tips="您可以针对此平台定制不一样的联系电话，发单时这里的优先级最高，会忽略其它地方的设置" autocomplete="off" placeholder="" maxlength="50" class="layui-input layui-input-shadow boxshadow-success">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div style="text-align:center;align-items:center">
+            <a class="layui-btn layui-btn-normal layui-btn-lg w-lg saveInterfaceBtn">保存设置</a>
+        </div>
+    </div>
+
+
+    <div class="layui-bg-gray" style="padding:10px">
+        <blockquote class="layui-elem-quote layui-text">
+            这里的设置项会针对所有平台生效
+        </blockquote>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                1、录单页面是否需要支持快速发单到交易平台(默认不支持，若需要支持，需要在此页面对接好平台，再到系统维护/平台快速发单设置进行配置快速发单参数)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK132" value="N" title="关"  [% if (settings.SK132 if settings.SK132 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK132 if settings.SK132 is defined else "N")|string == "N" %]checked[% endif %]>
+                <input type="radio" name="SK132" value="Y" title="开" [% if (settings.SK132 if settings.SK132 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK132 if settings.SK132 is defined else "N")|string == "Y" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                1.1、发单到交易平台界面是否需要启用传统简易模式？
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK156" value="0" title="否" [% if (settings.SK156 if settings.SK156 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK156 if settings.SK156 is defined else "0")|string == "0" %]checked[% endif %]>
+                <input type="radio" name="SK156" value="1" title="是"  [% if (settings.SK156 if settings.SK156 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK156 if settings.SK156 is defined else "0")|string == "1" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                1.2、发单到交易平台时是否需要检测游戏大区准确性？
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK157" value="0" title="否" [% if (settings.SK157 if settings.SK157 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK157 if settings.SK157 is defined else "0")|string == "0" %]checked[% endif %]>
+                <input type="radio" name="SK157" value="1" title="是"  [% if (settings.SK157 if settings.SK157 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK157 if settings.SK157 is defined else "0")|string == "1" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                2、发单时如果检测到双金任意一个为0是否禁止发出去(默认不限制)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK107" value="Y" title="禁止发单"  [% if (settings.SK107 if settings.SK107 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK107 if settings.SK107 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                <input type="radio" name="SK107" value="N" title="不限制" [% if (settings.SK107 if settings.SK107 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK107 if settings.SK107 is defined else "Y")|string == "N" %]checked[% endif %]>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                2.1、发相同平台的订单是否需要检测重复发单(即同一平台相同账号已有单子在平台上进行中，继续发会出现冲突)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK159" value="0" title="检测" [% if (settings.SK159 if settings.SK159 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK159 if settings.SK159 is defined else "0")|string == "0" %]checked[% endif %]>
+                <input type="radio" name="SK159" value="1" title="不做检测"  [% if (settings.SK159 if settings.SK159 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK159 if settings.SK159 is defined else "0")|string == "1" %]checked[% endif %]>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                3、发单时是否默认勾选发平台交易中心(如果本系统绑定了平台官方账号，默认将勾选)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK106" value="Y" title="勾选"  [% if (settings.SK106 if settings.SK106 is defined else "N")|string == "Y" %][% endif %] [% if (settings.SK106 if settings.SK106 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                <input type="radio" name="SK106" value="N" title="不勾选" [% if (settings.SK106 if settings.SK106 is defined else "N")|string == "N" %][% endif %] [% if (settings.SK106 if settings.SK106 is defined else "Y")|string == "N" %]checked[% endif %]>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                4、若发生撞单(即多个平台同时接手)时系统会保留最早的接手外，其它所有平台全申请0撤
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK145" value="Y" title="0撤" [% if (settings.SK145 if settings.SK145 is defined else "Y")|string == "Y" %][% endif %] [% if (settings.SK145 if settings.SK145 is defined else "Y")|string == "Y" %]checked[% endif %]>
+                <input type="radio" name="SK145" value="N" title="不自动处理撤销"  [% if (settings.SK145 if settings.SK145 is defined else "Y")|string == "N" %][% endif %] [% if (settings.SK145 if settings.SK145 is defined else "Y")|string == "N" %]checked[% endif %]>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                5、已完成的订单是否不允许再次发到交易平台(可适当防止客服自盗作假)
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK155" value="0" title="不限制" [% if (settings.SK155 if settings.SK155 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK155 if settings.SK155 is defined else "0")|string == "0" %]checked[% endif %]>
+                <input type="radio" name="SK155" value="1" title="限制"  [% if (settings.SK155 if settings.SK155 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK155 if settings.SK155 is defined else "0")|string == "1" %]checked[% endif %]>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px;margin-top:10px">
+                6、平台接手后是否自动将订单群二维码发送到平台（需要提前上传好）
+            </div>
+            <div class="layui-input-block" style="min-height:0px;margin-left:10px">
+                <input type="radio" name="SK158" value="0" title="不发送" [% if (settings.SK158 if settings.SK158 is defined else "0")|string == "0" %][% endif %] [% if (settings.SK158 if settings.SK158 is defined else "0")|string == "0" %]checked[% endif %]>
+                <input type="radio" name="SK158" value="1" title="自动发"  [% if (settings.SK158 if settings.SK158 is defined else "0")|string == "1" %][% endif %] [% if (settings.SK158 if settings.SK158 is defined else "0")|string == "1" %]checked[% endif %]>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="margin-top:20px">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-lg layui-btn-normal" lay-submit="" lay-filter="saveBtn1">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="sysId" value="[[ sys.id ]]" />
+    <input type="hidden" id="ptid" name="ptid" value="0" />
+</form>
+<script type="text/javascript" src="/JS2019/System/tripartiteplatformsetting.js?v=2020043088"></script>
+</body>
+</html>

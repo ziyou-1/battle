@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>售后处理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+    <script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+    <script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+    <style>body { background-color: #fff }</style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" lay-filter="search" onsubmit="return false">
+                <div class="layui-form-item" style="margin-bottom:0">
+                    <div class="layui-inline"><div class="layui-input-inline"><select name="status" lay-filter="status"><option value="待处理">待处理</option><option value="处理中">处理中</option><option value="已完成">已完成</option><option value="已驳回">已驳回</option><option value="全部">全部</option></select></div></div>
+                    <div class="layui-inline"><div class="layui-input-inline"><input type="text" name="key" id="key" class="layui-input" placeholder="订单号 / 客户 / 手机 / 内容" autocomplete="off"></div></div>
+                    <div class="layui-inline"><button class="layui-btn layui-btn-normal" lay-submit lay-filter="seach">搜索</button></div>
+                    <div class="layui-inline layui-word-aux" id="summary"></div>
+                </div>
+            </form>
+            <table class="layui-hide" id="tableList" lay-filter="tableList"></table>
+            <script type="text/html" id="bar">
+                {{# if (d.status == '待处理' || d.status == '处理中') { }}<a class="layui-btn layui-btn-xs" lay-event="handle">处理</a>{{# } }}
+                <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="order">看订单</a>
+            </script>
+        </div>
+    </div>
+</div>
+<div id="handleBox" style="display:none;padding:15px">
+    <form class="layui-form" lay-filter="handle">
+        <div class="layui-form-item"><label class="layui-form-label">处理结果</label><div class="layui-input-block">
+            <input type="radio" name="status" value="处理中" title="处理中" lay-filter="hs"><input type="radio" name="status" value="已完成" title="已完成（可退款）" lay-filter="hs" checked><input type="radio" name="status" value="已驳回" title="驳回" lay-filter="hs"></div></div>
+        <div class="layui-form-item" id="refundRow"><label class="layui-form-label">退款到余额</label><div class="layui-input-inline" style="width:120px"><input type="text" name="refundAmount" id="refundAmount" class="layui-input" value="0"></div><div class="layui-form-mid layui-word-aux" id="refundTip"></div></div>
+        <div class="layui-form-item layui-form-text"><label class="layui-form-label">回复客户</label><div class="layui-input-block"><textarea name="result" class="layui-textarea" placeholder="客户端会显示这段说明" maxlength="300"></textarea></div></div>
+    </form>
+</div>
+<script>
+    layui.config({ base: '../layuiadmin/' }).extend({ index: 'lib/index' }).use(['index', 'form', 'table', 'layer'], function () {
+        var $ = layui.$, form = layui.form, table = layui.table, layer = layui.layer, status = '待处理', cur = null;
+        var tableList = table.render({
+            elem: '#tableList', url: '/OrderAjax/GetAfterSaleList?status=待处理', page: true, limit: 30,
+            cols: [ [
+                { field: 'createTime', title: '申请时间', width: 140 },
+                { field: 'type', title: '类型', width: 70, templet: function (d) { var c = { '退款': '#FF5722', '投诉': '#FFB800', '补打': '#1E9FFF' }[d.type] || '#999'; return '<span style="color:' + c + '">' + d.type + '</span>'; } },
+                { field: 'orderNo', title: '订单号', width: 150 },
+                { field: 'customerName', title: '客户', width: 100 },
+                { field: 'phone', title: '手机', width: 120 },
+                { field: 'project', title: '项目', minWidth: 140 },
+                { field: 'reason', title: '客户描述', minWidth: 220 },
+                { field: 'amount', title: '申请退款', width: 90, templet: function (d) { return d.type == '退款' ? d.amount + ' 元' : '-'; } },
+                { field: 'status', title: '状态', width: 80, templet: function (d) { var c = { '待处理': '#FF5722', '处理中': '#1E9FFF', '已完成': '#5FB878', '已驳回': '#999' }[d.status]; return '<span style="color:' + c + '">' + d.status + '</span>'; } },
+                { field: 'result', title: '处理说明', minWidth: 160, templet: function (d) { return (d.result || '') + (d.refundAmount ? '<span style="color:#FF5722">（已退 ' + d.refundAmount + ' 元）</span>' : ''); } },
+                { field: 'handler', title: '处理人', width: 90, templet: function (d) { return d.handler ? d.handler + '<br><span class="layui-word-aux">' + d.handleTime + '</span>' : ''; } },
+                { title: '操作', width: 130, toolbar: '#bar', fixed: 'right' }
+            ] ],
+            done: function (res) { if (res.total) $('#summary').html('共 ' + res.total.count + ' 条，待处理 ' + res.total.pending + ' 条'); }
+        });
+        function reload() { tableList.reload({ url: '/OrderAjax/GetAfterSaleList?status=' + encodeURIComponent(status) + '&key=' + encodeURIComponent($('#key').val()), page: { curr: 1 } }); }
+        form.on('select(status)', function (d) { status = d.value; reload(); });
+        form.on('submit(seach)', function () { reload(); return false; });
+        form.on('radio(hs)', function (d) { $('#refundRow').toggle(d.value === '已完成'); });
+        table.on('tool(tableList)', function (obj) {
+            if (obj.event === 'order') {
+                parent.layer.open({ title: '订单详情', type: 2, area: ['1280px', '980px'], shade: [0.3, '#333'], shadeClose: true, skin: 'layui-layer-lan', content: '/Order/OrderView?orderId=' + obj.data.orderId + '&viewType=10' });
+                return;
+            }
+            cur = obj.data;
+            form.val('handle', { status: '已完成', refundAmount: cur.type == '退款' ? cur.amount : 0, result: '' });
+            $('#refundRow').show(); $('#refundTip').text(cur.type == '退款' ? '客户申请 ' + cur.amount + ' 元，退到会员余额' : '不退款填 0');
+            layer.open({
+                type: 1, title: '处理售后 - 订单 ' + cur.orderNo, area: ['560px', '420px'], content: $('#handleBox'), btn: ['提交', '取消'],
+                yes: function (index) {
+                    var f = form.val('handle');
+                    $.post('/OrderAjax/HandleAfterSale', { id: cur.id, status: f.status, result: f.result, refundAmount: f.status === '已完成' ? f.refundAmount : 0 }, function (res) {
+                        layer.msg(res.msg); if (res.code > 0) { layer.close(index); reload(); }
+                    }, 'json');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

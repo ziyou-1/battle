@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <meta charset="utf-8">
+    <title>账号详情</title>
+    <meta name="keywords" />
+    <meta name="description" />
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- load css -->
+    <!--加载CSS文件-->
+<link rel="stylesheet" href="/layuiadmin/layui/css/layui.css?V=128102" media="all">
+<link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+<link rel="stylesheet" type="text/css" href="/layuiadmin/lib/formselects-v4.css" />
+<link rel="stylesheet" href="/CSS/zdy.css?v=1100008" media="all" />
+<link rel="stylesheet" href="/CSS/admin-skin.css?v=3" media="all" />
+
+<!-- 加载js文件-->
+[% if dev %]<script>window.addEventListener('error',function(e){try{navigator.sendBeacon('/api/DevApi/JsError',JSON.stringify({page:location.pathname,msg:String(e.message),src:String(e.filename)+':'+e.lineno}))}catch(x){}});</script>[% endif %]
+<script src="/layuiadmin/layui/layui.js?V=110293266"></script>
+<script type="text/javascript" src="/JS2019/common.js?v=11107"></script>
+
+
+    <style>
+        body {
+            background-color: #fff
+        } 
+        .layadmin-pagetabs {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 80px 0 40px;
+            background-color: #fafafa;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+            border-bottom: 1px solid #1AA094;
+        }
+            .layadmin-pagetabs .layui-tab-title li.layui-this, .layadmin-pagetabs .layui-tab-title li:hover {
+                background-color: #009688;
+                color: #fff;
+            }
+    </style>
+</head>
+<body style="font-size:12px;" id="iosiframe">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+<style>
+    .left {
+        float: left
+    }
+
+    .itemTitle {
+        float: left;
+        width: 60px;
+        text-align: right;
+    }
+
+    .linespan {
+        color: #808080
+    }
+
+    .layui-form-item span {
+        line-height: 18px
+    }
+
+    .lableb {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 14px;
+        color: #fff;
+        white-space: nowrap;
+        vertical-align: middle;
+        overflow: hidden;
+        border-radius: 3px;
+        margin-right: 2px;
+    }
+
+    .layui-table-cell {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        position: relative;
+        box-sizing: border-box;
+        font-size: 12px
+    }
+</style>
+
+<form class="layui-form" action="" style="margin-top:10px;margin-left:10px;margin-right:10px">
+    <div class="layui-row">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md7 layui-col-lg7">
+            <fieldset class="layui-elem-field">
+                <legend>账号详情</legend>
+                <div class="layui-field-box">
+                    [% if not acc %]<span style="color:#FF5722">账号不存在或已删除</span>[% else %]
+                    <div class="layui-row" style="line-height:26px">
+                        [% for k, v in [('编号', acc.gameAccId), ('状态', acc.accStatusStr), ('游戏', acc.gameName), ('用途', acc.accUseTypeStr), ('区服', (acc.gameArea ~ ' ' ~ acc.gameServer)|trim), ('阵营/职业', (acc.gameGroup ~ ' ' ~ acc.gameJob)|trim),
+                                         ('角色名', acc.gameRoleName), ('区服信息', acc.gameInfo), ('当前信息', (acc.gameTF ~ ' ' ~ acc.otherLevel ~ ' ' ~ acc.otherMark)|trim), ('成本/售价', acc.costPrice ~ ' / ' ~ acc.sellPrice ~ '（利润 ' ~ acc.profit ~ '）'),
+                                         ('接手人', acc.recUserName or '无'), ('标签', acc.Tips), ('机位', acc.jiwei), ('入库时间', acc.createTime), ('备注', acc.remark)] %]
+                        <div class="layui-col-xs12 layui-col-md6" style="padding:0 6px;word-break:break-all"><span style="color:#888;display:inline-block;width:70px;text-align:right;margin-right:8px">[[ k ]]</span>[[ v ]]</div>
+                        [% endfor %]
+                    </div>
+                    <div style="margin-top:8px">
+                        <a class="layui-btn layui-btn-sm layui-btn-normal getGameAccountUseInfo" href="javascript:;" title="提取账号密码，会记录到账号日志">提取使用资料</a>
+                        <a class="layui-btn layui-btn-sm layui-btn-warm getGameAccountPrivateInfo" href="javascript:;" title="提取密保等机密资料，会记录到账号日志">提取机密资料</a>
+                        <a class="layui-btn layui-btn-sm layui-btn-primary upImg" href="javascript:;" data-id="[[ acc.gameAccId ]]">上传账号截图</a>
+                        <a class="layui-btn layui-btn-sm layui-btn-primary mangeImg" href="javascript:;" data-id="[[ acc.gameAccId ]]">查看账号截图</a>
+                    </div>
+                    <div class="uinfo" style="margin-top:8px;line-height:24px"></div>
+                    <div class="pinfo" style="margin-top:4px;line-height:24px"></div>
+                    [% endif %]
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md5 layui-col-lg5">
+            <fieldset class="layui-elem-field">
+                <legend>账号日志</legend>
+                <div class="layui-field-box" style="padding:5px 10px">
+                    <div class="">
+                        <input type="text" name="remark" id="remark" lay-verify="remark" autocomplete="off" placeholder="请在此输入要添加的备注内容" class="layui-input layui-input-shadow" maxlength="50">
+                    </div>
+                    <button class="layui-btn layui-btn-sm layui-btn-normal" style="margin-top:3px;" lay-submit="" lay-filter="addpbtn">添加</button>
+                    <fieldset class="layui-elem-field" style="">
+                        <legend>详细记录</legend>
+                        <div class="layui-field-box logdiv" style="padding: 7px 0px;min-height:420px;height:420px; overflow:scroll;overflow-x:hidden" id="logdiv">
+
+                        </div>
+                    </fieldset>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    
+
+    <input type="hidden" id="accId" name="accId" value="[[ acc.gameAccId if acc else 0 ]]" />
+</form>
+<script src="/JS2019/GameAccounts/gameaccdetails.js?v=20260427" type="text/javascript"></script>
+
+</body>
+</html>

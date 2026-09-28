@@ -1,0 +1,85 @@
+﻿/*订单列表订单号列*/ 
+.lableb{
+        display: inline-block;
+    padding: 2px 4px;
+    font-size: 12px;
+    line-height: 14px;
+    color: #fff;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #999;
+    overflow: hidden;
+    border-radius:3px;
+    margin-right:2px
+}
+.lablepadding{
+    padding:initial
+}
+ table {
+        table-layout: fixed; /* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */
+    }
+
+td {
+    /*width: 100%;*/
+    word-break: keep-all; /* 不换行 */
+    white-space: nowrap; /* 不换行 */
+    overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+    text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+    padding: 8px 5px;
+}
+
+    /*.layui-layout-admin .layui-body{top:60px;bottom:0px}*/
+    .layui-table td, .layui-table th {
+    padding: 6px 6px;
+    min-height: 20px;
+    line-height: 20px;
+    border: 1px solid #e2e2e2;
+    font-size: 12px;
+}
+
+.chengeRole ul{
+    margin:0 0 0 30px
+}
+.chengeRole ul li p{
+    margin:0;
+}
+.chengeRole ul li{
+    list-style-type:none;
+    font-size:14px;
+    line-height:32px;
+    color: #333333;
+}
+.chengeRole ul li span{
+    cursor: pointer;
+    padding: 0 0 0 22px;
+    background-image: url(../images/icon_select.png);
+    background-repeat: no-repeat;
+    margin: 0 30px 0 0;
+    background-position: 3px 4px;
+    line-height: 32px;
+}
+.chengeRole ul li span.selected{
+    background-position: 3px -31px;
+}
+.page_div{
+	 text-align:center;
+}
+.layui-table-click, .layui-table-hover, .layui-table[lay-even] tbody tr:nth-child(even) {
+    background-color: #abf8dd
+}
+
+/* Keep Layui gutter rows inside the viewport on desktop.  The framework's
+   negative row margins are useful inside a padded card, but on full-width
+   iframe pages they create a 5px horizontal scrollbar and make the right
+   column look clipped. */
+body#iosiframe .layui-row.layui-col-space5,
+body#iosiframe .layui-row.layui-col-space10,
+body#iosiframe .layui-row.layui-col-space15,
+body#iosiframe .layui-row.layui-col-space20 {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+body#iosiframe .layui-elem-field {
+    min-width: 0;
+}
